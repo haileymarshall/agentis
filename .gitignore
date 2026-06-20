@@ -17,3 +17,4 @@ relay-state.json
 .pytest_cache
 __pycache__
 .venv
+.vercel
