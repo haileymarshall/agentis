@@ -8,6 +8,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "tsx src/relay.ts",
+    "start": "node dist/relay.js",
     "test": "vitest run"
   },
   "dependencies": {

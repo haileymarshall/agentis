@@ -108,8 +108,9 @@ async function main() {
     });
   }
 
-  serve({ fetch: createRelayApp(store, config).fetch, port: config.port });
-  console.log(`Agentis relayer listening on http://localhost:${config.port}`);
+  const hostname = process.env.HOST || "0.0.0.0";
+  serve({ fetch: createRelayApp(store, config).fetch, port: config.port, hostname });
+  console.log(`Agentis relayer listening on http://${hostname}:${config.port}`);
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

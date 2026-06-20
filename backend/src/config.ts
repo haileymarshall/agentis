@@ -52,8 +52,10 @@ export function loadConfig(): RelayerConfig {
     .map((value) => Number(value.trim()))
     .filter((value): value is BaseChainId => value === 84532 || value === 8453);
 
+  const port = Number(process.env.PORT || process.env.RELAYER_PORT || "8787");
+
   return {
-    port: Number(process.env.RELAYER_PORT || "8787"),
+    port,
     supportedChainIds: supported.length > 0 ? supported : [84532, 8453],
     dbPath: process.env.RELAY_DB_PATH || "./relay-state.json",
     genlayerNetwork: "studionet",

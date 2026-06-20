@@ -1,11 +1,11 @@
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { BaseChainId } from "@agentis/shared";
 import { createRelayProcessor, type RelayProcessorDeps } from "./relay.js";
 import { JsonRelayStore } from "./persistence.js";
-import type { RelayerConfig } from "./config.js";
+import { loadConfig, type RelayerConfig } from "./config.js";
 import { decodeReadableResult, extractReadableResult } from "./genlayerClient.js";
 import { parseGenLayerVerdict, type GenLayerVerdict } from "./verdictSchema.js";
 
@@ -15,6 +15,11 @@ afterEach(() => {
   for (const dir of tempDirs.splice(0)) {
     rmSync(dir, { recursive: true, force: true });
   }
+  vi.unstubAllEnvs();
+});
+
+beforeEach(() => {
+  vi.unstubAllEnvs();
 });
 
 function tempStore() {
@@ -173,6 +178,22 @@ describe("relayer processor", () => {
     const relay = createRelayProcessor(relayDeps);
 
     await expect(relay.processVerdictRequest(84532, 1n)).rejects.toThrow(/payout bps exceed/);
+  });
+});
+
+describe("render runtime config", () => {
+  it("prefers the Render PORT variable", () => {
+    vi.stubEnv("PORT", "10001");
+    vi.stubEnv("RELAYER_PORT", "8787");
+
+    expect(loadConfig().port).toBe(10001);
+  });
+
+  it("falls back to RELAYER_PORT when PORT is absent", () => {
+    vi.unstubAllEnvs();
+    vi.stubEnv("RELAYER_PORT", "9012");
+
+    expect(loadConfig().port).toBe(9012);
   });
 });
 
