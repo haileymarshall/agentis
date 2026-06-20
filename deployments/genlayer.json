@@ -1,0 +1,7 @@
+{
+  "studionet": {
+    "name": "GenLayer StudioNet",
+    "judgeContractAddress": "0xA64EA2857B3a4355FA727B1d45a7157BD7C59817",
+    "notes": "GenLayer adjudication remains on StudioNet for both Base Sepolia and Base Mainnet."
+  }
+}

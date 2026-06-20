@@ -1,0 +1,2943 @@
+{
+  "base_url": "https://docs.genlayer.com/",
+  "bulk_sections": 132,
+  "bulk_url": "https://docs.genlayer.com/full-documentation.txt",
+  "compiled_pages": 228,
+  "crawl_results": {
+    "https://docs.genlayer.com/": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 238260,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/FAQ": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 252100,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/_providers/ollama": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 235382,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/_providers/openai": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233404,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/_temp/security-and-best-practices/grey-boxing": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 230314,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/_temp/security-and-best-practices/universal-attacks": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 230183,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/about-genlayer/core-concepts/optimistic-democracy": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 236546,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 232720,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/CONTRIBUTING": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 3338,
+      "status_code": 404
+    },
+    "https://docs.genlayer.com/api-references/LICENSE": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 3338,
+      "status_code": 404
+    },
+    "https://docs.genlayer.com/api-references/docs/direct-runner": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 3338,
+      "status_code": 404
+    },
+    "https://docs.genlayer.com/api-references/docs/studio-runner": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 3338,
+      "status_code": 404
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 236652,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/accounts/account": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 236727,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/accounts/account/create": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 235500,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/accounts/account/export": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 235393,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/accounts/account/import": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 237586,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/accounts/account/list": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 232576,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/accounts/account/lock": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233265,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/accounts/account/remove": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 234397,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/accounts/account/send": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 236484,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/accounts/account/show": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233910,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/accounts/account/unlock": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233971,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/accounts/account/use": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233489,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/configuration/config": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 234631,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/configuration/config/get": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233557,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/configuration/config/reset": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233603,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/configuration/config/set": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233586,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/configuration/network": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 234620,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/configuration/network/info": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 232640,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/configuration/network/list": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 232618,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/configuration/network/set": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233555,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/contracts/call": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233950,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/contracts/code": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233631,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/contracts/deploy": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233387,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/contracts/schema": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233644,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/contracts/write": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233946,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/environment/init": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 236485,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/environment/new": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 234796,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/environment/stop": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 232016,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/environment/up": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 236449,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/environment/update": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 234004,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/environment/update/ollama": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233263,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/finalize": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233240,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/finalize-batch": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233344,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/localnet/localnet": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 234030,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/localnet/localnet/validators": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 236101,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/localnet/localnet/validators/count": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233259,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/localnet/localnet/validators/create": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 236132,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/localnet/localnet/validators/create-random": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 234275,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/localnet/localnet/validators/delete": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 234046,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/localnet/localnet/validators/get": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 234024,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/localnet/localnet/validators/update": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 236808,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 240172,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/active-validators": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 234750,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/banned-validators": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 234798,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/delegation-info": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 237792,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/delegator-claim": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 238445,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/delegator-exit": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 238443,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/delegator-join": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 238462,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/epoch-info": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 235415,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/prime-all": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 236097,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/quarantined-validators": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 234815,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/set-identity": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 243006,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/set-operator": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 238035,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/validator-claim": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 237082,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/validator-deposit": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 237836,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/validator-exit": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 237772,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/validator-history": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 240947,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/validator-info": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 237751,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/validator-join": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 237538,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/validator-prime": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 237774,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/validators": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 235377,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/wizard": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 235962,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/transactions/appeal": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 234366,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/transactions/appeal-bond": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233700,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/transactions/receipt": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 237475,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-cli/transactions/trace": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 234590,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-js": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 322729,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-js/contracts": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 293086,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-js/staking": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 291726,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-js/transactions": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 254191,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-linter": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 260223,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-node": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 651647,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-node/debug/gen_dbg_ping": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 236207,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-node/debug/gen_dbg_traceTransaction": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 252154,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-node/debug/gen_dbg_trie": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 238932,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-node/gen/gen_call": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 306555,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-node/gen/gen_getContractCode": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 251963,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-node/gen/gen_getContractSchema": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 251115,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-node/gen/gen_getContractState": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 251954,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-node/gen/gen_getTransactionReceipt": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 281807,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-node/gen/gen_getTransactionStatus": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 247850,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-node/gen/gen_syncing": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 246108,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-node/ops/balance": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 247363,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-node/ops/health": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 249566,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-node/ops/metrics": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 293322,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-node/ops/snapshot": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 262126,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-py": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 282369,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-py/api": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 350958,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-test": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 358217,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-test/direct": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 319769,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-test/glsim": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 252609,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/genlayer-test/integration": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 373766,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/api-references/tests/examples/contracts": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 3338,
+      "status_code": 404
+    },
+    "https://docs.genlayer.com/build-with-genlayer/intelligent-contracts": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 252557,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/core-concepts/genvm": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 234975,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/core-concepts/intelligent-contracts": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 252557,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/core-concepts/optimistic-democracy": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 236546,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/core-concepts/optimistic-democracy/appeal-process": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233235,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/core-concepts/optimistic-democracy/equivalence-principle": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 240540,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/core-concepts/optimistic-democracy/finality": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 239569,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/core-concepts/optimistic-democracy/slashing": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 234233,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/core-concepts/optimistic-democracy/staking": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 286445,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/core-concepts/optimistic-democracy/unstaking": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 235649,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/core-concepts/transactions": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 264871,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 248948,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/decentralized-applications/architecture-overview": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 235815,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/decentralized-applications/dapp-development-workflow": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 244542,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/decentralized-applications/genlayer-js": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 247534,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/decentralized-applications/project-boilerplate": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 269480,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/decentralized-applications/querying-a-transaction": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 255703,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/decentralized-applications/reading-data": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 262250,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/decentralized-applications/testing": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 254586,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/decentralized-applications/writing-data": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 307602,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/advanced-features/contract-to-contract-interaction": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 3338,
+      "status_code": 404
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/crafting-prompts": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 302106,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/debugging": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 239031,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/deploying": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 251904,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/deploying/cli-deployment": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 273361,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/deploying/deploy-scripts": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 302810,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/deploying/deployment-methods": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 238214,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/deploying/network-configuration": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 283103,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/equivalence-principle": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 400989,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/error-handling": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 3338,
+      "status_code": 404
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/examples/_advanced/_adr-validator": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 296954,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/examples/_advanced/_flight-insurance": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 295585,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/examples/_advanced/_genlayer-dao": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 375960,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/examples/_advanced/_git-bounties": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 283122,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/examples/_advanced/_influencer-tweet-analyzer": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 325140,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/examples/_advanced/_purellm-dao": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 260522,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/examples/_advanced/_rokos-mansion": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 346605,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/examples/fetch-github-profile": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 254056,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/examples/fetch-web-content": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 273038,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/examples/github-profile-projects": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 258903,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/examples/github-profile-summary": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 259981,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/examples/llm-hello-world": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 251624,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/examples/llm-hello-world-non-comparative": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 250988,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/examples/prediction": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 262834,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/examples/storage": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 248773,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/examples/user-storage": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 253025,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/examples/vector-store-log-indexer": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 271974,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/examples/wizard-of-coin": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 256523,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/features": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 243400,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/features/balances": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 230153,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/features/calling-llms": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 294608,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/features/debugging": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 236013,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/features/error-handling": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 263913,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/features/features": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 243056,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/features/image-processing": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 252171,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/features/interacting-with-evm-contracts": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 248615,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/features/interacting-with-intelligent-contracts": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 263015,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/features/messages": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 292638,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/features/non-determinism": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 291958,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/features/random": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233612,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/features/special-methods": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 236925,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/features/storage": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 273761,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/features/transaction-context": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 278381,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/features/upgradability": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 281928,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/features/value-transfers": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 281696,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/features/vector-storage": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 265686,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/features/web-access": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 264826,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/first-contract": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 254148,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/first-intelligent-contract": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 243758,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/ideas": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 240511,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/introduction": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 252557,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/security-and-best-practices/prompt-injection": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233280,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/storage": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 295999,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/testing": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 302449,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/tooling-setup": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 344905,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-cli": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 262735,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233726,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio/advanced-features/custom-plugins": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 275110,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio/contract-state": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 234230,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio/deploying-contract": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 236210,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio/development-tips": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 255744,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio/execute-transaction": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 235525,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio/limitations": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 234868,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio/loading-contract": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 235276,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio/monitoring-node-logs": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 235959,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio/providers": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 237683,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio/reset-the-studio": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 235925,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio/troubleshooting": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 257947,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio/validators": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 238346,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-testing-suite": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 3338,
+      "status_code": 404
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/types": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 3338,
+      "status_code": 404
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/types/address": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 281927,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/types/collections": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 305317,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/types/dataclasses": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 249595,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/types/primitive": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 303513,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/when-to-use-genlayer": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 248842,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/your-first-contract": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 254148,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/intelligent-contracts/your-first-intelligent-contract": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 3338,
+      "status_code": 404
+    },
+    "https://docs.genlayer.com/developers/networks": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 261820,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/developers/staking-guide": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 343112,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/genlayer-stack/genlayer-studio/execute-transaction": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 235525,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/getting-started": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 248948,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/partners/chutes": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 261646,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/partners/comput3": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 229261,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/partners/genlayerlabs": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 229752,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/partners/heurist": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 229318,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/partners/ionet": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 229791,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/partners/libertai": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 230058,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/partners/morpheus": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 229436,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/references/genlayer-cli": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 236652,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/references/genlayer-js": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 322729,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/security-and-best-practices/grey-boxing": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233280,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 237138,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 235593,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/accounts-and-addresses": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 235292,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/economic-model": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233759,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/genvm": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 234975,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/large-language-model-llm-integration": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233689,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/non-deterministic-operations-handling": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233871,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/optimistic-democracy": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 236546,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/optimistic-democracy/appeal-process": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233235,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/optimistic-democracy/equivalence-principle": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 240540,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/optimistic-democracy/finality": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 239569,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/optimistic-democracy/slashing": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 234233,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/optimistic-democracy/staking": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 286445,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/optimistic-democracy/unstaking": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 235649,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/rollup-integration": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 238091,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/transactions": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 264871,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/transactions/transaction-encoding-serialization-and-signing": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 231933,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/transactions/transaction-execution": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 239407,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/transactions/transaction-statuses": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 237999,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/transactions/types-of-transactions": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 257725,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/validators-and-validator-roles": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 234437,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/web-data-access": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 233668,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol/optimistic-democracy-how-genlayer-works": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 236419,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol/typical-use-cases": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 240756,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol/what-are-intelligent-contracts": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 228702,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol/what-is-genlayer": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 263823,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol/what-makes-genlayer-different": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 228673,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol/who-is-genlayer-for": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 228607,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/understand-genlayer-protocol/why-we-are-building-genlayer": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 228586,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/validators/changelog": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 334420,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/validators/genvm-configuration": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 353587,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/validators/monitoring": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 320434,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/validators/setup-guide": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 473184,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/validators/system-requirements": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 237595,
+      "status_code": 200
+    },
+    "https://docs.genlayer.com/validators/upgrade": {
+      "content_type": "text/html; charset=utf-8",
+      "length": 248083,
+      "status_code": 200
+    }
+  },
+  "crawled_urls": 252,
+  "generated": "2026-05-30 07:47:19",
+  "llms_url": "https://docs.genlayer.com/llms.txt",
+  "pages": [
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "index.mdx",
+      "status_code": 200,
+      "title": "The Adjudication Layer for the Agentic Economy",
+      "url": "https://docs.genlayer.com/"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "understand-genlayer-protocol.mdx",
+      "status_code": 200,
+      "title": "Optimistic Democracy: How Consensus Works",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "understand-genlayer-protocol/what-is-genlayer.mdx",
+      "status_code": 200,
+      "title": "What is GenLayer",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol/what-is-genlayer"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "understand-genlayer-protocol/optimistic-democracy-how-genlayer-works.mdx",
+      "status_code": 200,
+      "title": "How GenLayer Works",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol/optimistic-democracy-how-genlayer-works"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "understand-genlayer-protocol/typical-use-cases.mdx",
+      "status_code": 200,
+      "title": "Use Cases",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol/typical-use-cases"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "understand-genlayer-protocol/core-concepts.mdx",
+      "status_code": 200,
+      "title": "Core Concepts",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "understand-genlayer-protocol/core-concepts/validators-and-validator-roles.mdx",
+      "status_code": 200,
+      "title": "Validators and Validator Roles",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/validators-and-validator-roles"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "understand-genlayer-protocol/core-concepts/genvm.mdx",
+      "status_code": 200,
+      "title": "GenVM (GenLayer Virtual Machine)",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/genvm"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "understand-genlayer-protocol/core-concepts/optimistic-democracy.mdx",
+      "status_code": 200,
+      "title": "Optimistic Democracy",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/optimistic-democracy"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "understand-genlayer-protocol/core-concepts/optimistic-democracy/equivalence-principle.mdx",
+      "status_code": 200,
+      "title": "Equivalence Principle Mechanism",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/optimistic-democracy/equivalence-principle"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "understand-genlayer-protocol/core-concepts/optimistic-democracy/appeal-process.mdx",
+      "status_code": 200,
+      "title": "Appeals Process",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/optimistic-democracy/appeal-process"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "understand-genlayer-protocol/core-concepts/optimistic-democracy/finality.mdx",
+      "status_code": 200,
+      "title": "Finality",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/optimistic-democracy/finality"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "understand-genlayer-protocol/core-concepts/optimistic-democracy/staking.mdx",
+      "status_code": 200,
+      "title": "Staking in GenLayer",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/optimistic-democracy/staking"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "understand-genlayer-protocol/core-concepts/optimistic-democracy/slashing.mdx",
+      "status_code": 200,
+      "title": "Slashing in GenLayer",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/optimistic-democracy/slashing"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "understand-genlayer-protocol/core-concepts/optimistic-democracy/unstaking.mdx",
+      "status_code": 200,
+      "title": "Unstaking in GenLayer",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/optimistic-democracy/unstaking"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "understand-genlayer-protocol/core-concepts/rollup-integration.mdx",
+      "status_code": 200,
+      "title": "Rollup Integration",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/rollup-integration"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "understand-genlayer-protocol/core-concepts/non-deterministic-operations-handling.mdx",
+      "status_code": 200,
+      "title": "Non-Deterministic Operations Handling",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/non-deterministic-operations-handling"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "understand-genlayer-protocol/core-concepts/large-language-model-llm-integration.mdx",
+      "status_code": 200,
+      "title": "Large Language Model (LLM) Integration",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/large-language-model-llm-integration"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "understand-genlayer-protocol/core-concepts/web-data-access.mdx",
+      "status_code": 200,
+      "title": "Web Data Access in Intelligent Contracts",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/web-data-access"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "understand-genlayer-protocol/core-concepts/transactions.mdx",
+      "status_code": 200,
+      "title": "Transactions",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/transactions"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "understand-genlayer-protocol/core-concepts/transactions/types-of-transactions.mdx",
+      "status_code": 200,
+      "title": "Types of Transactions",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/transactions/types-of-transactions"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "understand-genlayer-protocol/core-concepts/transactions/transaction-statuses.mdx",
+      "status_code": 200,
+      "title": "Transaction Processing",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/transactions/transaction-statuses"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "understand-genlayer-protocol/core-concepts/transactions/transaction-execution.mdx",
+      "status_code": 200,
+      "title": "Transaction execution",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/transactions/transaction-execution"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "understand-genlayer-protocol/core-concepts/transactions/transaction-encoding-serialization-and-signing.mdx",
+      "status_code": 200,
+      "title": "Transaction encoding, serialization, and signing",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/transactions/transaction-encoding-serialization-and-signing"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "understand-genlayer-protocol/core-concepts/economic-model.mdx",
+      "status_code": 200,
+      "title": "Economic Model",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/economic-model"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "understand-genlayer-protocol/core-concepts/accounts-and-addresses.mdx",
+      "status_code": 200,
+      "title": "Accounts and Addressing",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/accounts-and-addresses"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers.mdx",
+      "status_code": 200,
+      "title": "Getting Started with GenLayer",
+      "url": "https://docs.genlayer.com/developers"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/networks.mdx",
+      "status_code": 200,
+      "title": "Networks",
+      "url": "https://docs.genlayer.com/developers/networks"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/introduction.mdx",
+      "status_code": 200,
+      "title": "Introduction to Intelligent Contracts",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/introduction"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/when-to-use-genlayer.mdx",
+      "status_code": 200,
+      "title": "When to Use GenLayer",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/when-to-use-genlayer"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/features.mdx",
+      "status_code": 200,
+      "title": "Intelligent Contract Features",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/features"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/features/storage.mdx",
+      "status_code": 200,
+      "title": "Storage",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/features/storage"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/features/error-handling.mdx",
+      "status_code": 200,
+      "title": "Error Handling",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/features/error-handling"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/features/upgradability.mdx",
+      "status_code": 200,
+      "title": "Upgradability",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/features/upgradability"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/features/value-transfers.mdx",
+      "status_code": 200,
+      "title": "Value Transfers",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/features/value-transfers"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/features/transaction-context.mdx",
+      "status_code": 200,
+      "title": "Transaction Context",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/features/transaction-context"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/features/messages.mdx",
+      "status_code": 200,
+      "title": "Messages",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/features/messages"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/features/interacting-with-intelligent-contracts.mdx",
+      "status_code": 200,
+      "title": "Interacting with Intelligent Contracts",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/features/interacting-with-intelligent-contracts"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/features/interacting-with-evm-contracts.mdx",
+      "status_code": 200,
+      "title": "Interacting with EVM Contracts",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/features/interacting-with-evm-contracts"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/features/special-methods.mdx",
+      "status_code": 200,
+      "title": "Special Methods",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/features/special-methods"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/features/vector-storage.mdx",
+      "status_code": 200,
+      "title": "Vector Store",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/features/vector-storage"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/features/debugging.mdx",
+      "status_code": 200,
+      "title": "Debugging",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/features/debugging"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/features/random.mdx",
+      "status_code": 200,
+      "title": "Random",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/features/random"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/features/non-determinism.mdx",
+      "status_code": 200,
+      "title": "Non-determinism",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/features/non-determinism"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/features/calling-llms.mdx",
+      "status_code": 200,
+      "title": "Calling LLMs",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/features/calling-llms"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/features/image-processing.mdx",
+      "status_code": 200,
+      "title": "Image Processing",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/features/image-processing"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/features/web-access.mdx",
+      "status_code": 200,
+      "title": "Web Access",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/features/web-access"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/tooling-setup.mdx",
+      "status_code": 200,
+      "title": "Development Setup",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/tooling-setup"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/first-contract.mdx",
+      "status_code": 200,
+      "title": "Your First Contract",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/first-contract"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/types/address.mdx",
+      "status_code": 200,
+      "title": "Address Type",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/types/address"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/types/primitive.mdx",
+      "status_code": 200,
+      "title": "Primitive Types",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/types/primitive"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/types/collections.mdx",
+      "status_code": 200,
+      "title": "Collection Types",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/types/collections"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/types/dataclasses.mdx",
+      "status_code": 200,
+      "title": "Dataclasses",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/types/dataclasses"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/storage.mdx",
+      "status_code": 200,
+      "title": "Persisting data on the blockchain",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/storage"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/first-intelligent-contract.mdx",
+      "status_code": 200,
+      "title": "Your First **Intelligent** Contract",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/first-intelligent-contract"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/equivalence-principle.mdx",
+      "status_code": 200,
+      "title": "The Equivalence Principle",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/equivalence-principle"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/debugging.mdx",
+      "status_code": 200,
+      "title": "Debugging Intelligent Contracts on GenLayer",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/debugging"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/testing.mdx",
+      "status_code": 200,
+      "title": "Testing Intelligent Contracts",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/testing"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/deploying.mdx",
+      "status_code": 200,
+      "title": "Deploying Intelligent Contracts",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/deploying"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/deploying/deployment-methods.mdx",
+      "status_code": 200,
+      "title": "Deployment Methods",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/deploying/deployment-methods"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/deploying/network-configuration.mdx",
+      "status_code": 200,
+      "title": "Network Configuration",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/deploying/network-configuration"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/deploying/cli-deployment.mdx",
+      "status_code": 200,
+      "title": "CLI Deployment",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/deploying/cli-deployment"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/deploying/deploy-scripts.mdx",
+      "status_code": 200,
+      "title": "Deploy Scripts",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/deploying/deploy-scripts"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/crafting-prompts.mdx",
+      "status_code": 200,
+      "title": "Prompt & Data Techniques",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/crafting-prompts"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/security-and-best-practices/prompt-injection.mdx",
+      "status_code": 200,
+      "title": "Prompt Injection",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/security-and-best-practices/prompt-injection"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/examples/storage.mdx",
+      "status_code": 200,
+      "title": "Storage Contract",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/examples/storage"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/examples/user-storage.mdx",
+      "status_code": 200,
+      "title": "UserStorage Contract",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/examples/user-storage"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/examples/llm-hello-world.mdx",
+      "status_code": 200,
+      "title": "LlmHelloWorld Contract",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/examples/llm-hello-world"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/examples/llm-hello-world-non-comparative.mdx",
+      "status_code": 200,
+      "title": "LlmHelloWorldNonComparative Contract",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/examples/llm-hello-world-non-comparative"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/examples/wizard-of-coin.mdx",
+      "status_code": 200,
+      "title": "Wizard of Coin Contract",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/examples/wizard-of-coin"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/examples/fetch-web-content.mdx",
+      "status_code": 200,
+      "title": "FetchWebContent Contract",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/examples/fetch-web-content"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/examples/fetch-github-profile.mdx",
+      "status_code": 200,
+      "title": "FetchGitHubProfile Contract",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/examples/fetch-github-profile"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/examples/github-profile-projects.mdx",
+      "status_code": 200,
+      "title": "GitHubProfilesRepositories Contract",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/examples/github-profile-projects"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/examples/github-profile-summary.mdx",
+      "status_code": 200,
+      "title": "GitHubProfilesSummaries Contract",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/examples/github-profile-summary"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/examples/prediction.mdx",
+      "status_code": 200,
+      "title": "Prediction Market Contract",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/examples/prediction"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/examples/vector-store-log-indexer.mdx",
+      "status_code": 200,
+      "title": "LogIndexer Contract",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/examples/vector-store-log-indexer"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/tools/genlayer-cli.mdx",
+      "status_code": 200,
+      "title": "GenLayer CLI",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-cli"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/tools/genlayer-studio.mdx",
+      "status_code": 200,
+      "title": "GenLayer Studio",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/tools/genlayer-studio/loading-contract.mdx",
+      "status_code": 200,
+      "title": "Load Your Contract",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio/loading-contract"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/tools/genlayer-studio/deploying-contract.mdx",
+      "status_code": 200,
+      "title": "Deploy Contracts",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio/deploying-contract"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/tools/genlayer-studio/contract-state.mdx",
+      "status_code": 200,
+      "title": "Current Intelligent Contract State",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio/contract-state"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/tools/genlayer-studio/execute-transaction.mdx",
+      "status_code": 200,
+      "title": "Execute Transactions",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio/execute-transaction"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/tools/genlayer-studio/monitoring-node-logs.mdx",
+      "status_code": 200,
+      "title": "Monitoring Node Logs",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio/monitoring-node-logs"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/tools/genlayer-studio/validators.mdx",
+      "status_code": 200,
+      "title": "Accessing and Configuring Validators",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio/validators"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/tools/genlayer-studio/providers.mdx",
+      "status_code": 200,
+      "title": "Inference Providers",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio/providers"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/tools/genlayer-studio/limitations.mdx",
+      "status_code": 200,
+      "title": "Limitations of the GenLayer Studio",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio/limitations"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/tools/genlayer-studio/reset-the-studio.mdx",
+      "status_code": 200,
+      "title": "Resetting the GenLayer Studio",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio/reset-the-studio"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/tools/genlayer-studio/troubleshooting.mdx",
+      "status_code": 200,
+      "title": "Troubleshooting",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio/troubleshooting"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/tools/genlayer-studio/development-tips.mdx",
+      "status_code": 200,
+      "title": "Development Tips",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio/development-tips"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/tools/genlayer-studio/advanced-features/custom-plugins.mdx",
+      "status_code": 200,
+      "title": "Adding LLM Provider Plugins",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio/advanced-features/custom-plugins"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/intelligent-contracts/ideas.mdx",
+      "status_code": 200,
+      "title": "\ud83d\udca1 Build With GenLayer",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/ideas"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/decentralized-applications/architecture-overview.mdx",
+      "status_code": 200,
+      "title": "Architecture Overview of Decentralized Applications Using GenLayer",
+      "url": "https://docs.genlayer.com/developers/decentralized-applications/architecture-overview"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/decentralized-applications/dapp-development-workflow.mdx",
+      "status_code": 200,
+      "title": "DApp Development Workflow with GenLayer",
+      "url": "https://docs.genlayer.com/developers/decentralized-applications/dapp-development-workflow"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/decentralized-applications/genlayer-js.mdx",
+      "status_code": 200,
+      "title": "GenLayerJS SDK",
+      "url": "https://docs.genlayer.com/developers/decentralized-applications/genlayer-js"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/decentralized-applications/querying-a-transaction.mdx",
+      "status_code": 200,
+      "title": "Querying a Transaction",
+      "url": "https://docs.genlayer.com/developers/decentralized-applications/querying-a-transaction"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/decentralized-applications/reading-data.mdx",
+      "status_code": 200,
+      "title": "Reading from Intelligent Contracts",
+      "url": "https://docs.genlayer.com/developers/decentralized-applications/reading-data"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/decentralized-applications/writing-data.mdx",
+      "status_code": 200,
+      "title": "Writing to Intelligent Contracts",
+      "url": "https://docs.genlayer.com/developers/decentralized-applications/writing-data"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/decentralized-applications/testing.mdx",
+      "status_code": 200,
+      "title": "Testing Intelligent Contracts on GenLayer",
+      "url": "https://docs.genlayer.com/developers/decentralized-applications/testing"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/decentralized-applications/project-boilerplate.mdx",
+      "status_code": 200,
+      "title": "GenLayer Project Boilerplate",
+      "url": "https://docs.genlayer.com/developers/decentralized-applications/project-boilerplate"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "developers/staking-guide.mdx",
+      "status_code": 200,
+      "title": "Staking Contract Guide",
+      "url": "https://docs.genlayer.com/developers/staking-guide"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "validators/setup-guide.mdx",
+      "status_code": 200,
+      "title": "Setting Up Your GenLayer Validator",
+      "url": "https://docs.genlayer.com/validators/setup-guide"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "validators/monitoring.mdx",
+      "status_code": 200,
+      "title": "Monitoring & Telemetry",
+      "url": "https://docs.genlayer.com/validators/monitoring"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "validators/system-requirements.mdx",
+      "status_code": 200,
+      "title": "System Requirements",
+      "url": "https://docs.genlayer.com/validators/system-requirements"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "validators/genvm-configuration.mdx",
+      "status_code": 200,
+      "title": "GenVM Configuration",
+      "url": "https://docs.genlayer.com/validators/genvm-configuration"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "validators/upgrade.mdx",
+      "status_code": 200,
+      "title": "Validator Upgrade Guide",
+      "url": "https://docs.genlayer.com/validators/upgrade"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "validators/changelog.mdx",
+      "status_code": 200,
+      "title": "Changelog",
+      "url": "https://docs.genlayer.com/validators/changelog"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "api-references.mdx",
+      "status_code": 200,
+      "title": "Api References",
+      "url": "https://docs.genlayer.com/api-references"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "api-references/genlayer-cli.mdx",
+      "status_code": 200,
+      "title": "GenLayer CLI",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "api-references/genlayer-cli/staking/staking.mdx",
+      "status_code": 200,
+      "title": "Usage",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "api-references/genlayer-cli/localnet/localnet.mdx",
+      "status_code": 200,
+      "title": "Usage",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/localnet/localnet"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "api-references/genlayer-node.mdx",
+      "status_code": 200,
+      "title": "GenLayer Node API",
+      "url": "https://docs.genlayer.com/api-references/genlayer-node"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "api-references/genlayer-node/gen/gen_call.mdx",
+      "status_code": 200,
+      "title": "gen_call",
+      "url": "https://docs.genlayer.com/api-references/genlayer-node/gen/gen_call"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "api-references/genlayer-node/gen/gen_getContractSchema.mdx",
+      "status_code": 200,
+      "title": "gen_getContractSchema",
+      "url": "https://docs.genlayer.com/api-references/genlayer-node/gen/gen_getContractSchema"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "api-references/genlayer-node/gen/gen_getContractState.mdx",
+      "status_code": 200,
+      "title": "Get latest accepted state",
+      "url": "https://docs.genlayer.com/api-references/genlayer-node/gen/gen_getContractState"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "api-references/genlayer-node/gen/gen_getContractCode.mdx",
+      "status_code": 200,
+      "title": "Get latest accepted code",
+      "url": "https://docs.genlayer.com/api-references/genlayer-node/gen/gen_getContractCode"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "api-references/genlayer-node/gen/gen_getTransactionReceipt.mdx",
+      "status_code": 200,
+      "title": "gen_getTransactionReceipt",
+      "url": "https://docs.genlayer.com/api-references/genlayer-node/gen/gen_getTransactionReceipt"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "api-references/genlayer-node/gen/gen_getTransactionStatus.mdx",
+      "status_code": 200,
+      "title": "gen_getTransactionStatus",
+      "url": "https://docs.genlayer.com/api-references/genlayer-node/gen/gen_getTransactionStatus"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "api-references/genlayer-node/gen/gen_syncing.mdx",
+      "status_code": 200,
+      "title": "gen_syncing",
+      "url": "https://docs.genlayer.com/api-references/genlayer-node/gen/gen_syncing"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "api-references/genlayer-node/debug/gen_dbg_ping.mdx",
+      "status_code": 200,
+      "title": "gen_dbg_ping",
+      "url": "https://docs.genlayer.com/api-references/genlayer-node/debug/gen_dbg_ping"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "api-references/genlayer-node/debug/gen_dbg_trie.mdx",
+      "status_code": 200,
+      "title": "gen_dbg_trie",
+      "url": "https://docs.genlayer.com/api-references/genlayer-node/debug/gen_dbg_trie"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "api-references/genlayer-node/debug/gen_dbg_traceTransaction.mdx",
+      "status_code": 200,
+      "title": "gen_dbg_traceTransaction",
+      "url": "https://docs.genlayer.com/api-references/genlayer-node/debug/gen_dbg_traceTransaction"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "api-references/genlayer-node/ops/balance.mdx",
+      "status_code": 200,
+      "title": "balance",
+      "url": "https://docs.genlayer.com/api-references/genlayer-node/ops/balance"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "api-references/genlayer-node/ops/health.mdx",
+      "status_code": 200,
+      "title": "health",
+      "url": "https://docs.genlayer.com/api-references/genlayer-node/ops/health"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "api-references/genlayer-node/ops/metrics.mdx",
+      "status_code": 200,
+      "title": "HELP genlayer_node_cpu_usage_percent Current CPU usage percentage (0-100)",
+      "url": "https://docs.genlayer.com/api-references/genlayer-node/ops/metrics"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "api-references/genlayer-node/ops/snapshot.mdx",
+      "status_code": 200,
+      "title": "snapshot",
+      "url": "https://docs.genlayer.com/api-references/genlayer-node/ops/snapshot"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "partners/genlayerlabs.mdx",
+      "status_code": 200,
+      "title": "GenLayer Labs",
+      "url": "https://docs.genlayer.com/partners/genlayerlabs"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "partners/heurist.mdx",
+      "status_code": 200,
+      "title": "Heurist",
+      "url": "https://docs.genlayer.com/partners/heurist"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "partners/ionet.mdx",
+      "status_code": 200,
+      "title": "io.net",
+      "url": "https://docs.genlayer.com/partners/ionet"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "partners/comput3.mdx",
+      "status_code": 200,
+      "title": "Comput3",
+      "url": "https://docs.genlayer.com/partners/comput3"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "partners/chutes.mdx",
+      "status_code": 200,
+      "title": "Using Chutes with GenLayer Validators",
+      "url": "https://docs.genlayer.com/partners/chutes"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "partners/morpheus.mdx",
+      "status_code": 200,
+      "title": "Morpheus",
+      "url": "https://docs.genlayer.com/partners/morpheus"
+    },
+    {
+      "source_kind": "bulk-mdx",
+      "source_path": "FAQ.mdx",
+      "status_code": 200,
+      "title": "FAQ",
+      "url": "https://docs.genlayer.com/FAQ"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "Ollama",
+      "url": "https://docs.genlayer.com/_providers/ollama"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "OpenAI",
+      "url": "https://docs.genlayer.com/_providers/openai"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "Greyboxing in GenLayer",
+      "url": "https://docs.genlayer.com/_temp/security-and-best-practices/grey-boxing"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "Universal Attacks in GenLayer",
+      "url": "https://docs.genlayer.com/_temp/security-and-best-practices/universal-attacks"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "GenLayerJS",
+      "url": "https://docs.genlayer.com/api-references/genlayer-js"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "GenLayerPY",
+      "url": "https://docs.genlayer.com/api-references/genlayer-py"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "GenLayer Testing Suite",
+      "url": "https://docs.genlayer.com/api-references/genlayer-test"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "ADRValidator Contract",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/examples/_advanced/_adr-validator"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "Flight Insurance Contract",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/examples/_advanced/_flight-insurance"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "GenLayerDAO Contract",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/examples/_advanced/_genlayer-dao"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "GitBounties Contract",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/examples/_advanced/_git-bounties"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "Influencer Tweet Analyzer Contract",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/examples/_advanced/_influencer-tweet-analyzer"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "PureLLM DAO Contract",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/examples/_advanced/_purellm-dao"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "RokosMansion Contract",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/examples/_advanced/_rokos-mansion"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "Balances",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/features/balances"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "Intelligent Contract Features",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/features/features"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "What Are Intelligent Contracts?",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol/what-are-intelligent-contracts"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "What Makes GenLayer Different?",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol/what-makes-genlayer-different"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "Who Is GenLayer For?",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol/who-is-genlayer-for"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "Why We Are Building GenLayer",
+      "url": "https://docs.genlayer.com/understand-genlayer-protocol/why-we-are-building-genlayer"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "staking active-validators",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/active-validators"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "staking banned-validators",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/banned-validators"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "staking delegation-info",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/delegation-info"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "staking delegator-claim",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/delegator-claim"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "staking delegator-exit",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/delegator-exit"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "staking delegator-join",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/delegator-join"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "staking epoch-info",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/epoch-info"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "staking prime-all",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/prime-all"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "staking quarantined-validators",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/quarantined-validators"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "staking set-identity",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/set-identity"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "staking set-operator",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/set-operator"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "staking validator-claim",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/validator-claim"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "staking validator-deposit",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/validator-deposit"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "staking validator-exit",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/validator-exit"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "staking validator-history",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/validator-history"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "staking validator-info",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/validator-info"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "staking validator-join",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/validator-join"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "staking validator-prime",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/validator-prime"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "staking validators",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/validators"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "staking wizard",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/staking/staking/wizard"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "localnet validators",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/localnet/localnet/validators"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "localnet validators count",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/localnet/localnet/validators/count"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "localnet validators create",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/localnet/localnet/validators/create"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "localnet validators create-random",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/localnet/localnet/validators/create-random"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "localnet validators delete",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/localnet/localnet/validators/delete"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "localnet validators get",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/localnet/localnet/validators/get"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "localnet validators update",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/localnet/localnet/validators/update"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "finalize",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/finalize"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "finalize-batch",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/finalize-batch"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "account",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/accounts/account"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "account create",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/accounts/account/create"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "account export",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/accounts/account/export"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "account import",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/accounts/account/import"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "account list",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/accounts/account/list"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "account lock",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/accounts/account/lock"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "account remove",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/accounts/account/remove"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "account send",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/accounts/account/send"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "account show",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/accounts/account/show"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "account unlock",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/accounts/account/unlock"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "account use",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/accounts/account/use"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "config",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/configuration/config"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "config get",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/configuration/config/get"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "config reset",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/configuration/config/reset"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "config set",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/configuration/config/set"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "network",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/configuration/network"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "network info",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/configuration/network/info"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "network list",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/configuration/network/list"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "network set",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/configuration/network/set"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "deploy",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/contracts/deploy"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "call",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/contracts/call"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "write",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/contracts/write"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "schema",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/contracts/schema"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "code",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/contracts/code"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "init",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/environment/init"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "up",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/environment/up"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "stop",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/environment/stop"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "new",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/environment/new"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "update",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/environment/update"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "update ollama",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/environment/update/ollama"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "receipt",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/transactions/receipt"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "trace",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/transactions/trace"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "appeal",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/transactions/appeal"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "appeal-bond",
+      "url": "https://docs.genlayer.com/api-references/genlayer-cli/transactions/appeal-bond"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "Contract Methods",
+      "url": "https://docs.genlayer.com/api-references/genlayer-js/contracts"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "Transaction Methods",
+      "url": "https://docs.genlayer.com/api-references/genlayer-js/transactions"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "Staking Methods",
+      "url": "https://docs.genlayer.com/api-references/genlayer-js/staking"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "GenLayerPY SDK API Reference",
+      "url": "https://docs.genlayer.com/api-references/genlayer-py/api"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "Integration Testing",
+      "url": "https://docs.genlayer.com/api-references/genlayer-test/integration"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "Direct Mode Testing",
+      "url": "https://docs.genlayer.com/api-references/genlayer-test/direct"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "glsim \u2014 Local GenLayer Network",
+      "url": "https://docs.genlayer.com/api-references/genlayer-test/glsim"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "genvm-linter",
+      "url": "https://docs.genlayer.com/api-references/genlayer-linter"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "LibertAI",
+      "url": "https://docs.genlayer.com/partners/libertai"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "Optimistic Democracy",
+      "url": "https://docs.genlayer.com/core-concepts/optimistic-democracy"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "genlayer Commands",
+      "url": "https://docs.genlayer.com/references/genlayer-cli"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "Getting Started with GenLayer",
+      "url": "https://docs.genlayer.com/getting-started"
+    },
+    {
+      "source_kind": "html-article",
+      "source_path": null,
+      "status_code": 200,
+      "title": "Execute Transactions",
+      "url": "https://docs.genlayer.com/genlayer-stack/genlayer-studio/execute-transaction"
+    }
+  ],
+  "sitemap_url": "https://docs.genlayer.com/sitemap.xml",
+  "sitemap_urls": 136,
+  "skipped_duplicate_pages": [
+    {
+      "duplicate_of": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/genvm",
+      "title": "GenVM (GenLayer Virtual Machine)",
+      "url": "https://docs.genlayer.com/core-concepts/genvm"
+    },
+    {
+      "duplicate_of": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/transactions",
+      "title": "Transactions",
+      "url": "https://docs.genlayer.com/core-concepts/transactions"
+    },
+    {
+      "duplicate_of": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/optimistic-democracy/equivalence-principle",
+      "title": "Equivalence Principle Mechanism",
+      "url": "https://docs.genlayer.com/core-concepts/optimistic-democracy/equivalence-principle"
+    },
+    {
+      "duplicate_of": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/optimistic-democracy/appeal-process",
+      "title": "Appeals Process",
+      "url": "https://docs.genlayer.com/core-concepts/optimistic-democracy/appeal-process"
+    },
+    {
+      "duplicate_of": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/optimistic-democracy/finality",
+      "title": "Finality",
+      "url": "https://docs.genlayer.com/core-concepts/optimistic-democracy/finality"
+    },
+    {
+      "duplicate_of": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/optimistic-democracy/staking",
+      "title": "Staking in GenLayer",
+      "url": "https://docs.genlayer.com/core-concepts/optimistic-democracy/staking"
+    },
+    {
+      "duplicate_of": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/optimistic-democracy/slashing",
+      "title": "Slashing in GenLayer",
+      "url": "https://docs.genlayer.com/core-concepts/optimistic-democracy/slashing"
+    },
+    {
+      "duplicate_of": "https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/optimistic-democracy/unstaking",
+      "title": "Unstaking in GenLayer",
+      "url": "https://docs.genlayer.com/core-concepts/optimistic-democracy/unstaking"
+    },
+    {
+      "duplicate_of": "https://docs.genlayer.com/developers/intelligent-contracts/first-contract",
+      "title": "Your First Contract",
+      "url": "https://docs.genlayer.com/developers/intelligent-contracts/your-first-contract"
+    },
+    {
+      "duplicate_of": "https://docs.genlayer.com/core-concepts/optimistic-democracy",
+      "title": "Optimistic Democracy",
+      "url": "https://docs.genlayer.com/about-genlayer/core-concepts/optimistic-democracy"
+    },
+    {
+      "duplicate_of": "https://docs.genlayer.com/developers/intelligent-contracts/introduction",
+      "title": "Introduction to Intelligent Contracts",
+      "url": "https://docs.genlayer.com/core-concepts/intelligent-contracts"
+    },
+    {
+      "duplicate_of": "https://docs.genlayer.com/developers/intelligent-contracts/introduction",
+      "title": "Introduction to Intelligent Contracts",
+      "url": "https://docs.genlayer.com/build-with-genlayer/intelligent-contracts"
+    },
+    {
+      "duplicate_of": "https://docs.genlayer.com/api-references/genlayer-js",
+      "title": "GenLayerJS",
+      "url": "https://docs.genlayer.com/references/genlayer-js"
+    },
+    {
+      "duplicate_of": "https://docs.genlayer.com/developers/intelligent-contracts/security-and-best-practices/prompt-injection",
+      "title": "Prompt Injection",
+      "url": "https://docs.genlayer.com/security-and-best-practices/grey-boxing"
+    }
+  ]
+}

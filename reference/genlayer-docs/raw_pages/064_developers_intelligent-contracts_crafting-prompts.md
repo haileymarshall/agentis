@@ -1,0 +1,213 @@
+# Prompt & Data Techniques
+
+Source: https://docs.genlayer.com/developers/intelligent-contracts/crafting-prompts
+
+Intelligent contracts combine LLM reasoning with web data and programmatic logic. Getting reliable results requires specific techniques — structured outputs, stable data extraction, and grounding LLM judgments with verified facts.
+
+## Always Return JSON
+
+The single most impactful technique. Using `response_format="json"` guarantees the LLM returns parseable JSON, eliminating manual cleanup:
+
+```python
+def leader_fn():
+    prompt = f"""
+    You are a wizard guarding a magical coin.
+    An adventurer says: {request}
+
+    Should you give them the coin? Respond as JSON:
+    {{"reasoning": "your reasoning", "give_coin": true/false}}
+    """
+    return gl.nondet.exec_prompt(prompt, response_format="json")
+
+def validator_fn(leaders_res) -> bool:
+    if not isinstance(leaders_res, gl.vm.Return):
+        return False
+    my_result = leader_fn()
+    # Compare the decision, not the reasoning
+    return my_result["give_coin"] == leaders_res.calldata["give_coin"]
+
+result = gl.vm.run_nondet_unsafe(leader_fn, validator_fn)
+```
+
+Without `response_format="json"`, LLMs may wrap output in markdown code fences, add commentary, or return malformed JSON. With it, you get a parsed dict directly.
+
+> **Note:**
+    Always define the JSON schema in your prompt. `response_format="json"` ensures valid JSON, but the LLM still needs to know *which* fields to include.
+
+## Extract Stable Fields from Web Data
+
+When fetching external data for consensus, the leader and validators make **independent requests**. API responses often contain fields that change between calls — timestamps, view counts, caching headers. Extract only the fields that matter:
+
+```python
+def leader_fn():
+    response = gl.nondet.web.get(github_api_url)
+    data = json.loads(response.body.decode("utf-8"))
+    # Only return fields that are stable across requests
+    return {
+        "id": data["id"],
+        "title": data["title"],
+        "state": data["state"],
+        "merged": data.get("merged", False),
+    }
+    # NOT: updated_at, comments, reactions, changed_files
+
+def validator_fn(leaders_res) -> bool:
+    if not isinstance(leaders_res, gl.vm.Return):
+        return False
+    return leader_fn() == leaders_res.calldata
+```
+
+This is the #1 cause of failed consensus for new developers. If your contract fetches web data and consensus keeps failing, check whether you're returning unstable fields.
+
+## Compare Derived Status, Not Raw Data
+
+Sometimes even stable fields can differ between calls — a new CI check run starts, a comment is added. Instead of comparing raw arrays, derive a summary and compare that:
+
+```python
+def _check_ci_status(self, repo: str, commit_hash: str) -> str:
+    url = f"https://api.github.com/repos/{repo}/commits/{commit_hash}/check-runs"
+
+    def leader_fn():
+        response = gl.nondet.web.get(url)
+        data = json.loads(response.body.decode("utf-8"))
+        return [
+            {"name": c["name"], "status": c["status"], "conclusion": c.get("conclusion", "")}
+            for c in data.get("check_runs", [])
+        ]
+
+    def validator_fn(leaders_res) -> bool:
+        if not isinstance(leaders_res, gl.vm.Return):
+            return False
+        validator_result = leader_fn()
+
+        # Compare derived status, not raw arrays
+        # (check count may differ if new CI run triggered between calls)
+        def derive_status(checks):
+            if not checks:
+                return "pending"
+            for c in checks:
+                if c.get("status") != "completed":
+                    return "pending"
+                if c.get("conclusion") != "success":
+                    return c.get("conclusion", "failure")
+            return "success"
+
+        return derive_status(leaders_res.calldata) == derive_status(validator_result)
+
+    checks = gl.vm.run_nondet(leader_fn, validator_fn)
+
+    if not checks:
+        return "pending"
+    for c in checks:
+        if c.get("conclusion") != "success":
+            return c.get("conclusion", "failure")
+    return "success"
+```
+
+The key insight: consensus doesn't require identical data — it requires agreement on the **decision**.
+
+## Ground LLM Judgments with Programmatic Facts
+
+LLMs hallucinate on character-level checks. Ask "does this text contain an em dash?" and the LLM may say yes when it doesn't, or vice versa. The fix: check programmatically first, then feed the results as ground truth into the LLM prompt.
+
+### Step 1: LLM Generates Checkable Rules
+
+Ask the LLM to convert human-readable rules into Python expressions:
+
+```python
+def _generate_rule_checks(self, rules: str) -> list:
+    prompt = f"""Given these rules, generate Python expressions that can
+    programmatically verify each rule that CAN be checked with code.
+    Variable `text` contains the post text. Skip subjective rules.
+
+    Rules:
+    {rules}
+
+    Output JSON: {{"checks": [{{"rule": "...", "expression": "...", "description": "..."}}]}}"""
+
+    return gl.nondet.exec_prompt(prompt, response_format="json").get("checks", [])
+
+# Example output for rules "no em dashes, must mention @BOTCHA, must include botcha.xyz":
+# [
+#   {"rule": "no em dashes",    "expression": "'—' not in text",      ...},
+#   {"rule": "mention @BOTCHA", "expression": "'@BOTCHA' in text",    ...},
+#   {"rule": "include link",    "expression": "'botcha.xyz' in text", ...},
+# ]
+```
+
+### Step 2: Eval in a Sandbox
+
+Run the generated expressions deterministically — no hallucination possible:
+
+```python
+def _eval_rule_checks(self, checks: list, tweet_text: str) -> list:
+    def run_checks():
+        results = []
+        for check in checks:
+            try:
+                passed = eval(
+                    check["expression"],
+                    {"__builtins__": {"len": len}, "text": tweet_text},
+                )
+                results.append({
+                    "rule": check["rule"],
+                    "result": "SATISFIED" if passed else "VIOLATED",
+                })
+            except Exception:
+                pass  # skip broken expressions, let LLM handle the rule
+        return results
+
+    return gl.vm.unpack_result(gl.vm.spawn_sandbox(run_checks))
+```
+
+> **Note:**
+    `gl.vm.spawn_sandbox` runs a function in an isolated sandbox within the GenVM. `gl.vm.unpack_result` extracts the return value. Together they let you execute dynamically generated code safely. See the [genlayer-py API reference](/api-references/genlayer-py) for details.
+
+### Step 3: Inject Ground Truth into LLM Prompt
+
+Feed the verified results back so the LLM focuses on subjective rules and doesn't override programmatic facts:
+
+```python
+compliance_prompt = f"""
+Evaluate this submission for compliance with the campaign rules.
+
+Submission: {tweet_text}
+
+IMPORTANT — PROGRAMMATIC VERIFICATION RESULTS:
+These results are GROUND TRUTH from running code on the raw text.
+Do NOT override them with your own character-level analysis.
+
+<programmatic_checks>
+{chr(10).join(f"- {r['rule']}: {r['result']}" for r in programmatic_results)}
+</programmatic_checks>
+
+For rules NOT listed above, use your own judgment.
+
+Respond as JSON: {{"compliant": true/false, "violations": ["..."]}}
+"""
+
+result = gl.nondet.exec_prompt(compliance_prompt, response_format="json")
+```
+
+This three-step pattern — **generate checks → eval deterministically → inject as ground truth** — eliminates an entire class of LLM errors. Use it whenever your contract needs to verify concrete, checkable facts.
+
+## Classify Errors
+
+Use error prefixes to distinguish user mistakes from infrastructure failures. This helps both debugging and error handling logic:
+
+```python
+ERROR_EXPECTED = "[EXPECTED]"    # Business logic errors (deterministic)
+ERROR_EXTERNAL = "[EXTERNAL]"   # API/network failures (non-deterministic)
+
+# In contract methods:
+if sender != bounty.owner:
+    raise ValueError(f"{ERROR_EXPECTED} Only bounty owner can validate")
+
+if response.status != 200:
+    raise ValueError(f"{ERROR_EXTERNAL} GitHub API returned {response.status}")
+```
+
+`[EXPECTED]` errors mean the transaction should fail consistently across all nodes. `[EXTERNAL]` errors mean the external service had a problem — the transaction may succeed on retry.
+
+> **Note:**
+    For a comprehensive guide on prompt engineering, see the [Prompt Engineering Guide from Anthropic](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview).

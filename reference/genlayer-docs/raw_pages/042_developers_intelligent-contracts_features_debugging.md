@@ -1,0 +1,30 @@
+# Debugging
+
+Source: https://docs.genlayer.com/developers/intelligent-contracts/features/debugging
+
+## Print Statements
+
+Use `print` calls for basic debugging, which will be present in node or studio output.
+
+Use `gl.trace` to include time stamps in the output (it will be written to genvm_log instead of stdout)
+
+## Profiling
+
+There is also `gl.trace_time_micro` which returns timestamp in the GenVM debug mode. Default bootloader includes
+possibility to enable profiling by setting environment variable `GENLAYER_ENABLE_PROFILER=true`.
+
+```python
+# {
+#   "Seq": [
+#     { "SetEnv": { "name": "GENLAYER_ENABLE_PROFILER", "value": "true" } },
+#     { "Depends": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6" }
+#   ]
+# }
+```
+
+This will output base-64 encoded gzip-compressed profiling data to stderr after every single VM execution
+
+## Attaching a Debugger
+
+> **Note:**
+  Unfortunately, attaching a debugger to a running Intelligent Contract is not supported yet

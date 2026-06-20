@@ -1,0 +1,213 @@
+# Network Configuration
+
+Source: https://docs.genlayer.com/developers/intelligent-contracts/deploying/network-configuration
+
+GenLayer supports multiple networks, each serving specific purposes in the development lifecycle:
+
+## Localnet
+
+**Purpose**: Local development and testing
+- **When to use**: During development, debugging, and initial testing
+- **Setup**: Requires running the GenLayer Studio locally with `genlayer init` and `genlayer up`
+- **URL**: `http://localhost:4000/api` (default)
+- **Benefits**:
+  - Full control over validators and network configuration
+  - No external dependencies
+  - Fast transaction processing
+  - Ability to reset database and validators
+  - Built-in faucet to fund accounts with GEN (💧 button in the account selector)
+
+### Setting up Localnet
+
+```bash
+# Initialize local network
+genlayer init
+
+# Start the local network
+genlayer up
+```
+
+For complete setup instructions, examples, and video tutorials, see the [GenLayer Studio Guide](../tools/genlayer-studio).
+
+## Studionet
+
+**Purpose**: Hosted development environment
+- **When to use**: For development without local setup requirements
+- **Setup**: Accessible through [studio.genlayer.com/api](https://studio.genlayer.com)
+- **Benefits**:
+  - No local installation required
+  - Pre-configured validators
+  - Shared development environment
+  - Ideal for quick prototyping
+  - Built-in faucet to fund accounts with GEN (💧 button in the account selector)
+
+> **Note:**
+  Studionet is perfect for getting started quickly or when you need to share your development environment with others.
+
+### Using Studionet
+
+```bash
+# Set network to studionet
+genlayer network studionet
+
+# Deploy to studionet
+genlayer deploy --contract contracts/my_contract.py
+```
+
+## TestnetAsimov
+
+**Purpose**: Infrastructure testing and stress testing
+- **When to use**: For infrastructure stability testing, scalability testing, and stress tests
+- **Setup**: Connect using network configuration
+- **Benefits**:
+  - Stable infrastructure testing environment
+  - Scalability and stress testing
+  - Shared testnet for community testing
+
+### Using TestnetAsimov
+
+```bash
+# Set network to testnet
+genlayer network testnet-asimov
+
+# Deploy to testnet
+genlayer deploy --contract contracts/my_contract.py
+```
+
+## TestnetBradbury
+
+**Purpose**: Production-like testing environment with real AI/LLM use cases
+- **When to use**: For deploying and testing intelligent contracts with real LLM models
+- **Setup**: Connect using network configuration
+- **Benefits**:
+  - Real AI workloads using powerful LLM models
+  - Production-like environment for intelligent contract testing
+  - Real use cases and contracts deployed
+  - Shared testnet for community testing
+
+> **Note:**
+  Testnet Bradbury configuration details will be available when the network goes live. The faucet and RPC endpoints are shared with Testnet Asimov.
+
+### Getting Testnet Tokens
+
+Before deploying to TestnetBradbury, you'll need testnet tokens. Use the [faucet](https://testnet-faucet.genlayer.foundation/) to get free GEN tokens.
+
+### Using TestnetBradbury
+
+```bash
+# Set network to testnet
+genlayer network testnet-bradbury
+
+# Deploy to testnet
+genlayer deploy --contract contracts/my_contract.py
+```
+
+## Network Comparison
+
+| Feature | Localnet | Studionet | TestnetAsimov | TestnetBradbury |
+|---------|----------|-----------|---------------|-----------------|
+| **Setup Complexity** | Medium | None | Low | Low |
+| **Control Level** | Full | Limited | Limited | Limited |
+| **Persistence** | Local only | Temporary | Persistent | Persistent |
+| **Collaboration** | No | Yes | Yes | Yes |
+| **Performance** | Fast | Medium | Production-like | Production-like |
+| **Best for** | Development | Prototyping | Infrastructure testing | AI/LLM testing |
+
+## Development Workflow
+
+We recommend following this progression:
+
+1. **Start with Localnet**: Develop and test your contracts locally with full control
+2. **Test on Studionet**: Validate contracts in a shared environment
+3. **Deploy to TestnetBradbury**: Final testing in a production-like environment with real AI workloads
+
+## Managing Network Settings
+
+### Viewing Current Configuration
+
+```bash
+# Show all configuration
+genlayer config get
+
+# Show specific network setting
+genlayer config get network
+```
+
+### Setting Networks
+
+The GenLayer CLI allows you to set a default network that will be used for all operations unless overridden.
+
+**Interactive Network Selection:**
+```bash
+# Set network interactively
+genlayer network
+```
+
+This command will show you available networks and let you choose:
+
+```
+? Select a network:
+❯ localnet
+  studionet
+  testnet-asimov
+  testnet-bradbury
+  custom
+```
+
+**Direct Network Selection:**
+```bash
+# Set specific network directly
+genlayer network localnet
+genlayer network studionet
+genlayer network testnet-asimov
+genlayer network testnet-bradbury
+```
+
+### Network Switching Workflow
+
+```bash
+# Development workflow
+genlayer network localnet
+genlayer deploy --contract contracts/my_contract.py
+
+# Testing workflow
+genlayer network studionet
+genlayer deploy --contract contracts/my_contract.py
+
+# Pre-production workflow
+genlayer network testnet-bradbury
+genlayer deploy --contract contracts/my_contract.py
+```
+
+## Network Configuration File
+
+The CLI stores network configuration in `~/.genlayer/genlayer-config.json`:
+
+```json
+{
+  "network": {
+    "id": 61999,
+    "name": "Genlayer Localnet",
+    "rpcUrls": {
+      ...
+    }
+  }
+}
+```
+
+### Manual Configuration
+
+If needed, you can edit the configuration file directly:
+
+```bash
+# Open config file
+code ~/.genlayer/genlayer-config.json
+
+# Or edit with any editor
+nano ~/.genlayer/genlayer-config.json
+```
+
+## Next Steps
+
+- Start deploying with [CLI Deployment](./cli-deployment)
+- Set up automated deployments with [Deploy Scripts](./deploy-scripts)

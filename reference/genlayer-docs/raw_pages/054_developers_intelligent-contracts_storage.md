@@ -1,0 +1,212 @@
+# Persisting data on the blockchain
+
+Source: https://docs.genlayer.com/developers/intelligent-contracts/storage
+
+Usual data structures aren't suitable for representing blockchain persistent storage:
+
+1. Allocated addresses (`id` in python terms) are not persistent
+2. Allocation requires knowledge about all allocated addresses, which takes a lot of space and would cost a lot of reads at start time
+3. Serialization works poorly as it will rewrite entire storage (consider rehash)
+
+Intelligent Contracts store data publicly on chain, attached to their account's address. The storage starts zero-initialized until a contract is deployed and initializes a state.
+
+For storage declaration GenLayer uses contract class fields.
+
+> **Note:**
+    All persistent fields must be declared in the class body and annotated with types.
+
+Example:
+```py
+class PersistentContract(gl.Contract):
+    minter: Address
+
+    def __init__(self):
+        self.minter = gl.message.sender_address
+```
+
+In your contracts, you can use any Python types, but for persisted fields, there are some restrictions:
+- `list[T]` needs to be replaced with `DynArray[T]`
+- `dict[K, V]` needs to be replaced with `TreeMap[K, V]`
+- `int` type isn't supported on purpose. You most likely wish to use some fixed-size integer type, such as `i32` or `u256`. If this is not the case and you are sure that you need big integers, you can annotate your field with `bigint`, which is just an alias for python `int`
+
+> **Note:**
+    Only fully instantiated generic types can be used, so `TreeMap` is forbidden, while `TreeMap[str, u256]` is not
+
+Simple examples:
+
+```py
+class PersistentContract(gl.Contract):
+    a: str
+    b: bytes
+    # c: list[str]           # ❌ `list` is forbidden!
+    c: DynArray[str]
+    # b: dict[Address, u256] # ❌ `dict` is forbidden!
+    # b: TreeMap             # ❌ only fully specialized generic types are allowed!
+    b: TreeMap[Address, u256]
+    # d: int                 # ❌ `int` is forbidden
+    d: bigint                # ⚠️ most likely you don't need an arbitrary big integer
+    d_sized: i256
+```
+
+## Few words about `DynArray` and `TreeMap`
+
+These types implement python `collections.abc.MutableSequence` and `collections.abc.MutableMapping` which makes them compatible with most of the python code
+
+They can be encoded into calldata as-is as well, which means that following code is correct:
+
+```py
+class PersistentContract(gl.Contract):
+    storage: DynArray[str]
+
+    @gl.public.view
+    def get_complete_storage(self) -> collections.abc.Sequence[str]:
+        return self.storage
+```
+
+> **Note:**
+    Calldata format supports mappings only with `str` keys, like JSON does.
+
+## Using custom data types
+
+You can use other python classes in storage, for example:
+
+```py
+@allow_storage
+@dataclass
+class User:
+    name: str
+    birthday: datetime.datetime
+
+class Contract(gl.Contract):
+    users: DynArray[User]
+```
+
+Note that you must decorate them with `@allow_storage`. This is done to prevent [confusion](#differences-from-regular-python-types)
+
+However, there is a tricky case: allocating storage generics in-memory. It is different from regular python syntax because storage types don't have type erasure due to fixed memory layout.
+
+```py
+@allow_storage
+@dataclass
+class User:
+    data: TreeMap[str, str]
+
+User() # error: data is absent (from dataclass)
+User(gl.storage.inmem_allocate(TreeMap[str, str])) # works fine, this function takes a type and `*args, **kwargs` for corresponding `__init__`. Also note that type must be fully instantiated and have no type variables.
+```
+
+## Default values
+By default storage is zero-initialized:
+| Type       | Default value |
+|------------|---------------|
+| `u*`, `i*` | `0`           |
+| `bool`     | `false`       |
+| `float`    | `+0`          |
+| `str`      | `""`          |
+| `DynArray` | `[]`          |
+| `TreeMap`  | `{}`          |
+
+Struct types are zero-initialized "recursively"
+
+---
+## Memory Management
+
+### `gl.storage.inmem_allocate`
+
+Required for **generic storage classes** only. Regular dataclasses use normal initialization.
+
+```python
+# { "Depends": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6" }
+
+from genlayer import *
+from dataclasses import dataclass
+import datetime
+
+@allow_storage
+@dataclass
+class User:
+    name: str
+    birthday: datetime.datetime
+
+@allow_storage
+@dataclass
+class Gen[T]:
+    name: T
+    birthday: datetime.datetime
+
+class Contract(gl.Contract):
+    user: User
+    gen_user: Gen[bytes]
+
+    def __init__(self):
+        pass
+
+    @gl.public.write
+    def plain(self):
+        user = User('Ada', datetime.datetime.now())
+        self.user = user
+
+        read_user = self.user
+        copied_out = gl.storage.copy_to_memory(read_user)
+
+        def nd():
+            print('inmem: ok', user)
+            try:
+                print('storage: not ok', str(read_user))
+            except Exception as e:
+                print('storage: not ok', e)
+            print('copied out: ok', copied_out)
+
+        gl.eq_principle.strict_eq(nd)
+
+    @gl.public.write
+    def generic(self):
+        user = gl.storage.inmem_allocate(Gen[bytes], b'Ada', datetime.datetime.now())
+        self.gen_user = user
+
+        read_user = self.gen_user
+        copied_out = gl.storage.copy_to_memory(read_user)
+
+        def nd():
+            print('inmem: ok', user)
+            try:
+                print('storage: not ok', str(read_user))
+            except Exception as e:
+                print('storage: not ok', e)
+            print('copied out: ok', copied_out)
+
+        gl.eq_principle.strict_eq(nd)
+```
+
+### `gl.storage.copy_to_memory`
+
+Storage objects need to be copied to memory when you want to use them in non-deterministic blocks, since non-deterministic blocks cannot access storage directly:
+
+```python
+# Read from storage
+storage_user = self.user
+
+# Copy to memory for use in non-deterministic blocks or other operations
+memory_user = gl.storage.copy_to_memory(storage_user)
+
+def my_nondet_function():
+    # Storage objects cannot be used directly in nondet blocks
+    # print('storage: not accessible', storage_user)  # Error - storage not accessible!
+
+    # But memory objects work fine
+    print('copied out: ok', memory_user)  # Works!
+    return str(memory_user)  # String conversion also works with memory objects
+
+gl.eq_principle.strict_eq(my_nondet_function)
+```
+
+---
+## Differences from regular python types
+Even though storage classes mimic python types, remember that they provide you only with a view on memory, not actual data that is "here". For example, consider the above example
+
+```py
+self.users.append(User("Ada"))
+user = self.users[-1]
+self.users[-1] = User("Definitely not Ada", datetime.datetime.now())
+assert user.name == "Definitely not Ada" # this is true!
+```

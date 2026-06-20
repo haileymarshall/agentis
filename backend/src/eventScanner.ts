@@ -1,0 +1,68 @@
+import { agentisAbi, type BaseChainId } from "@agentis/shared";
+import type { RelayerConfig } from "./config.js";
+import { createBaseClients } from "./baseClient.js";
+
+export interface VerdictRequestEvent {
+  chainId: BaseChainId;
+  jobId: bigint;
+  txHash?: `0x${string}`;
+}
+
+export async function scanMissedVerdictRequests(
+  config: RelayerConfig,
+  chainId: BaseChainId,
+  handler: (event: VerdictRequestEvent) => Promise<void>
+) {
+  const { publicClient, network } = createBaseClients(config, chainId);
+  if (!network.agentisAddress) return;
+
+  const logs = await publicClient.getContractEvents({
+    address: network.agentisAddress,
+    abi: agentisAbi,
+    eventName: "VerdictRequested",
+    fromBlock: network.startBlock,
+    toBlock: "latest"
+  });
+
+  for (const log of logs) {
+    const emittedChainId = Number(log.args.chainId);
+    if (emittedChainId !== chainId) {
+      throw new Error(`Refusing mixed-chain event: listener ${chainId}, emitted ${emittedChainId}`);
+    }
+    if (log.args.jobId == null) {
+      throw new Error("VerdictRequested event missing jobId");
+    }
+    await handler({ chainId, jobId: log.args.jobId, txHash: log.transactionHash });
+  }
+}
+
+export function watchVerdictRequests(
+  config: RelayerConfig,
+  chainId: BaseChainId,
+  handler: (event: VerdictRequestEvent) => Promise<void>
+) {
+  const { publicClient, network } = createBaseClients(config, chainId);
+  if (!network.agentisAddress) return () => undefined;
+
+  return publicClient.watchContractEvent({
+    address: network.agentisAddress,
+    abi: agentisAbi,
+    eventName: "VerdictRequested",
+    onLogs: (logs: any[]) => {
+      for (const log of logs) {
+        const emittedChainId = Number(log.args.chainId);
+        if (emittedChainId !== chainId) {
+          console.error(`Refusing mixed-chain event: listener ${chainId}, emitted ${emittedChainId}`);
+          continue;
+        }
+        if (log.args.jobId == null) {
+          console.error("VerdictRequested event missing jobId");
+          continue;
+        }
+        handler({ chainId, jobId: log.args.jobId, txHash: log.transactionHash }).catch((error) => {
+          console.error(`Relay failed for ${chainId}:${log.args.jobId?.toString()}`, error);
+        });
+      }
+    }
+  });
+}

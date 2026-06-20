@@ -1,0 +1,27 @@
+# Resetting the GenLayer Studio
+
+Source: https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio/reset-the-studio
+The GenLayer Studio provides a straightforward way to reset its storage, current status, memory, and contract examples. This feature is particularly useful if you want to start fresh with a clean state, whether you’re testing new contracts or simply clearing out previous configurations.
+
+## How to Reset the Studio
+To reset the GenLayer Studio, follow these simple steps:
+
+1. **Access the Settings Page**: begin by navigating to the Settings page within the GenLayer Studio.
+2. **Click "Reset Storage"**: this option allows you to clear all the current data stored in the studio, including the state of deployed contracts, transaction history, and any cached information.
+3. **Confirm the Reset in the Dialog**: this is an important step, as resetting the storage will remove all existing data and cannot be undone.
+
+Once confirmed, the studio will reset its storage, returning to its initial state as if it were newly initialized.
+
+## What Does Resetting Do?
+Resetting the GenLayer Studio through the Reset Storage option will:
+
+- Clear All Deployed Contracts: Any contracts that you have deployed in the studio will be removed from the frontend memory.
+- Reset Transaction History: All previous transactions, including those in various states, will be erased.
+- Restore Contract Examples: Any example contracts included in the studio will be restored to their original, unaltered state.
+
+## When Should You Reset?
+Consider resetting the studio when:
+
+- You want to start with a clean slate for a new development or testing session.
+- You encounter issues that might be caused by lingering data or state inconsistencies.
+- You have completed a testing phase and need to ensure that previous data does not interfere with new experiments.

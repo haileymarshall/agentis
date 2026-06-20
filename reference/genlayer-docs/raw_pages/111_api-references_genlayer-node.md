@@ -1,0 +1,1695 @@
+# GenLayer Node API
+
+Source: https://docs.genlayer.com/api-references/genlayer-node
+
+The GenLayer Node provides a [JSON-RPC API](https://www.jsonrpc.org/specification) for interacting with it. This API allows you to execute contract calls, retrieve transaction information, and perform various blockchain operations.
+
+## GenLayer Methods
+
+### gen_call
+
+Executes a new message call immediately without creating a transaction on the blockchain. This method supports read operations, write operations, and contract deployments.
+
+**Method:** `gen_call`
+
+**Parameters:**
+
+- `request` (object, required): The contract call request parameters
+  - `from` (string, required): The address making the call
+  - `to` (string, required): The contract address to call
+  - `data` (string, required): The encoded function call data
+  - `type` (string, required): The type of call (`"read"`, `"write"`, or `"deploy"`)
+  - `blockNumber` (string, optional): The block number to query at (hex-encoded). If not provided, uses latest block
+  - `status` (string, optional): The transaction status filter (`"finalized"` or `"accepted"`). If not provided, uses accepted state
+  - `value` (string, optional): The value to send with the call (hex-encoded)
+  - `leader_results` (array of strings or null, optional): When provided, GenVM runs in validator mode (executing `validator_fn` instead of `leader_fn` in `run_nondet` calls). Each element is a hex-encoded equivalence output from a previous leader execution. When omitted or null, GenVM runs in leader mode
+
+**Returns:** A structured JSON object containing execution results and debug information
+
+**Response Fields:**
+
+- `data` (string): Hex-encoded return value from contract execution
+- `eqOutputs` (array of strings): Equivalence outputs from GenVM execution, each as a hex-encoded string. These are deterministic outputs used for consensus validation. Populated in leader mode; empty in validator mode
+- `status` (object): Execution status
+  - `code` (number): Status code (0=success, 1=user error, 2=vm error, 3=internal error)
+  - `message` (string): Human-readable status message
+- `stdout` (string): Standard output captured during execution
+- `stderr` (string): Standard error captured during execution
+- `logs` (array): GenVM log entries, each as a JSON object with fields like `level`, `message`, `target`, `file`, `ts`
+- `events` (array): Contract events emitted during execution
+  - `topics` (array of strings): Event topics as hex-encoded strings
+  - `data` (string): Event data as hex-encoded string
+- `messages` (array): Messages emitted by the contract
+  - `messageType` (number): Type identifier for the message
+  - `recipient` (string): Recipient address
+  - `value` (string): Value in hex format
+  - `data` (string): Message data as hex-encoded string
+  - `onAcceptance` (boolean): Whether message is sent on acceptance
+  - `saltNonce` (string): Salt nonce in hex format
+- `nondetDisagreementCallNo` (number or null): When running in validator mode (with `leader_results`), indicates which `run_nondet` call the validator disagreed on. Null when there is no disagreement or when running in leader mode
+
+**Example - Deploy Call:**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "gen_call",
+  "params": [
+    {
+      "type": "deploy",
+      "data": "0xf9023db90223232076302e312e300a23207b2022446570656e6473223a202270792d67656e6c617965723a3135716669766a7679383038303072683939387063786d64326d38766131777132717a71687a3835306e3867676372346939713022207d0a0a66726f6d2067656e6c6179657220696d706f7274202a0a0a0a2320636f6e747261637420636c6173730a636c6173732053746f7261676528676c2e436f6e7472616374293a0a2020202073746f726167653a207374720a0a202020202320636f6e7374727563746f720a20202020646566205f5f696e69745f5f2873656c662c20696e697469616c5f73746f726167653a20737472293a0a202020202020202073656c662e73746f72616765203d20696e697469616c5f73746f726167650a0a20202020232072656164206d6574686f6473206d75737420626520616e6e6f7461746564207769746820766965770a2020202040676c2e7075626c69632e766965770a20202020646566206765745f73746f726167652873656c6629202d3e207374723a0a202020202020202072657475726e2073656c662e73746f726167650a0a2020202023207772697465206d6574686f640a2020202040676c2e7075626c69632e77726974650a20202020646566207570646174655f73746f726167652873656c662c206e65775f73746f726167653a2073747229202d3e204e6f6e653a0a202020202020202073656c662e73746f72616765203d206e65775f73746f726167650a950e04617267730d6c696e697469616c2076616c756500",
+      "from": "0xf6A60752C24Cd3BFcAf8d387a5EB62d3746F44EE",
+      "to": "0x0000000000000000000000000000000000000000",
+      "status": "finalized"
+    }
+  ],
+  "id": 1
+}
+```
+
+**Example Response (Deploy Success):**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "data": "00",
+    "eqOutputs": [],
+    "status": {
+      "code": 0,
+      "message": "success"
+    },
+    "stdout": "",
+    "stderr": "",
+    "logs": [
+      {
+        "file": "common/src/lib.rs:111",
+        "level": "info",
+        "message": "logging initialized",
+        "target": "genvm_common",
+        "ts": "1770221913210",
+        "version": "v0.2.11-aarch64-macos-release"
+      },
+      {
+        "file": "src/exe/run.rs:150",
+        "genvm_id": "1",
+        "level": "info",
+        "message": "genvm id",
+        "target": "genvm::exe::run",
+        "ts": "1770221913212"
+      },
+      {
+        "file": "src/lib.rs:299",
+        "level": "info",
+        "message": "metrics",
+        "metrics": {
+          "gvm": {
+            "host": { "time": 654 },
+            "llm_module": { "calls": 0, "time": 0 },
+            "supervisor": { "compilation_time": 0, "compiled_modules": 0, "precompile_hits": 2 },
+            "web_module": { "calls": 0, "time": 0 }
+          },
+          "llm": null,
+          "web": null
+        },
+        "target": "genvm",
+        "ts": "1770221913590"
+      }
+    ],
+    "events": [],
+    "messages": [],
+    "nondetDisagreementCallNo": null
+  },
+  "id": 1
+}
+```
+
+**Example - Read Call (Latest Accepted State):**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "gen_call",
+  "params": [
+    {
+      "type": "read",
+      "data": "0xd8960e066d6574686f646c6765745f686176655f636f696e00",
+      "from": "0xf6A60752C24Cd3BFcAf8d387a5EB62d3746F44EE",
+      "to": "0xCe5712E63fd5475288aB1B7c0a368B9417357b81",
+      "gas": "0x5208",
+      "value": "0x0"
+    }
+  ],
+  "id": 1
+}
+```
+
+**Example - Read Call with Specific Block and Status:**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "gen_call",
+  "params": [
+    {
+      "type": "read",
+      "data": "0xd8960e066d6574686f646c6765745f686176655f636f696e00",
+      "from": "0xf6A60752C24Cd3BFcAf8d387a5EB62d3746F44EE",
+      "to": "0xCe5712E63fd5475288aB1B7c0a368B9417357b81",
+      "blockNumber": "0x151ec5",
+      "status": "accepted"
+    }
+  ],
+  "id": 1
+}
+```
+
+**Example - Write Call:**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "gen_call",
+  "params": [
+    {
+      "from": "0x742d35Cc6634C0532925a3b8D4C9db96c4b4d8b6",
+      "to":   "0x742d35Cc6634C0532925a3b8D4C9db96c4b4d8b6",
+      "data": "0xa9059cbb000000000000000000000000742d35cc6634c0532925a3b8d4c9db96c4b4d8b6",
+      "type": "write",
+      "gas":  "0x5208",
+      "value":"0x0"
+    }
+  ],
+  "id": 1
+}
+```
+
+**Example Response with Messages (Router Forward Call):**
+
+When a contract emits internal messages (e.g., a router contract forwarding calls), the response includes the messages array:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "data": "00",
+    "eqOutputs": [],
+    "status": {
+      "code": 0,
+      "message": "success"
+    },
+    "stdout": "",
+    "stderr": "",
+    "logs": [
+      {
+        "file": "src/lib.rs:299",
+        "level": "info",
+        "message": "metrics",
+        "target": "genvm",
+        "ts": "1770225770000"
+      }
+    ],
+    "events": [],
+    "messages": [
+      {
+        "messageType": 1,
+        "recipient": "0xc346f80c86adf1d71accfc4ef6efe7482b25be40",
+        "value": "0x0",
+        "data": "0xf86eb86a16046172677331d4023078393164463338654243623930384335643635...",
+        "onAcceptance": false,
+        "saltNonce": "0x0"
+      },
+      {
+        "messageType": 1,
+        "recipient": "0xad26513a4315b0ea8a5c800322b35092a83dfd3d",
+        "value": "0x0",
+        "data": "0xf86eb86a16046172677331d4023078333738653339374533316346383538333630...",
+        "onAcceptance": false,
+        "saltNonce": "0x0"
+      }
+    ],
+    "nondetDisagreementCallNo": null
+  },
+  "id": 1
+}
+```
+
+**Notes:**
+
+- The `blockNumber` parameter can be either hex-encoded with a `0x` prefix (e.g., `"0x151ec5"`) or decimal (e.g., `"1384133"`)
+- Valid `status` values are `"accepted"` (default) and `"finalized"`
+- When both parameters are omitted, the call executes against the latest accepted state
+- For `read` and `write` type calls, if the contract doesn't exist at the specified block/status combination, an error is returned with code `-32001` (Resource not found) and message `"contract not found at address 0x..."`
+- For `deploy` type calls, the `status` and `blockNumber` parameters are not used for contract state validation since no contract exists yet
+
+### gen_getContractSchema
+
+Retrieve the schema/interface of a GenLayer contract to understand its available methods and properties.
+
+**Method:** `gen_getContractSchema`
+
+**Parameters:**
+
+- `request` (object, required): The contract schema request
+  - `code` (string, required): Base64-encoded contract code
+
+**Returns:** Contract schema object with methods and properties
+
+```json
+{
+  "ctor": { // constructor info
+    "kwparams": {}, // dict
+    "params": [["value", "type"]] // list of tuples
+  },
+  "methods": { // dict from method name to method info
+    "method_name": {
+      "kwparams": {}, // dict
+      "params": [["value", "type"]], // list of tuples
+      "payable": false, // bool
+      "readonly": false, // bool
+      "ret": "null" // string
+    },
+  }
+}
+```
+
+**Example:**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "gen_getContractSchema",
+  "params": [
+    {
+      "code": "IyB7ICJEZXBlbmRzIjogInB5LWdlbmxheWVyOnRlc3QiIH0KCmZyb20gZ2VubGF5ZXIgaW1wb3J0ICoKCgojIGNvbnRyYWN0IGNsYXNzCmNsYXNzIFN0b3JhZ2UoZ2wuQ29udHJhY3QpOgogICAgc3RvcmFnZTogc3RyCgogICAgIyBjb25zdHJ1Y3RvcgogICAgZGVmIF9faW5pdF9fKHNlbGYsIGluaXRpYWxfc3RvcmFnZTogc3RyKToKICAgICAgICBzZWxmLnN0b3JhZ2UgPSBpbml0aWFsX3N0b3JhZ2UKCiAgICAjIHJlYWQgbWV0aG9kcyBtdXN0IGJlIGFubm90YXRlZCB3aXRoIHZpZXcKICAgIEBnbC5wdWJsaWMudmlldwogICAgZGVmIGdldF9zdG9yYWdlKHNlbGYpIC0+IHN0cjoKICAgICAgICByZXR1cm4gc2VsZi5zdG9yYWdlCgogICAgIyB3cml0ZSBtZXRob2QKICAgIEBnbC5wdWJsaWMud3JpdGUKICAgIGRlZiB1cGRhdGVfc3RvcmFnZShzZWxmLCBuZXdfc3RvcmFnZTogc3RyKSAtPiBOb25lOgogICAgICAgIHNlbGYuc3RvcmFnZSA9IG5ld19zdG9yYWdlCg=="
+    }
+  ],
+  "id": 1
+}
+```
+
+**Response:**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "ctor": {
+      "kwparams": {},
+      "params": [["initial_storage", "string"]]
+    },
+    "methods": {
+      "get_storage": {
+        "kwparams": {},
+        "params": [],
+        "readonly": true,
+        "ret": "string"
+      },
+      "update_storage": {
+        "kwparams": {},
+        "params": [["new_storage", "string"]],
+        "payable": false,
+        "readonly": false,
+        "ret": "null"
+      }
+    }
+  },
+  "id": 1
+}
+```
+
+### gen_getContractState
+
+Retrieves the current state of a GenLayer intelligent contract at a specific block height and transaction status.
+
+**Method:** `gen_getContractState`
+
+**Parameters:**
+
+- `request` (object, required): The contract state request parameters
+  - `address` (string, required): The contract address to query
+  - `blockNumber` (string, optional): The block number to query at (hex-encoded). If not provided, uses latest block
+  - `status` (string, optional): The transaction status filter (`"finalized"` or `"accepted"`). If not provided, uses accepted state
+
+**Returns:** Hex-encoded contract state data
+
+**Example Request - Latest Accepted State:**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "gen_getContractState",
+  "params": [
+    {
+      "address": "0x73ca5a2b51edf506ceaf110a41780ec51294d89f"
+    }
+  ],
+  "id": 1
+}
+```
+
+**Example Request - Specific Block and Status:**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "gen_getContractState",
+  "params": [
+    {
+      "address": "0x73ca5a2b51edf506ceaf110a41780ec51294d89f",
+      "blockNumber": "0x151ec5",
+      "status": "accepted"
+    }
+  ],
+  "id": 1
+}
+```
+
+**Example Response:**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": "0xd9960e0773746f726167656c6e757064617465642074657374207374",
+  "id": 1
+}
+```
+
+**Notes:**
+
+- The `blockNumber` parameter should be hex-encoded with a `0x` prefix
+- Valid `status` values are `"accepted"` (default) and `"finalized"`
+- The returned state is hex-encoded binary data with a `0x` prefix
+- Empty contract state returns `"0x"`
+- If the contract doesn't exist at the specified block/status, an error will be returned
+
+**cURL Example:**
+
+```bash
+# Get latest accepted state
+curl -X POST http://localhost:9151 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "gen_getContractState",
+    "params": [{
+      "address": "0x73ca5a2b51edf506ceaf110a41780ec51294d89f"
+    }],
+    "id": 1
+  }'
+
+# Get state at specific block with accepted status
+curl -X POST http://localhost:9151 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "gen_getContractState",
+    "params": [{
+      "address": "0x73ca5a2b51edf506ceaf110a41780ec51294d89f",
+      "blockNumber": "0x151ec5",
+      "status": "accepted"
+    }],
+    "id": 1
+  }'
+```
+
+### gen_getContractCode
+
+Retrieves the code of a deployed GenLayer intelligent contract at a specific block height and transaction status.
+
+**Method:** `gen_getContractCode`
+
+**Parameters:**
+
+- `request` (object, required): The contract code request parameters
+  - `address` (string, required): The contract address to query
+  - `blockNumber` (string, optional): The block number to query at (hex-encoded). If not provided, uses latest block
+  - `status` (string, optional): The transaction status filter (`"finalized"` or `"accepted"`). If not provided, uses accepted state
+
+**Returns:** Base64-encoded contract code
+
+**Example Request - Latest Accepted State:**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "gen_getContractCode",
+  "params": [
+    {
+      "address": "0x73ca5a2b51edf506ceaf110a41780ec51294d89f"
+    }
+  ],
+  "id": 1
+}
+```
+
+**Example Request - Specific Block and Status:**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "gen_getContractCode",
+  "params": [
+    {
+      "address": "0x73ca5a2b51edf506ceaf110a41780ec51294d89f",
+      "blockNumber": "0x151ec5",
+      "status": "finalized"
+    }
+  ],
+  "id": 1
+}
+```
+
+**Example Response:**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": "IyB7ICJEZXBlbmRzIjogInB5LWdlbmxheWVyOnRlc3QiIH0KCmZyb20gZ2VubGF5ZXIgaW1wb3J0ICoKCgpjbGFzcyBTdG9yYWdlKGdsLkNvbnRyYWN0KToKICAgIHN0b3JhZ2U6IHN0cgoKICAgIGRlZiBfX2luaXRfXyhzZWxmLCBpbml0aWFsX3N0b3JhZ2U6IHN0cik6CiAgICAgICAgc2VsZi5zdG9yYWdlID0gaW5pdGlhbF9zdG9yYWdlCgogICAgQGdsLnB1YmxpYy52aWV3CiAgICBkZWYgZ2V0X3N0b3JhZ2Uoc2VsZikgLT4gc3RyOgogICAgICAgIHJldHVybiBzZWxmLnN0b3JhZ2UKCiAgICBAZ2wucHVibGljLndyaXRlCiAgICBkZWYgdXBkYXRlX3N0b3JhZ2Uoc2VsZiwgbmV3X3N0b3JhZ2U6IHN0cikgLT4gTm9uZToKICAgICAgICBzZWxmLnN0b3JhZ2UgPSBuZXdfc3RvcmFnZQo=",
+  "id": 1
+}
+```
+
+**Notes:**
+
+- The `blockNumber` parameter should be hex-encoded with a `0x` prefix
+- Valid `status` values are `"accepted"` (default) and `"finalized"`
+- The returned code is base64-encoded
+- If the contract doesn't exist at the specified block/status, an error will be returned
+- If the address does not have code (not a contract), an error will be returned
+
+**cURL Example:**
+
+```bash
+# Get latest accepted code
+curl -X POST http://localhost:9151 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "gen_getContractCode",
+    "params": [{
+      "address": "0x73ca5a2b51edf506ceaf110a41780ec51294d89f"
+    }],
+    "id": 1
+  }'
+
+# Get code at specific block with finalized status
+curl -X POST http://localhost:9151 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "gen_getContractCode",
+    "params": [{
+      "address": "0x73ca5a2b51edf506ceaf110a41780ec51294d89f",
+      "blockNumber": "0x151ec5",
+      "status": "finalized"
+    }],
+    "id": 1
+  }'
+```
+
+### gen_getTransactionReceipt
+
+Retrieves the transaction receipt for a given transaction ID. This endpoint is a proxy to the underlying consensus layer's `getTransactionAllData` function, providing detailed information about a transaction that has been processed.
+
+**Method:** `gen_getTransactionReceipt`
+
+**Parameters:**
+
+- `request` (object, required):
+  - `txId` (`string`, required): The 32-byte transaction hash as a hexadecimal string with a `0x` prefix.
+
+**Returns:**
+
+A `Transaction` object which contains the details of the transaction. The structure is based on `ITransactionsTransaction` from the consensus contracts. The object has the following fields:
+
+- `id` (`string`): The transaction ID as a hex string.
+- `txOrigin` (`address`): The original address that initiated the transaction.
+- `sender` (`address`): The address of the sender.
+- `recipient` (`address`): The destination address of the transaction.
+- `activator` (`address`): The address of the validator that activated the transaction.
+- `status` (`uint8`): The current status of the transaction.
+- `previousStatus` (`uint8`): The previous status of the transaction.
+- `txSlot` (`uint256`): The transaction slot number.
+- `initialRotations` (`uint256`): The initial number of rotations.
+- `numOfInitialValidators` (`uint256`): The number of initial validators.
+- `randomSeed` (`string`): The random seed used for the transaction as a hex string.
+- `txExecutionHash` (`string`): The execution hash of the transaction as a hex string.
+- `txCallData` (`string`): The transaction call data as a hex string.
+- `eqBlocksOutputs` (`string`): The equivalent blocks outputs as a hex string.
+- `timestamps` (`object`): Object containing various timestamps:
+  - `Created` (`uint256`): When the transaction was created.
+  - `Pending` (`uint256`): When the transaction became pending.
+  - `Activated` (`uint256`): When the transaction was activated.
+  - `Proposed` (`uint256`): When the transaction was proposed.
+  - `Committed` (`uint256`): When the transaction was committed.
+  - `LastVote` (`uint256`): When the last vote was cast.
+  - `AppealSubmitted` (`uint256`): When an appeal was submitted.
+  - `LeaderRevealed` (`uint256`): When the leader was revealed.
+- `result` (`uint256`): The result of the transaction execution.
+- `readStateBlockRanges` (`array`): Array of block range objects, each containing:
+  - `ActivationBlock` (`uint256`): The activation block number.
+  - `ProcessingBlock` (`uint256`): The processing block number.
+  - `ProposalBlock` (`uint256`): The proposal block number.
+- `roundData` (`array`): Array of round data objects containing:
+  - `round` (`uint256`): The round number.
+  - `leaderIndex` (`uint256`): Index of the round leader.
+  - `votesCommitted` (`uint256`): Number of votes committed.
+  - `votesRevealed` (`uint256`): Number of votes revealed.
+  - `appealBond` (`uint256`): The appeal bond amount.
+  - `rotationsLeft` (`uint256`): Number of rotations remaining.
+  - `result` (`uint256`): The round result.
+  - `roundValidators` (`array`): Array of validator addresses for this round.
+  - `validatorVotes` (`string`): Base64-encoded validator votes.
+  - `validatorVotesHash` (`array`): Array of vote hashes as hex strings.
+  - `validatorResultHash` (`array`): Array of result hashes as hex strings.
+
+**Example Request:**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "gen_getTransactionReceipt",
+  "params": [
+    {
+      "txId": "0x635060dd514082096d18c8eb64682cc6a944f9ce1ae6982febf7a71e9f656f49"
+    }
+  ],
+  "id": 1
+}
+```
+
+**Example Response:**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "id": "0x635060dd514082096d18c8eb64682cc6a944f9ce1ae6982febf7a71e9f656f49",
+    "txOrigin": "0x5b70759760a85d92bf972b67ee8558e8e8da87d4",
+    "sender": "0x5b70759760a85d92bf972b67ee8558e8e8da87d4",
+    "recipient": "0x73ca5a2b51edf506ceaf110a41780ec51294d89f",
+    "activator": "0xf27b07d36ff5b9dcd37fd3a09811d6456dd4483a",
+    "status": 14,
+    "previousStatus": 0,
+    "txSlot": 1,
+    "initialRotations": 1,
+    "numOfInitialValidators": 5,
+    "randomSeed": "0x3d0bdff63bce1cf84b155f1557bb15e303b903b1b559325b6492794a5e498954",
+    "txExecutionHash": "0x76744dc491b1725eb2ba08cf516855c14aac310e36711368c04442fd39d61853",
+    "txCallData": "f5b31604617267730da4017570646174656420746573742073746f72616765066d6574686f64747570646174655f73746f7261676500",
+    "eqBlocksOutputs": "c0",
+    "timestamps": {
+      "Created": 1750774777,
+      "Pending": 1750774777,
+      "Activated": 1750774781,
+      "Proposed": 1750774786,
+      "Committed": 1750774791,
+      "LastVote": 0,
+      "AppealSubmitted": 0,
+      "LeaderRevealed": 0
+    },
+    "result": 0,
+    "readStateBlockRanges": [
+      {
+        "ActivationBlock": 1377797,
+        "ProcessingBlock": 1377797,
+        "ProposalBlock": 1377798
+      }
+    ],
+    "roundData": [
+      {
+        "round": 0,
+        "leaderIndex": 3,
+        "votesCommitted": 5,
+        "votesRevealed": 0,
+        "appealBond": 0,
+        "rotationsLeft": 1,
+        "result": 0,
+        "roundValidators": [
+          "0xa707a1d9dd946242f921f0ad62f61e1b7df30c85",
+          "0xf27b07d36ff5b9dcd37fd3a09811d6456dd4483a",
+          "0xf3738216c3208d77a9db79a1d31824e5133083c4",
+          "0x56394354538bff1e0ee5021c2b6d3522fce30257",
+          "0xcfdbac032f82f388d9eca76efa6610b98e7f59fe"
+        ],
+        "validatorVotes": "AAAAAAA=",
+        "validatorVotesHash": [
+          "54e3478b02dfb009a35d46b19ac7c967b65416430a33d3860e9301a0f2b19d57",
+          "f74a48e7283c91757bf2c612e40f8a9eb69ea0f02cf5e6b89c3c9b6ad629a3c1",
+          "2f51c3b1d9ff35140260fb42330fbed12303a9915b8da786c9b8ed060983fa6c",
+          "730127e27167fcf2450fe506250b85d916fbf07dd874b7f0c69a2f8ceb9e44a6",
+          "473d57953f7e7c1a6fb1d2335618f21088025e02bd9fa30d6f85f20a55c24d15"
+        ],
+        "validatorResultHash": [
+          "0000000000000000000000000000000000000000000000000000000000000000",
+          "0000000000000000000000000000000000000000000000000000000000000000",
+          "0000000000000000000000000000000000000000000000000000000000000000",
+          "0000000000000000000000000000000000000000000000000000000000000000",
+          "0000000000000000000000000000000000000000000000000000000000000000"
+        ]
+      }
+    ]
+  }
+}
+```
+
+### gen_getTransactionStatus
+
+Returns the current consensus status of a transaction. This is a lightweight endpoint that returns only the status without full receipt data — use it for polling transaction progress.
+
+**Method:** `gen_getTransactionStatus`
+
+**Parameters:**
+
+- `request` (object, required):
+  - `txId` (string, required): The transaction hash (hex-encoded with `0x` prefix)
+  - `timestamp` (integer, optional): Unix timestamp for the query. If not provided, uses current time
+
+**Returns:** Object with status string and numeric code
+
+**Response Fields:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `status` | string | Human-readable status name (e.g., "FINALIZED", "ACCEPTED", "PENDING") |
+| `statusCode` | uint8 | Numeric status code |
+
+**Status Codes:**
+
+| Code | Status |
+|------|--------|
+| 0 | UNINITIALIZED |
+| 1 | PENDING |
+| 2 | PROPOSING |
+| 3 | COMMITTING |
+| 4 | REVEALING |
+| 5 | ACCEPTED |
+| 6 | UNDETERMINED |
+| 7 | FINALIZED |
+| 8 | CANCELED |
+| 9 | APPEAL_REVEALING |
+| 10 | APPEAL_COMMITTING |
+| 11 | READY_TO_FINALIZE |
+| 12 | VALIDATORS_TIMEOUT |
+| 13 | LEADER_TIMEOUT |
+
+**Example Request:**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "gen_getTransactionStatus",
+  "params": [
+    {
+      "txId": "0x563f046c187d711127c51213ca62e2e4fee52009a98f0989a73a0a0382d21890"
+    }
+  ],
+  "id": 1
+}
+```
+
+**Example Response:**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "status": "FINALIZED",
+    "statusCode": 7
+  },
+  "id": 1
+}
+```
+
+**Notes:**
+
+- This endpoint queries the consensus contract on-chain via `getTransactionData`
+- Use this for polling — it's cheaper than `gen_getTransactionReceipt` which returns the full receipt
+- The `timestamp` parameter is passed to the on-chain call and affects how the contract reports the status
+
+### gen_syncing
+
+Returns the GenVM sync status, indicating how far the node's local GenVM state is behind the chain tip.
+
+**Method:** `gen_syncing`
+
+**Parameters:** None
+
+**Returns:** Object with sync status information
+
+**Response Fields:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `syncedBlock` | string | Hex-encoded block number that GenVM has synced to |
+| `latestBlock` | string | Hex-encoded latest block number on the chain |
+| `blocksBehind` | number | Number of blocks GenVM is behind the chain tip (0 = fully synced) |
+
+**Example Request:**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "gen_syncing",
+  "params": [],
+  "id": 1
+}
+```
+
+**Example Response (Synced):**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "syncedBlock": "0x151ec5",
+    "latestBlock": "0x151ec5",
+    "blocksBehind": 0
+  },
+  "id": 1
+}
+```
+
+**Example Response (Behind):**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "syncedBlock": "0x151e00",
+    "latestBlock": "0x151ec5",
+    "blocksBehind": 197
+  },
+  "id": 1
+}
+```
+
+**Notes:**
+
+- This endpoint always returns an object (never `false` like `eth_syncing`)
+- Use `blocksBehind == 0` to determine if the node is fully synced
+- When the node is catching up, `gen_call` requests without an explicit `blockNumber` will serve data at the `syncedBlock` rather than waiting for full sync
+
+## Debug Methods
+
+These methods are available for debugging and testing purposes during development.
+
+### gen_dbg_ping
+
+Simple connectivity test method that returns a "pong" response.
+
+**Method:** `gen_dbg_ping`
+
+**Parameters:** None
+
+**Returns:** "pong" string
+
+**Example:**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "gen_dbg_ping",
+  "params": [],
+  "id": 1
+}
+```
+
+**Response:**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": "pong",
+  "id": 1
+}
+```
+
+### gen_dbg_trie
+
+Get trie information for debugging node internal DB state.
+
+**Method:** `gen_dbg_trie`
+
+**Parameters:**
+
+- `request` (object, required): The trie debug request
+  - `txID` (string, required): Transaction ID (hex-encoded)
+  - `round` (integer, required): Round number
+
+**Returns:** Trie debug information string
+
+**Example:**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "gen_dbg_trie",
+  "params": [
+    {
+      "txID": "0x742d35Cc6634C0532925a3b8D4C9db96c4b4d8b6742d35Cc6634C0532925a3b8",
+      "round": 0
+    }
+  ],
+  "id": 1
+}
+```
+
+**Response:**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": "graph TD\nnode0@{label: \"br  seq=1\"}\nnode1@{label: \"ext seq=1 0x00000000000000000000000000000000000000000000000000000000000000000000000\"}\nnode1 --\u003e data2@{label: \"seq=1\n[21 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\"}\nnode0 --\u003e|0| node1\nnode3@{label: \"ext seq=1 0x72d46c3ada9f897c74d349bbfe0e450c798167c9f580f8daf85def57e96c3ea00000000\"}\nnode3 --\u003e data4@{label: \"seq=1\n[105 110 105 116 105 97 108 32 115 116 111 114 97 103 101 32 118 97 108 117 101 0 0 0 0 0 0 0 0 0 0 0]\"}\nnode0 --\u003e|3| node3\n",
+  "id": 1
+}
+
+### gen_dbg_traceTransaction
+
+Retrieves the full execution trace for a transaction, including the return data, stdout/stderr, GenVM logs, and the exact error if execution failed.
+
+**Method:** `gen_dbg_traceTransaction`
+
+**Parameters:**
+
+- `request` (object, required):
+  - `txID` (string, required): Transaction ID (hex-encoded with `0x` prefix)
+  - `round` (integer, optional): Consensus round number (default: 0)
+
+**Returns:** Transaction execution trace object
+
+**Response Fields:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `transaction_id` | string | Transaction hash |
+| `result_code` | number | 0=success, 1=user error, 2=VM error |
+| `return_data` | string | Hex-encoded contract return data |
+| `stdout` | string | Standard output captured during execution |
+| `stderr` | string | Standard error captured during execution |
+| `genvm_log` | array | Detailed GenVM execution log entries |
+| `storage_proof` | string | Hex-encoded storage proof hash |
+| `run_time` | string | Execution duration |
+| `eq_outputs` | array | Hex-encoded equivalence principle outputs |
+
+**Example:**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "gen_dbg_traceTransaction",
+  "params": [{"txID": "0x563f046c187d711127c51213ca62e2e4fee52009a98f0989a73a0a0382d21890", "round": 0}],
+  "id": 1
+}
+```
+
+**Response:**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "transaction_id": "0x563f046c187d711127c51213ca62e2e4fee52009a98f0989a73a0a0382d21890",
+    "result_code": 2,
+    "return_data": "0x2e0464617461b402696e76616c69645f636f6e7472616374...",
+    "stdout": "",
+    "stderr": "",
+    "genvm_log": [
+      {
+        "file": "src/lib.rs:82",
+        "level": "error",
+        "message": "vm error",
+        "error": {"causes": ["VMError(invalid_contract absent_runner_comment)"]}
+      }
+    ],
+    "storage_proof": "0x99ff0d9125e1fc9531a11262e15aeb2c60509a078c4cc4c64cefdfb06ff68647",
+    "run_time": "0s",
+    "eq_outputs": []
+  },
+  "id": 1
+}
+```
+
+**Notes:**
+
+- If the trace isn't stored locally (e.g., the node restarted or data was pruned), the endpoint will replay the transaction automatically.
+- This endpoint is in the `genlayer_debug` group and must be enabled in the node configuration.
+- Use `result_code` to determine execution outcome: 0 = contract returned successfully, 1 = contract raised a user error, 2 = GenVM encountered an error.
+
+## Ethereum Compatibility
+
+The GenLayer Node also supports Ethereum-compatible methods that are proxied to the underlying infrastructure. These methods follow the standard [Ethereum JSON-RPC specification](https://ethereum.org/en/developers/docs/apis/json-rpc/) and are prefixed with `eth_`.
+
+**Examples of supported Ethereum methods:**
+
+- `eth_blockNumber`
+- `eth_getBalance`
+- `eth_sendTransaction`
+- `eth_call`
+- And other standard Ethereum JSON-RPC methods
+
+## zkSync Compatibility
+
+[zkSync-compatible](https://docs.zksync.io/zksync-protocol/api/zks-rpc) methods are also supported and proxied to the underlying infrastructure. These methods are prefixed with `zksync_`.
+
+## Usage Examples
+
+### cURL
+
+```bash
+# Test connectivity
+curl -X POST http://localhost:9151 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "gen_dbg_ping",
+    "params": [],
+    "id": 1
+  }'
+
+# Execute a contract call
+curl -X POST http://localhost:9151 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "gen_call",
+    "params": [{
+      "from": "0x742d35Cc6634C0532925a3b8D4C9db96c4b4d8b6",
+      "to": "0x742d35Cc6634C0532925a3b8D4C9db96c4b4d8b6",
+      "data": "0x70a08231000000000000000000000000742d35cc6634c0532925a3b8d4c9db96c4b4d8b6",
+      "type": "read",
+      "transaction_hash_variant": "latest-nonfinal"
+    }],
+    "id": 1
+  }'
+
+# Get contract schema
+curl -X POST http://localhost:9151 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "gen_getContractSchema",
+    "params": [{
+      "code": "IyB7ICJEZXBlbmRzIjogInB5LWdlbmxheWVyOnRlc3QiIH0KCmZyb20gZ2VubGF5ZXIgaW1wb3J0ICoKCgojIGNvbnRyYWN0IGNsYXNzCmNsYXNzIFN0b3JhZ2UoZ2wuQ29udHJhY3QpOgogICAgc3RvcmFnZTogc3RyCgogICAgIyBjb25zdHJ1Y3RvcgogICAgZGVmIF9faW5pdF9fKHNlbGYsIGluaXRpYWxfc3RvcmFnZTogc3RyKToKICAgICAgICBzZWxmLnN0b3JhZ2UgPSBpbml0aWFsX3N0b3JhZ2UKCiAgICAjIHJlYWQgbWV0aG9kcyBtdXN0IGJlIGFubm90YXRlZCB3aXRoIHZpZXcKICAgIEBnbC5wdWJsaWMudmlldwogICAgZGVmIGdldF9zdG9yYWdlKHNlbGYpIC0+IHN0cjoKICAgICAgICByZXR1cm4gc2VsZi5zdG9yYWdlCgogICAgIyB3cml0ZSBtZXRob2QKICAgIEBnbC5wdWJsaWMud3JpdGUKICAgIGRlZiB1cGRhdGVfc3RvcmFnZShzZWxmLCBuZXdfc3RvcmFnZTogc3RyKSAtPiBOb25lOgogICAgICAgIHNlbGYuc3RvcmFnZSA9IG5ld19zdG9yYWdlCg=="
+    }],
+    "id": 1
+  }'
+
+# Get debug trie information
+curl -X POST http://localhost:9151 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "gen_dbg_trie",
+    "params": [{
+      "txID": "0x742d35Cc6634C0532925a3b8D4C9db96c4b4d8b6742d35Cc6634C0532925a3b8",
+      "round": 0
+    }],
+    "id": 1
+  }'
+
+# Get transaction receipt
+curl -X POST http://localhost:9151 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "gen_getTransactionReceipt",
+    "params": [{
+      "txId": "0x635060dd514082096d18c8eb64682cc6a944f9ce1ae6982febf7a71e9f656f49"
+    }],
+    "id": 1
+  }'
+```
+
+## Ops Methods
+
+These methods provide operational endpoints for monitoring the GenLayer node.
+
+### balance
+
+Returns the configured operator's account balance in multiple formats including hexadecimal, wei, and GEN units.
+
+**Method:** `GET /balance`
+
+**Parameters:** None
+
+**Returns:** JSON object containing the operator's balance in three formats
+
+**Example Request:**
+
+```bash
+curl -X GET http://localhost:9153/balance
+```
+
+**Example Response:**
+
+```json
+{
+  "balance_hex": "0x0de0b6b3a7640000",
+  "balance_wei": "1000000000000000000",
+  "balance_gen": "1.000"
+}
+```
+
+**Response Fields:**
+
+- `balance_hex` (string): The balance encoded as hexadecimal with "0x" prefix
+- `balance_wei` (string): The balance in wei as a decimal string
+- `balance_gen` (string): The balance in GEN units formatted with 3 decimal places
+
+**Notes:**
+
+- This endpoint is only available when the node is running in validator mode
+- The balance is always retrieved from the latest block
+- The operator address is configured at node startup
+- If the operator address is not configured, the zero address (0x0000...0000) is used
+- Balance conversions: 1 GEN = 1,000,000,000,000,000,000 wei (10^18 wei)
+- Returns HTTP 503 if the node is not in validator mode
+- Returns HTTP 500 if there's an error retrieving the balance
+
+**Example Response (Zero Balance):**
+
+```json
+{
+  "balance_hex": "0x",
+  "balance_wei": "0",
+  "balance_gen": "0.000"
+}
+```
+
+**Example Response (Large Balance):**
+
+```json
+{
+  "balance_hex": "0x3635c9adc5dea00000",
+  "balance_wei": "1000000000000000000000",
+  "balance_gen": "1000.000"
+}
+```
+
+**Error Response (Not in Validator Mode):**
+
+```json
+{
+  "message": "Balance endpoint not available in rollup mode"
+}
+```
+
+**cURL Example with Headers:**
+
+```bash
+curl -X GET http://localhost:9153/balance \
+  -H "Accept: application/json" \
+  -v
+```
+
+### health
+
+Returns the health status of the GenLayer node along with version information and the status of individual health checks.
+
+**Method:** `GET /health`
+
+**Parameters:** None
+
+**Returns:** JSON object containing the overall health status, version information, and individual check results
+
+**Example Request:**
+
+```bash
+curl -X GET http://localhost:9153/health
+```
+
+**Example Response:**
+
+```json
+{
+  "status": "up",
+  "node_version": "v1.2.3",
+  "protocol_version": "consensus-v2.1",
+  "checks": {
+    "test-check": {
+      "status": "up",
+      "timestamp": "2024-01-15T10:30:45Z"
+    }
+  }
+}
+```
+
+**Response Fields:**
+
+- `status` (string): Overall health status - "up" if all checks pass, "down" if any check fails
+- `node_version` (string): The version of the GenLayer node software
+- `protocol_version` (string): The consensus protocol version
+- `checks` (object, optional): Map of individual health check results
+  - `[check-name]` (object): Results for a specific health check
+    - `status` (string): Check status - "up" or "down"
+    - `timestamp` (string): ISO 8601 timestamp of when the check was performed
+    - `error` (string, optional): Error message if check failed
+
+**HTTP Status Codes:**
+
+- `200 OK`: Node is healthy (all checks passing)
+- `503 Service Unavailable`: Node is unhealthy (one or more checks failing)
+
+**Notes:**
+
+- The endpoint has a 5-second timeout for all health checks
+- The `checks` field is only included when health checks are configured
+- Version fields will show "unset" if version information is not available
+- Individual health checks are executed concurrently with results aggregated in the response
+
+**Example Response (Unhealthy):**
+
+```json
+{
+  "status": "down",
+  "node_version": "v1.2.3",
+  "protocol_version": "consensus-v2.1",
+  "checks": {
+    "database": {
+      "status": "down",
+      "error": "connection timeout",
+      "timestamp": "2024-01-15T10:30:45Z"
+    },
+    "consensus": {
+      "status": "up",
+      "timestamp": "2024-01-15T10:30:45Z"
+    }
+  }
+}
+```
+
+**cURL Example with Headers:**
+
+```bash
+curl -X GET http://localhost:9153/health \
+  -H "Accept: application/json" \
+  -v
+```
+
+### metrics
+
+Exposes Prometheus-compatible metrics for monitoring node performance and health.
+
+**Method:** `GET /metrics`
+
+**Parameters:** None
+
+**Returns:** Prometheus-format text response with all collected metrics
+
+**Example Request:**
+
+```bash
+curl -X GET http://localhost:9153/metrics
+```
+
+**Example Response:**
+
+```
+# HELP genlayer_node_cpu_usage_percent Current CPU usage percentage (0-100)
+# TYPE genlayer_node_cpu_usage_percent gauge
+genlayer_node_cpu_usage_percent{component="node"} 15.5
+genlayer_node_cpu_usage_percent{component="genvm-llm"} 45.2
+genlayer_node_cpu_usage_percent{component="genvm-web"} 12.8
+genlayer_node_cpu_usage_percent{component="webdriver"} 5.3
+
+# HELP genlayer_node_memory_rss_bytes Resident Set Size (RSS) memory usage in bytes
+# TYPE genlayer_node_memory_rss_bytes gauge
+genlayer_node_memory_rss_bytes{component="node"} 524288000
+genlayer_node_memory_rss_bytes{component="genvm-llm"} 2147483648
+
+# HELP genlayer_node_network_rx_bytes_total Total bytes received across all network interfaces
+# TYPE genlayer_node_network_rx_bytes_total counter
+genlayer_node_network_rx_bytes_total{component="node"} 1073741824
+```
+
+#### Available Metrics
+
+The node collects metrics for three main components:
+- **Node** - The main node process
+- **GenVM** - The GenVM modules (LLM and Web)
+- **WebDriver** - The WebDriver container
+
+**CPU Metrics**
+
+**genlayer_node_cpu_usage_percent**
+
+Current CPU usage percentage (0-100).
+
+**Type:** Gauge
+
+**Labels:**
+- `component`: One of `node`, `genvm-llm`, `genvm-web`, `webdriver`
+
+**Example:**
+```
+genlayer_node_cpu_usage_percent{component="node"} 15.5
+genlayer_node_cpu_usage_percent{component="genvm-llm"} 45.2
+genlayer_node_cpu_usage_percent{component="genvm-web"} 12.8
+genlayer_node_cpu_usage_percent{component="webdriver"} 5.3
+```
+
+**Memory Metrics**
+
+**genlayer_node_memory_rss_bytes**
+
+Resident Set Size (RSS) memory usage in bytes.
+
+**Type:** Gauge
+
+**Labels:**
+- `component`: One of `node`, `genvm-llm`, `genvm-web`, `webdriver`
+
+**Example:**
+```
+genlayer_node_memory_rss_bytes{component="node"} 524288000
+genlayer_node_memory_rss_bytes{component="genvm-llm"} 2147483648
+```
+
+**genlayer_node_memory_vms_bytes**
+
+Virtual Memory Size (VMS) in bytes.
+
+**Type:** Gauge
+
+**Labels:**
+- `component`: One of `node`, `genvm-llm`, `genvm-web`, `webdriver`
+
+**Note:** Only available for node and GenVM components.
+
+**genlayer_node_memory_usage_bytes**
+
+Current memory usage in bytes (WebDriver only).
+
+**Type:** Gauge
+
+**Labels:**
+- `component`: `webdriver`
+
+**genlayer_node_memory_limit_bytes**
+
+Memory limit in bytes (WebDriver only).
+
+**Type:** Gauge
+
+**Labels:**
+- `component`: `webdriver`
+
+**genlayer_node_memory_percent**
+
+Memory usage percentage.
+
+**Type:** Gauge
+
+**Labels:**
+- `component`: One of `genvm-llm`, `genvm-web`, `node`, `webdriver`
+- `node`: Node address (hex format)
+
+**genlayer_node_memory_peak_bytes**
+
+Peak memory usage in bytes (GenVM components only).
+
+**Type:** Gauge
+
+**Labels:**
+- `component`: One of `genvm-llm`, `genvm-web`
+- `node`: Node address (hex format)
+
+**Network Metrics**
+
+**genlayer_node_network_rx_bytes_total**
+
+Total bytes received across all network interfaces.
+
+**Type:** Counter
+
+**Labels:**
+- `component`: One of `node`, `genvm-llm`, `genvm-web`, `webdriver`
+- `node`: Node address (hex format)
+
+**Example:**
+```
+genlayer_node_network_rx_bytes_total{component="node",node="0x84b6cbd007511352d3fea26834c5c39a440903c4"} 96879942
+genlayer_node_network_rx_bytes_total{component="webdriver",node="0x84b6cbd007511352d3fea26834c5c39a440903c4"} 84
+```
+
+**genlayer_node_network_tx_bytes_total**
+
+Total bytes transmitted across all network interfaces.
+
+**Type:** Counter
+
+**Labels:**
+- `component`: One of `node`, `genvm-llm`, `genvm-web`, `webdriver`
+- `node`: Node address (hex format)
+
+**Disk Metrics**
+
+**genlayer_node_disk_free_bytes**
+
+Available free disk space in bytes.
+
+**Type:** Gauge
+
+**Labels:**
+- `component`: `node`
+- `directory`: One of `genlayer.db`, `keystore`, `logs`
+- `node`: Node address (hex format)
+
+**genlayer_node_disk_total_bytes**
+
+Total disk space in bytes.
+
+**Type:** Gauge
+
+**Labels:**
+- `component`: `node`
+- `directory`: One of `genlayer.db`, `keystore`, `logs`
+- `node`: Node address (hex format)
+
+**genlayer_node_disk_usage_bytes**
+
+Used disk space in bytes.
+
+**Type:** Gauge
+
+**Labels:**
+- `component`: `node`
+- `directory`: One of `genlayer.db`, `keystore`, `logs`
+- `node`: Node address (hex format)
+
+**genlayer_node_disk_usage_percent**
+
+Used disk space as percentage.
+
+**Type:** Gauge
+
+**Labels:**
+- `component`: `node`
+- `directory`: One of `genlayer.db`, `keystore`, `logs`
+- `node`: Node address (hex format)
+
+**Node Status Metrics**
+
+**genlayer_node_blocks_behind**
+
+Number of blocks behind the latest block.
+
+**Type:** Gauge
+
+**Labels:**
+- `node`: Node address (hex format)
+
+**genlayer_node_latest_block**
+
+Latest block number in the network.
+
+**Type:** Gauge
+
+**Labels:**
+- `node`: Node address (hex format)
+
+**genlayer_node_processing_block**
+
+Currently processing block number.
+
+**Type:** Gauge
+
+**Labels:**
+- `node`: Node address (hex format)
+
+**genlayer_node_synced_block**
+
+Last synced block number.
+
+**Type:** Gauge
+
+**Labels:**
+- `node`: Node address (hex format)
+
+**genlayer_node_synced**
+
+Node synchronization status (1 = synced, 0 = not synced).
+
+**Type:** Gauge
+
+**Labels:**
+- `node`: Node address (hex format)
+
+**genlayer_node_uptime_seconds**
+
+Node uptime in seconds.
+
+**Type:** Gauge
+
+**Labels:**
+- `component`: `node`
+- `node`: Node address (hex format)
+
+**Transaction Metrics**
+
+**genlayer_node_transactions_accepted_synced_total**
+
+Total number of accepted and synced transactions.
+
+**Type:** Gauge
+
+**Labels:**
+- `node`: Node address (hex format)
+
+**genlayer_node_transactions_activated_total**
+
+Total number of activated transactions.
+
+**Type:** Gauge
+
+**Labels:**
+- `node`: Node address (hex format)
+
+**genlayer_node_transactions_leader_proposed_total**
+
+Total number of transactions proposed as leader.
+
+**Type:** Gauge
+
+**Labels:**
+- `node`: Node address (hex format)
+
+**genlayer_node_transactions_leader_revealed_total**
+
+Total number of transactions revealed as leader.
+
+**Type:** Gauge
+
+**Labels:**
+- `node`: Node address (hex format)
+
+**genlayer_node_transactions_validator_commit_total**
+
+Total number of validator commit votes.
+
+**Type:** Gauge
+
+**Labels:**
+- `node`: Node address (hex format)
+
+**genlayer_node_transactions_validator_reveal_total**
+
+Total number of validator reveal votes.
+
+**Type:** Gauge
+
+**Labels:**
+- `node`: Node address (hex format)
+
+**Go Runtime Metrics**
+
+The endpoint also exposes standard Go runtime metrics including:
+
+- `go_gc_duration_seconds` - Garbage collection duration summary
+- `go_goroutines` - Number of active goroutines
+- `go_memstats_*` - Go memory statistics (heap, stack, GC)
+- `go_threads` - Number of OS threads
+
+**Process Metrics**
+
+Standard process metrics are also available:
+
+- `process_cpu_seconds_total` - Total CPU time
+- `process_resident_memory_bytes` - Resident memory size
+- `process_virtual_memory_bytes` - Virtual memory size
+- `process_open_fds` - Number of open file descriptors
+- `process_network_receive_bytes_total` - Network bytes received
+- `process_network_transmit_bytes_total` - Network bytes transmitted
+
+**Prometheus Handler Metrics**
+
+Metrics about the metrics endpoint itself:
+
+- `promhttp_metric_handler_requests_total` - Total scrape requests by status code
+- `promhttp_metric_handler_requests_in_flight` - Current scrapes being served
+
+#### Configuration
+
+Metrics collection can be configured in the node configuration file:
+
+```yaml
+metrics:
+  interval: "15s"        # Default interval for all collectors
+  collectors:
+    node:
+      enabled: true      # Enable/disable node metrics
+      interval: "30s"    # Optional: Override default interval
+    genvm:
+      enabled: true      # Enable/disable GenVM metrics
+      # Uses default interval (15s)
+    webdriver:
+      enabled: true      # Enable/disable WebDriver metrics
+      interval: "60s"    # Optional: Override default interval
+```
+
+**Default Values**
+- `metrics.interval`: 15s (applies to all collectors by default)
+- `enabled`: true (for each collector)
+- `interval`: Uses metrics.interval if not specified per collector
+
+**Configuration Priority**
+1. Collector-specific `interval` (if specified)
+2. Global `metrics.interval` (if specified)
+3. System default (15s)
+
+#### Troubleshooting
+
+**No Metrics for GenVM**
+
+GenVM processes are ephemeral and only run when executing smart contracts. If you don't see GenVM metrics, it's likely that no contracts are currently being executed.
+
+**WebDriver Metrics Missing**
+
+Ensure the WebDriver container is running:
+```bash
+docker ps | grep genlayer-node-webdriver
+```
+
+If not running, start it:
+```bash
+task docker:webdriver:docker-compose:up:detach
+```
+
+**Metrics Not Updating**
+
+Check if metrics collection is enabled in your configuration and that the node has been restarted after configuration changes.
+
+#### Performance Considerations
+
+- Collection intervals can be increased to reduce overhead further
+- Each collector runs independently and won't block others if one fails
+
+### snapshot
+
+Produces a consistent snapshot of the node's state at the current block. Two modes selected by the request body: stream the snapshot back as a gzipped tar response (operator path), or write it to a destination directory on the node's filesystem (zero-downtime upgrade-controller path).
+
+**Method:** `POST /snapshot`
+
+**Authentication:** required. Send the operator token in either header:
+
+```
+Authorization: Bearer 
+X-Admin-Auth: 
+```
+
+The token is the value of `GENLAYERNODE_NODE_OPERATOR_TOKEN` on the node process. When that variable is unset, the endpoint returns `401` to every caller regardless of header value (default-deny). The other ops routes (`/metrics`, `/health`, `/balance`) are unaffected and remain public.
+
+**Network exposure:** the ops server is intended for in-host or in-cluster access (Prometheus scraping `/metrics`, k8s probes hitting `/health`). The endpoint may not be reachable from outside the host depending on the deployment's firewall. The recommended operator workflow is therefore one of:
+
+- SSH onto the node and call the endpoint via `127.0.0.1:9153`, or
+- Open an SSH tunnel from the operator workstation to the node (`ssh -L 9153:127.0.0.1:9153 <node>`) and call `localhost:9153` through it.
+
+**Parameters:**
+
+- `destDir` (string, optional): Absolute path on the node's filesystem. When set, switches to write-to-path mode; when omitted or empty, the snapshot is streamed back as `application/gzip`.
+
+**Returns:**
+- Stream mode (`destDir` omitted): gzipped tar archive in the response body, `Content-Type: application/gzip`.
+- Write-to-path mode (`destDir` set): empty body, `204 No Content`.
+
+**Example Request — Stream Mode (operator):**
+
+On the node (after `ssh <node>`):
+
+```bash
+curl -X POST http://127.0.0.1:9153/snapshot \
+  -H "X-Admin-Auth: $GENLAYERNODE_NODE_OPERATOR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{}' \
+  -o snapshot.tar.gz
+```
+
+Or via SSH tunnel from a workstation (forwards `9153` to the node's loopback):
+
+```bash
+ssh -L 9153:127.0.0.1:9153 -N  &
+curl -X POST http://localhost:9153/snapshot \
+  -H "X-Admin-Auth: $GENLAYERNODE_NODE_OPERATOR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{}' \
+  -o snapshot.tar.gz
+```
+
+The response body is a stream — `curl` can write it to a file (as above) or pipe it through any tool that reads stdin, without staging on local disk.
+
+**Example Response — Stream Mode:**
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/gzip
+Content-Disposition: attachment; filename="snapshot.tar.gz"
+
+```
+
+**Example Request — Write-to-Path Mode (upgrade controller):**
+
+```bash
+curl -X POST http://127.0.0.1:9153/snapshot \
+  -H "X-Admin-Auth: $GENLAYERNODE_NODE_OPERATOR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"destDir": "/var/snapshots/asimov-100"}'
+```
+
+**Example Response — Write-to-Path Mode:**
+
+```
+HTTP/1.1 204 No Content
+```
+
+**HTTP Status Codes:**
+
+- `200 OK`: Stream mode succeeded; body carries the gzipped tar archive.
+- `204 No Content`: Write-to-path mode succeeded; snapshot is on disk at `destDir`.
+- `400 Bad Request`: `destDir` is not absolute, or already exists.
+- `401 Unauthorized`: Missing, invalid, or empty operator token (also returned when `GENLAYERNODE_NODE_OPERATOR_TOKEN` is unset on the node).
+- `500 Internal Server Error`: Snapshot creation failed (e.g., disk full, DB checkpoint error).
+
+**Notes:**
+
+- A snapshot may be several GB. In stream mode the connection stays open for the duration of the snapshot — configure reverse proxies / load balancers with adequate read timeouts and disable response buffering.
+- In stream mode, a dropped connection leaves no on-disk artifact on the node; retry the request from scratch.
+- In write-to-path mode, `destDir` must be an absolute path that does not yet exist; the node creates it. Path-traversal hardening beyond these checks is a separate (Sev: Medium) follow-up — treat the operator token as a credential that can write under the node user's filesystem permissions.
+- **Docker deploys**: in write-to-path mode, `destDir` is resolved inside the node container's filesystem, not on the host. To make the resulting directory reachable from the host (or from another container), use a volume mount that maps `destDir` identically on both sides, or stick with stream mode. Stream mode is unaffected — the response body is sent over HTTP regardless of where the node runs.
+- The snapshot includes the full chain database (SSTables, MANIFEST, WAL) at the moment of capture. Treat the artifact as sensitive — anyone holding it can reconstruct the node's state.
+- Token comparison is constant-time and length-padded so neither the value nor the length of the secret can be inferred from response timing.
+- Rotation: update `GENLAYERNODE_NODE_OPERATOR_TOKEN` and restart the node. Tokens are read once at startup and not hot-reloaded.
+
+**Forward-compatibility note:** when the zero-downtime upgrade controller (Phase 3) lands, `/snapshot` will additionally accept a second role (`upgrade`) so the controller can drive the snapshot + stop + start sequence with its own credential. The operator-token path documented here remains the same — no migration is required for operator tooling.
+
+**cURL Example with Bearer header:**
+
+```bash
+curl -X POST http://127.0.0.1:9153/snapshot \
+  -H "Authorization: Bearer $GENLAYERNODE_NODE_OPERATOR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{}' \
+  -o snapshot.tar.gz
+```

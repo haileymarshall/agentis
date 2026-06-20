@@ -1,0 +1,28 @@
+{
+  "name": "@agentis/backend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/relay.js",
+  "types": "dist/relay.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx src/relay.ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@agentis/shared": "file:../shared",
+    "@hono/node-server": "^1.13.8",
+    "dotenv": "^16.4.7",
+    "genlayer-js": "^1.1.8",
+    "hono": "^4.6.15",
+    "viem": "^2.21.53",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.12",
+    "tsx": "^4.19.2",
+    "typescript": "^5.8.3",
+    "vitest": "^2.1.8"
+  }
+}

@@ -1,0 +1,657 @@
+# Changelog
+
+Source: https://docs.genlayer.com/validators/changelog
+
+## v0.5.12
+
+### Misc
+
+- Update dependency ethers to ~5.8.0
+- Update all non-major dependencies
+
+### Bug fixes
+
+- Self-recover from sync stall wedge
+- Reclassify zkSync not-found errors
+
+### Security
+
+- Update module golang.org/x/net to v0.55.0
+- Update module golang.org/x/crypto to v0.52.0
+
+## v0.5.11
+
+### New features
+
+- Add node health state machine
+- Scope admin tokens per role
+- Add circuit breaker for RPC outages
+- Add bearer auth for admin endpoints
+- Unify CORS and WS origins allowlist
+- Inbound WebSocket JSON-RPC endpoint
+
+### Misc
+
+- Tag runtime metrics by network
+- Cap PreloadAccepted concurrency
+- Improve historical sync by sync-mode cleanup
+- Reframe /snapshot examples for SSH access; drop cloud refs
+- Default inbound WS path to /ws
+- Default WS example to single-listener
+- Multiplex WS subscriptions
+- Trace context cancellations on all watchers
+- Remove unused WaitMined method
+
+### Bug fixes
+
+- Guard nil GasFeeCap on bump retry
+- Ensure GenVM precompile cache before manager start
+- Keep sync ticker running while Synced
+- Create export file when --path is missing
+- Autodetect GenVM permit capacity
+- RPC debug error codes and id default
+- Trust XFF + cap WS frame size
+- Never halt sync on bloom mismatch
+- Refresh version on skip-sync
+- Route receipt polls to poll probes
+- Handle -32602 decode-rejection and cap GasFeeCap
+- Cap RPC body/batch and admin loopback bind
+
+### Security
+
+- Update module go.opentelemetry.io/otel to v1.41.0
+
+## v0.5.10
+
+### New features
+
+- Resilient WS RPC for fallback path
+
+### Bug fixes
+
+- Close activator-binding race
+- Exit finalize loop on post-Submit race
+- Persist gas high-water across cycles
+- Lift gas ceiling on retry-count
+- Bound cancel gasFeeCap and lift bump ceiling on blocker lookup
+- Fall back to WS on block-not-found
+- Repair self-cancellation recovery
+- Make chain-submit buffer configurable and stop collapsing on short step_timeout
+- Add fault label to RPC error metric
+- Unwedge replay and filter sync
+
+### Misc
+
+- Label RPC metrics with provider
+- Add chain nonce and desync gauges metrics
+- Log timestamps after acquireTransaction
+
+## v0.5.9
+
+### Bug fixes
+
+- Count real provider failures on SLA
+- Harden nonce management
+- Check per-block bloom filters for multi-block ranges
+- Pool HTTP transport for chain RPC
+- Self-cancel stuck nonce on mempool replacement exhaustion
+- Prevent sync panic and self-dependency cycle during tx replay
+- Resume sync after WS reconnect
+
+### Misc
+
+- Use RFC3339Nano for zerolog timestamps
+- Extract encoding functions into dedicated encoding package
+- Move consensus entity types to entities package
+- Add gen_dbg_traceTransaction API doc
+
+## v0.5.8
+
+### New features
+
+- Add `gen_syncing` endpoint for sync status visibility
+- Add bounded sync wait for RPC readiness
+- Add per-IP per-method RPC rate limiting
+
+### Bug fixes
+
+- Defer GenVM precompile to container startup to avoid AVX-512 incompatibility
+- Replace stuck transactions with gas bump
+- Skip duty recovery when behind and handle chained missing tx data dependencies
+- Add hiccup retry to sync pipeline
+- Recover prime after reorg
+- Fix RPC max block range exceeded in event router
+- Return -32001 for missing contract errors
+- Pass transaction value to GenVM
+- Standardize RPC error codes per EIP-1474
+- Retry tx lookup for RPC indexing lag
+
+### Misc
+
+- Consolidate genvm configs
+- Add `gen_getTransactionStatus` docs
+- Add `gen_syncing` API docs and clarify RPC config group vs method precedence
+
+## v0.5.7
+
+### New features
+
+- Add LLM greyboxing with configurable chain order via YAML meta
+
+### Bug fixes
+
+- Use PendingAt for idle activator rotation
+- Remove unnecessary workaround from view calls
+- Restart sync pipeline after RPC failures
+- Suppress shutdown errors in watchers
+- Reduce FindAcceptanceBlock range to fit RPC limit
+
+### Misc
+
+- Include Alloy healthcheck script in release tarball
+- Increase Alloy push intervals to 60s
+
+## v0.5.6
+
+### Bug fixes
+
+- Add priority admission control
+
+## v0.5.5
+
+### New features
+
+- Add network name to health endpoint
+- Add network label to logger and all metrics
+- Add metrics to rollup RPC transport and WebSocket
+
+### Bug fixes
+
+- Recover from cache miss on late lifecycle events
+- Wait for queue head before finalize with recipient-aware queue management
+- Suppress context canceled errors on shutdown
+- Raise gas bump ceiling and retries
+- Stuck nonce and finalize resilience
+- Patch GenVM dylib references on macOS during download
+
+### Misc
+
+- Downgrade finalized-not-in-cache log to Debug
+
+## v0.5.4
+
+### New features
+
+- Add `--network` flag to doctor command for multi-network validation
+
+## v0.5.3
+
+### New features
+
+- Add network label to telemetry metrics and logs
+
+## v0.5.2
+
+### New features
+
+- Add recovery for missing TxData
+
+### Bug fixes
+
+- Invalidate timeout cache on SetTimeouts
+- Dedup propose on duplicate events
+- Stop retrying on ValidatorSelectionFailed
+- Prevent sync error race on ctx cancel
+- Recover sync on missing TxData
+- Reject stale block in idle check
+- Increment leader revealed metric counter
+- Sync commit idle timeout with contract timestamps
+
+### Misc
+
+- Use CtxLogger in HTTP handler constructors
+
+## v0.5.1
+
+### New features
+
+- Add transaction manager for nonce resilience
+- Add leader_results input and nondetDisagreementCallNo to gen_call
+- Handle hanging transactions via processIdleness
+- Add Morpheus as OpenAI-compatible LLM provider
+
+### Misc
+
+- Dedup duplicate NewTransaction events per block
+- Add CanFinalize pre-check before finalization
+- Make sync idempotent
+- Per-recipient head-by-head idleness finalization
+
+### Bug fixes
+
+- Detect ZkSync nonce inconsistency error
+- Capture RPC error message when data is not decodable
+- Correct consensus address and genesis block
+- Enrich context errors with last failure
+- Fetch on-chain data in Accepted/Undetermined handlers
+
+## v0.5.0
+
+### New features
+
+- Upgrade consensus contracts from v0.4 to v0.5
+- Add gen_getContractCode endpoint
+- Return full VMResult data from gen_call
+
+### Bug fixes
+
+- Check pending queue head before activation
+- Enable and fix gen_call write simulation
+- Exclude stack field from console output
+- Move GenVM execution outside retry loop to avoid double GenVM execution on submitting failure
+- Use ConsoleWriter for caller field filtering
+- Remove nested retry from epoch finalization
+- Add logging for silent tx submission failures
+- Retry ProcessIdleness on failure in lastVoteWatcher
+- Handle shutdown errors gracefully
+- Remove --create-venv=false flag from post-install scripts
+- Install Python dependencies globally to avoid venv build issues
+- Update validator priming logic to use current epoch
+- Epoch advance scheduler not running for epoch 0
+- Prevent panic on closing done channel during event processing
+- Handle new consensus ResultType
+- New behavior for finalizing epochs
+
+### Misc
+
+- Inject txID into context for automatic log propagation
+- Enable validator idle reveal idleness
+- Add profiling with pyroscope
+- Fix to handle zksync local-node compatibility
+
+## v0.4.5
+
+### New features
+
+- Decouple epoch advance from finalization, allowing them to run as independent processes with separate retry mechanisms
+- Implement sync waiting mechanism to ensure GenVM has latest state before contract execution
+- Add `genlayer_node_info` Prometheus metric exposing node and protocol version
+
+### Bug fixes
+
+- Add canPrime check to verify epoch state before validator priming, preventing priming when epochs are out of sync
+- Return user-friendly error instead of system error when sync times out
+- Fix genvm executor process handling
+
+### Misc
+
+- Improve GenVM logging with context-aware logger
+- Update health checker to use ZkSync connectivity checks
+- Increase default genvm permits to 8 in config.yaml.example
+
+## v0.4.4
+
+### New features
+
+- Improve logging with context-aware tracing and cleaner console output
+- Refactor ZkSync client to split RPC and WSS connections for better reliability
+- Move storage writing to genvm for improved performance
+
+### Bug fixes
+
+- Skip priming check for full nodes
+- Add Docker socket mount for webdriver metrics collection in docker-compose configurations
+- Prevent incorrect sync state by updating blocksBehind calculation
+- Fix memory leak from threads package
+- Fix memory leak in consensus processing
+- Fix bug in latest transaction with effect calculation
+- Fix wallet mutex using read lock instead of write lock when unlocking accounts
+
+### Misc
+
+- Fix signer for full nodes
+- Improve logs for http servers
+- Improve signer initialization for faster and more reliable transaction signing
+- Add logs for previous activator on idleness checks
+- Migrate zksync-go to go-ethereum
+
+## v0.4.3
+
+### Bug fixes
+
+- Fix node storage handling for non-accepted transactions like LeaderTimeout
+- Fix validator priming logic
+- Fix default in release/.env.example
+
+## v0.4.2
+
+### Bug fixes
+
+- Telemetry config and scraping
+- Fix genvm readiness attempts
+
+## v0.4.1
+
+### New features
+
+- Add show and list subcommands for account management
+- Split authentication credentials for Prometheus and Loki
+- Add IsPrimed health check for unprimed validators
+- Add primed state and warning for unprimed validators
+
+### Misc
+
+- Refactor txcalldata decoding to a new encoding package
+- Remove unused `pkg/cryptoutils/address.go`
+- Update deployment configuration options for network and cleanup
+- Refactor gas estimator
+
+### Bug fixes
+
+- Implement indefinite retry for validator priming until primed
+- Implement health check and timeout handling for GenVM manager
+- Fix undetermined transaction rotations when ProcessIdleness
+- Improve message handling to prevent dropped events
+- Add GenVM contracts cache and enhance sync progress logging
+- Fix sync filtering process
+- Improve messages around genlayerRPC chain connectivity
+- Stop retrying activation after transaction is activated
+
+## v0.4.0
+
+### New features
+
+- Integrate the latest GenLayer Consensus version v0.4 with Staking
+    - Introduce validator wallet
+    - Handle validator priming
+    - Finalize epochs
+    - Advance epochs when epochs finalize
+- Handle automatic gas increase
+- Implement ProcessIdleness and enhance event subscription
+- Handle validator commit idleness for leader
+- Implement leader idleness detection and rotation
+- Add detailed ban information with epoch and permanent flag
+- Handle unfinished transactions with batch finalization
+- Add nonceSafe for granular transaction locking
+- Add sanity check for operator address in validator wallet configuration
+- Add missing fields from consensus transaction data to API response
+- Add validator telemetry push monitoring
+- Add actionable fix suggestions to WebDriver error messages in doctor command
+- Add zkSync connectivity checks
+- Add Staking Contract address comparison to doctor checks
+- Add libertai as a new LLM provider
+- Add transaction count metrics for consensus roles
+- Implement consensus sync status metrics
+- Add TimeoutsSet event router for dynamic timeout configuration
+- Add enhanced transaction failure debugging with trace support
+- Sync data with finalized and appeal started events
+- Add timeout delay mechanism for RPC resilience
+- Add status and blockNumber parameters to gen_call
+- Enhance health endpoint with version info and validator with ban and permanent ban detection
+- Update genvm version to v0.2.7
+- Store and expose genvm execution information
+- Add sign admin endpoint for genvm
+
+### Bug fixes
+
+- GenVM architecture on arm64
+- Fix sync issue when there are no consensus events
+- Use latest block instead of timestamp for transaction queries
+- Update WebDriver check for Puppeteer implementation
+- Resolve multi-transaction nonce issue
+- Remove duplicated check logic and fix status check on specific block
+- Leader rotation timeout and receipt cleanup
+- Change transaction finalization to allow all nodes to finalize
+- GenVM non determinism
+- Add retry logic to prevent validator banning on transient errors
+- GenVM sanity checks
+- Cancel context and wait for group when genvm tester fails
+- Decoding calldata into complex types
+- Don't try activating already activated transactions
+- Still process sync failed TX for DB consistency
+- Add correct encoding for getState
+- Only sync transactions with ResultCodeReturn and add sanity check
+- Use block number for transaction data retrieval
+- Validator votes idleness
+- Leader idleness
+- Accidental deadlock in genvm
+- Lazy validators commit order
+
+### Misc
+
+- Simplify environment variable configuration using .env file
+- Add environment variable override support for config values
+- Update webdriver image to v0.0.9
+- Update RPC and WebSocket endpoints in config.yaml.example
+- Correct status for validatorTimeout after appeal time window
+- Validate presence of abigen in dependency check
+- Rename environment validation functions for clarity
+- Use cockroachdb errors package for error handling
+- Remove wallet.yaml file handling
+- Rename archive to full
+
+## v0.3.11
+
+### New features
+
+- Add validator telemetry push monitoring
+
+### Bug fixes
+
+- Validator banning on parallel transactions executions
+
+### Misc
+
+- Document health RPC endpoint
+
+## v0.3.10
+
+### New features
+
+- Add actionable fix suggestions to WebDriver error messages in doctor command
+
+### Bug fixes
+
+- Add retry logic to prevent validator banning on transient errors
+
+## v0.3.9
+
+### New features
+
+- Add doctor command zkSync connectivity checks
+
+### Misc
+
+- Simplify contract initialization with auto-discovery
+
+### Bug fixes
+
+- Remove response body size limit for WebDriver
+
+## v0.3.8
+
+### New features
+
+- Add Staking Contract address comparison to doctor checks
+- Add libertai as a new LLM provider
+
+### Misc
+
+- Enhance metrics logging by adding blocks behind calculation
+- Print address for account not found
+- Fix typo in telemetry configuration comment
+
+### Bug fixes
+
+- Enable CORS support for HTTP methods in the API
+- Move sync success log after state update
+- Don't panic with metrics + print panics
+
+## v0.3.7
+
+### New features
+
+- Add transaction count metrics for consensus roles
+- Implement consensus sync status metrics
+- Add node uptime collector
+- Add disk storage usage metrics for monitoring
+- Add comprehensive metrics collection for ops visibility
+
+## v0.3.6
+
+### Misc
+
+- Add enhanced transaction failure debugging with trace support
+
+## v0.3.5
+
+### New features
+
+- Add Transport with exponential backoff retry logic
+- Add timeout delay mechanism for RPC resilience
+- Add status and blockNumber parameters to gen_call
+- Enhance health endpoint with version info and validator ban detection
+- Add balance endpoint for validator nodes
+- Add gas estimation failover to all consensus transaction functions
+- Implement gen_getContractState endpoint
+- Add ionet as inference provider
+- Add gen_getTransactionStatus endpoint
+- Implement gen_getTransactionReceipt
+- Add log upload system for validator diagnostics
+
+### Misc
+
+- Add comprehensive API documentation system and operations endpoints
+- Move retry logic to infrastructure and update DI
+- Improve timeout detection with type-based checking
+- Enhance WebDriver health check validation
+
+### Bug fixes
+
+- Fix validator idleness commit flow
+- Handle methods and groups configuration for RPC methods
+
+## v0.3.4
+
+### New features
+
+- Added genesis block configuration support for faster node startup
+- Enhanced `doctor` command with GenVM diagnostics integration
+- Updated consensus contract addresses for network upgrade
+
+### Misc
+
+- Improved node synchronization performance with genesis block hints
+- Enhanced validator configuration validation and error reporting
+
+## v0.3.3
+
+### New features
+
+- Added [Comput3](/validators/setup-guide#genvm-configuration) as a supported LLM provider for validators
+
+## v0.3.2
+
+### New features
+
+- Add command `doctor` to check Consensus Contract configuration
+
+### Misc
+
+- Implement retry logic with double-checked locking for `GetTimeouts`
+- Update ABI for consensus contracts.
+- Decode error returns from the network to improve error handling.
+
+## v0.3.1
+
+### Misc
+
+- Add logs details
+
+## v0.3.0
+
+### New features
+
+- Added appeals functionality
+- Added gen_getContractSchema
+- Added admin checkpoint endpoint
+- Added admin "stop at block" endpoint
+- Handle leader timeout
+- Handle validator timeout
+- Added `version` command
+
+### Bug fixes
+
+- Mitigate TxAccepted events being dropped
+- Waiting on event timeouts is now absolute
+- Patch up genvm timeouts
+- Add retry mechanism for genvm contracts interaction
+- Listen to leader timeout event to finalize transaction
+
+## v0.2.0-testnet007
+
+### New features
+
+- Activator idle replacement
+- Leader idle replacement
+- Validator idle replacement
+- Check for genvm on startup
+- Log file support for node
+- Ability to export private key in account command
+
+### Bug fixes
+
+- Build info logs now display correctly
+- Fixed config relative path
+- Node now fails fast when accepted transaction processing fails
+
+### Misc
+
+- Updated module github.com/btcsuite/btcd to v0.24.2 (security)
+- Improved sync speed on node startup
+
+## v0.2.0-testnet005
+
+### New features
+
+- Discover Consensus main genesis from deployment (contracts)
+
+### Bug fixes
+
+- All accepted sync transactions are now processed atomically per block
+- Fixed deadlock on cancelled context
+
+## v0.2.0-testnet004
+
+### Bug fixes
+
+- Updated genvm to v0.0.18
+
+## v0.2.0-testnet003
+
+### New features
+
+- Updated genvm to v0.0.17
+
+## v0.2.0-testnet002
+
+### New features
+
+- Use different address to run e2e tests
+- Updated consensus contract addresses in config
+
+## v0.2.0-testnet001
+
+### New features
+
+- Updated genvm to v0.0.16
+
+### Bug fixes
+
+- Log level is no longer ignored
+- Revived trie dumping and enhanced logging
+- Always kill genvm modules
+
+### Misc
+
+- Updated module golang.org/x/net to v0.38.0 (security)

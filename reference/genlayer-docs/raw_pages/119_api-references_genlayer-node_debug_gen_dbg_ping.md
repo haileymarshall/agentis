@@ -1,0 +1,32 @@
+# gen_dbg_ping
+
+Source: https://docs.genlayer.com/api-references/genlayer-node/debug/gen_dbg_ping
+
+Simple connectivity test method that returns a "pong" response.
+
+**Method:** `gen_dbg_ping`
+
+**Parameters:** None
+
+**Returns:** "pong" string
+
+**Example:**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "gen_dbg_ping",
+  "params": [],
+  "id": 1
+}
+```
+
+**Response:**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": "pong",
+  "id": 1
+}
+```

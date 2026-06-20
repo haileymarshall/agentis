@@ -1,0 +1,184 @@
+# Non-determinism
+
+Source: https://docs.genlayer.com/developers/intelligent-contracts/features/non-determinism
+
+## When to Use
+
+Non-deterministic operations are needed for:
+- External API calls
+- LLM and AI model calls
+- Random number generation
+- Any operation that might vary between nodes
+
+## What Goes Inside vs Outside
+
+Non-deterministic blocks (`leader_fn`, `validator_fn`, functions passed to `strict_eq`) run in a special execution context. The GenVM enforces strict rules about what can and cannot happen inside these blocks.
+
+### Must be INSIDE nondet blocks
+
+All `gl.nondet.*` calls — web requests, LLM prompts — must be inside a nondet block. They cannot run in regular contract code.
+
+```python
+@gl.public.write
+def fetch_price(self):
+    def leader_fn():
+        response = gl.nondet.web.get(api_url)          # ✓ inside nondet block
+        result = gl.nondet.exec_prompt(prompt)          # ✓ inside nondet block
+        return parse_price(response)
+
+    # gl.nondet.web.get(api_url)                        # ✗ would fail here
+    self.price = gl.vm.run_nondet_unsafe(leader_fn, validator_fn)
+```
+
+### Must be OUTSIDE nondet blocks
+
+Several operations must happen in the deterministic context — after the nondet block returns:
+
+| Operation | Why |
+|-----------|-----|
+| **Storage writes** (`self.x = ...`) | Storage must only change based on consensus-agreed values |
+| **Contract calls** (`gl.get_contract_at()`) | Cross-contract calls must use deterministic state |
+| **Message emission** (`.emit()`) | Messages to other contracts/chains must be deterministic |
+| **Nested nondet blocks** | Nondet blocks cannot contain other nondet blocks |
+
+```python
+@gl.public.write
+def update_price(self, pair: str):
+    def leader_fn():
+        response = gl.nondet.web.get(api_url)
+        return json.loads(response.body.decode("utf-8"))["price"]
+        # self.price = price                            # ✗ no storage writes here
+        # other = gl.get_contract_at(addr)              # ✗ no contract calls here
+        # other.emit().notify(price)                    # ✗ no message emission here
+
+    def validator_fn(leaders_res) -> bool:
+        if not isinstance(leaders_res, gl.vm.Return):
+            return False
+        my_price = leader_fn()
+        return abs(leaders_res.calldata - my_price) / leaders_res.calldata <= 0.02
+
+    price = gl.vm.run_nondet_unsafe(leader_fn, validator_fn)
+
+    # ✓ All side effects happen AFTER consensus, in deterministic context
+    self.prices[pair] = price
+    oracle = gl.get_contract_at(self.oracle_address)
+    oracle.emit().price_updated(pair, price)
+```
+
+> **Note:**
+    The [GenVM linter](/developers/intelligent-contracts/tooling-setup) catches all of these violations statically — run `genvm-lint check` before deploying to avoid runtime errors.
+
+### Why these rules exist
+
+The leader and validators execute nondet blocks **independently** — each node runs its own `leader_fn` or `validator_fn`. If you wrote to storage inside a nondet block, each node would write a different value before consensus decides which one is correct. The same applies to contract calls and message emission: these must happen once, after consensus, using the agreed-upon result.
+
+## Equivalence Principle
+
+GenLayer provides `strict_eq` for exact-match consensus and custom validator functions (`run_nondet_unsafe`) for everything else. Convenience wrappers like `prompt_comparative` and `prompt_non_comparative` exist for common patterns. For detailed information, see [Equivalence Principle](/developers/intelligent-contracts/equivalence-principle).
+
+### Strict Equality
+
+Requires exact matches between validator outputs. Use when all nodes can converge on the same normalized value — e.g., fetching objective data from an API and extracting a structured result:
+
+```python
+def fetch_current_block():
+    response = gl.nondet.web.request("https://api.example.com/block/latest")
+    data = json.loads(response)
+    return json.dumps({"height": data["height"], "hash": data["hash"]}, sort_keys=True)
+
+# All validators must return the exact same string
+result = gl.eq_principle.strict_eq(fetch_current_block)
+```
+
+> **Note:** `strict_eq` is not suitable for random number generation or LLM calls, since those inherently produce different results on each node. Use a custom validator function or one of the convenience wrappers below for those cases.
+
+### Comparative (Convenience Shortcut)
+
+A convenience wrapper where both leader and validators perform the same task, then an LLM compares results using your criteria:
+
+```python
+def comparative_example():
+    return gl.nondet.web.request("https://api.example.com/count")
+
+# Results are compared with acceptable margin of error
+result = gl.eq_principle.prompt_comparative(
+    comparative_example,
+    "Results should not differ by more than 5%"
+)
+```
+
+### Non-Comparative (Convenience Shortcut)
+
+A convenience wrapper where validators evaluate the leader's output against criteria without repeating the task:
+
+```python
+result = gl.eq_principle.prompt_non_comparative(
+    input="This product is amazing!",
+    task="Classify the sentiment as positive, negative, or neutral",
+    criteria="""
+        Output must be one of: positive, negative, neutral
+        Consider context and tone
+    """
+)
+```
+
+### Custom Validator Functions
+
+For full control over consensus logic, write a custom leader/validator pair with `run_nondet_unsafe`. This is the recommended approach for most contracts:
+
+```python
+def custom_consensus_example(self, data: str):
+    def leader_fn():
+        # Leader performs the operation
+        response = gl.nondet.exec_prompt(f"Rate this sentiment 1-10: <data>{data}</data>. Answer only with integer, without reasoning")
+        return int(response.strip())
+
+    def validator_fn(leader_result):
+        own_score = leader_fn()
+
+        if isinstance(leader_result, Exception):
+            return False
+
+        # Accept if within acceptable range
+        return abs(own_score - leader_result) <= 2
+
+    return gl.vm.run_nondet_unsafe(leader_fn, validator_fn)
+```
+
+## Operations
+
+### Accessing External Data
+
+Use non-deterministic blocks for external API calls. For more web access examples, see [Web Access](/developers/intelligent-contracts/features/web-access):
+
+```python
+@gl.public.write
+def fetch_external_data(self):
+    def fetch_data():
+        # External API call - inherently non-deterministic
+        response = gl.nondet.web.request("https://example.com/data")
+        return response
+
+    # Consensus ensures all validators agree on the result
+    data = gl.eq_principle.strict_eq(fetch_data)
+    return data
+```
+
+### LLM Integration
+
+Execute AI prompts using comparative principle. For more detailed examples, see [Calling LLMs](/developers/intelligent-contracts/features/calling-llms):
+
+```python
+@gl.public.write
+def ai_decision(self, prompt: str):
+    def call_llm():
+        response = gl.nondet.exec_prompt(prompt)
+        return response.strip()
+
+    # Use comparative principle for LLM response consensus
+    decision = gl.eq_principle.prompt_comparative(
+        call_llm,
+        principle="Responses should be semantically equivalent in meaning"
+    )
+    return decision
+```

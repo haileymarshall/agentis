@@ -1,0 +1,52 @@
+# Special Methods
+
+Source: https://docs.genlayer.com/developers/intelligent-contracts/features/special-methods
+
+> For how these methods fit into value transfer flows, see [Value Transfers](/developers/intelligent-contracts/features/value-transfers#receiving-value-without-a-method-call).
+
+There are two special methods allowed in each contract **definition**:
+```python
+class Contract(gl.Contract):
+    @gl.public.write # .payable?
+    def __handle_undefined_method__(
+        self, method_name: str, args: list[typing.Any], kwargs: dict[str, typing.Any]
+    ):
+        """
+        Method that is called for undefined method calls,
+        must be either ``@gl.public.write`` or ``@gl.public.write.payable``
+        """
+        ...
+
+    @gl.public.write.payable
+    def __receive__(self):
+        """
+        Method that is called for no-method transfers,
+        must be ``@gl.public.write.payable``
+        """
+        ...
+```
+
+Below is a diagram that shows how GenVM decides which method to pick, in case any regular method did not match:
+
+```mermaid
+graph TD
+    unhandled_message>unhandled message] ---> has_value[has value?]
+
+    has_value -->|yes| has_method_name[has method name?]
+
+    has_method_name -->|yes| fallback_defined1[__handle_undefined_method__ is defined?]
+    has_method_name -->|no| receive_defined[is __receive__ defined?]
+
+    receive_defined -->|no| fallback_defined1[is __handle_undefined_method__ defined?]
+    receive_defined -->|yes| receive{{call __receive__}}
+
+    fallback_defined1 -->|yes| fallback_is_payable[is __handle_undefined_method__ payable?]
+    fallback_defined1 -->|no| error3{{error}}
+
+    fallback_is_payable -->|yes| fallback1{{call __handle_undefined_method__}}
+    fallback_is_payable -->|no| error1{{error}}
+
+    has_value -->|no| fallback_defined
+    fallback_defined -->|yes| fallback2{{call __handle_undefined_method__}}
+    fallback_defined -->|no| error2{{error}}
+```

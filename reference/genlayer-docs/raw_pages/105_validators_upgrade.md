@@ -1,0 +1,63 @@
+# Validator Upgrade Guide
+
+Source: https://docs.genlayer.com/validators/upgrade
+
+Before upgrading, check the [changelog](/validators/changelog) for the target version to determine whether the upgrade is **breaking** or **non-breaking**.
+
+| Upgrade Type | How to Identify | Database | Downtime |
+|---|---|---|---|
+| **Non-breaking** | Patch/minor release, no consensus contract changes | Carries over | Minimal |
+| **Breaking** | Changelog mentions "upgrade consensus contracts" or new consensus deployment | Must be deleted | Full restart required |
+
+> **Note:**
+  When in doubt, treat it as a breaking change — the only cost is a longer sync time.
+
+---
+
+## Non-Breaking Upgrade
+
+No re-staking is required. You can minimize downtime by preparing the new version while your current node is still running.
+
+1. **Download and extract into a fresh folder** — See [download instructions](/validators/setup-guide#download-the-node-software). Always use a clean directory.
+2. **Configure the new version** — Set up `config.yaml` and `.env` as described in the [configuration section](/validators/setup-guide#configuration). You can reference your previous settings, but **do not blindly copy config files** — new versions may include updated defaults or new fields.
+3. **Copy the data folder** — Copy `data/` from your old installation to the new one (contains database and keystore). Skip this if your `datadir` points outside the project directory.
+4. **Validate** — Run `./bin/genlayernode doctor` and ensure all checks pass.
+5. **Switch over** — Stop the old node, then start the new one.
+
+---
+
+## Breaking Change Upgrade
+
+Breaking changes involve a new consensus deployment. The old database is incompatible, so it cannot be reused. **Re-staking is required** — you must stake again using the [validator wizard](/validators/setup-guide#using-the-validator-wizard).
+
+> **Note:**
+  **Always back up your keystore before a breaking upgrade.** You can copy the `data/node/keystore/` directory or use `genlayernode account export`. See [backing up your operator key](/validators/setup-guide#backing-up-your-operator-key).
+
+1. **Read the changelog** — Check the [changelog](/validators/changelog) for version-specific instructions and what changed.
+2. **Back up your keystore** — Copy `data/node/keystore/` to a safe location.
+3. **Download and extract into a fresh folder** — See [download instructions](/validators/setup-guide#download-the-node-software).
+4. **Configure from scratch** — Create `config.yaml` and `.env` using the new example files as a base. **Do not copy your old config** — the schema may have changed. Refer to the [configuration section](/validators/setup-guide#configuration) for the current format.
+5. **Import your operator key** — Copy your backed-up keystore into `data/node/keystore/`, or re-import using the CLI. See [restoring your operator key](/validators/setup-guide#restoring-your-operator-key).
+6. **Do NOT copy the old database** — Delete `data/node/genlayer.db` if you accidentally copied the full `data/` folder. The node will create a fresh database and sync from genesis.
+7. **Validate** — Run `./bin/genlayernode doctor` and ensure all checks pass.
+8. **Stop the old node, start the new one.**
+
+---
+
+## Migration Notes
+
+### v0.4.x to v0.5.0 (Breaking)
+
+- The two consensus contract addresses (`contractmainaddress` and `contractdataaddress`) have been replaced by a single `consensusaddress` field. Do not copy your old consensus config — use the new example `config.yaml`.
+- The GenLayer Chain ZKSync RPC URLs (`genlayerchainrpcurl` and `genlayerchainwebsocketurl`) have changed. Update both the HTTP RPC and WebSocket URLs in your `config.yaml` to the new endpoints.
+- Database must be wiped (the node creates a fresh one on startup).
+- Re-staking is required — breaking changes involve a new consensus deployment, so you must stake again using the [validator wizard](/validators/setup-guide#using-the-validator-wizard).
+
+---
+
+## Quick Troubleshooting
+
+- **Node won't start** — Run `./bin/genlayernode doctor`. If it reports unknown config fields, reconfigure from the new example.
+- **Not participating in consensus** — Verify the consensus contract address, `validatorWalletAddress`, and `operatorAddress` are correct.
+- **Key errors** — Your operator key wasn't imported. See [restoring your operator key](/validators/setup-guide#restoring-your-operator-key).
+- **Slow sync after breaking upgrade** — Expected. Ensure `genesis` is set in `config.yaml` to avoid scanning from block 0.

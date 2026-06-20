@@ -1,0 +1,78 @@
+# Deploying Intelligent Contracts
+
+Source: https://docs.genlayer.com/developers/intelligent-contracts/deploying
+
+This comprehensive guide covers everything you need to know about deploying your Intelligent Contracts on GenLayer. From local development to testnet deployment, learn how to use different methods and networks effectively.
+
+## Quick Start
+
+Get started quickly with these essential deployment options:
+
+- [CLI Deployment](./deploying/cli-deployment)
+
+- [Deploy Scripts](./deploying/deploy-scripts)
+
+- [Network Configuration](./deploying/network-configuration)
+
+## Deployment Approaches
+
+GenLayer offers two primary deployment methods:
+
+### CLI Direct Deployment
+Perfect for quick deployments and simple contracts. Deploy with a single command:
+
+```bash
+genlayer deploy --contract contracts/my_contract.py --args "Hello World" 42
+```
+
+[Learn more about CLI Deployment →](./deploying/cli-deployment)
+
+### Deploy Scripts
+Ideal for complex workflows, multi-contract deployments, and testnet environments:
+
+```typescript
+export default async function main(client: GenLayerClient<any>) {
+  // Deploy and configure multiple contracts
+  const mainContract = await deployContract(client, "contracts/main.py", []);
+  const helperContract = await deployContract(client, "contracts/helper.py", [mainContract]);
+
+  await configureContracts(client, mainContract, helperContract);
+}
+```
+
+[Learn more about Deploy Scripts →](./deploying/deploy-scripts)
+
+## Networks Overview
+
+Deploy to different networks based on your development stage:
+
+| Network | Purpose | When to Use |
+|---------|---------|-------------|
+| **Localnet** | Local development | Development, debugging, initial testing |
+| **Studionet** | Hosted development | Team collaboration, quick prototyping |
+| **TestnetAsimov** | Infrastructure testing | Stability, scalability, and stress testing |
+| **TestnetBradbury** | AI/LLM testing | Real AI workloads and intelligent contract testing |
+
+[Explore Network Configuration →](./deploying/network-configuration)
+
+## Development Workflow
+
+Follow this recommended progression:
+
+1. **Develop locally** on `localnet` with full control
+2. **Test collaboratively** on `studionet` with your team
+3. **Validate thoroughly** on `testnetBradbury` in a production-like environment with real AI workloads
+
+> **Note:**
+  Start with CLI deployment for simple contracts, then graduate to deploy scripts as your projects become more complex.
+
+## What's Next?
+
+After deploying your contracts:
+
+1. **Test Contract Functions**: Use `genlayer call` and `genlayer write` to interact with deployed contracts
+2. **Monitor Transactions**: Check transaction receipts with `genlayer receipt `
+3. **Build Frontend**: Integrate with your deployed contracts using [GenLayerJS](https://github.com/yeagerai/genlayer-js)
+4. **Debug Issues**: Use the [Debugging Guide](./debugging) if you encounter problems
+
+Ready to start deploying? Choose your preferred method and dive into the detailed guides!

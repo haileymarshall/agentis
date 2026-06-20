@@ -1,0 +1,85 @@
+# Introduction to Intelligent Contracts
+
+Source: https://docs.genlayer.com/developers/intelligent-contracts/introduction
+
+## What are Intelligent Contracts?
+
+Intelligent Contracts are an advanced evolution of smart contracts that combine traditional blockchain capabilities with natural language processing and web connectivity. Built in Python, they enable developers to create contracts that can understand human language, process external data, and make complex decisions based on real-world information.
+
+## Key Features of Intelligent Contracts
+
+### Natural Language Processing (NLP)
+Intelligent Contracts leverage Large Language Models (LLMs) to process and understand human language inputs. This integration enables the contracts to interpret complex text-based instructions and requirements, moving beyond simple conditional logic.
+
+Through NLP capabilities, these contracts can analyze qualitative criteria and make nuanced decisions based on contextual understanding, bringing a new level of intelligence to contract execution.
+
+### Web Connectivity
+These contracts can actively interact with web APIs to fetch real-time information, enabling dynamic decision-making based on current data. By incorporating external services for data verification, they maintain a reliable connection to real-world events and conditions, bridging the gap between on-chain and off-chain environments.
+
+### Non-Deterministic Operations
+Intelligent Contracts introduce a sophisticated approach to handling operations with unpredictable outputs, a significant advancement over traditional deterministic smart contracts. Through the implementation of a built-in equivalence principle, multiple validators can reach consensus even when processing non-deterministic results. This system supports both comparative validation, where outputs are directly matched, and non-comparative validation, where validators assess the reasonableness of results within defined parameters.
+
+## How Do Intelligent Contracts Work?
+
+### Contract Structure
+Intelligent Contracts are written in Python using the GenVM SDK library. The basic structure consists of:
+1. Dependencies Declaration: Specify required GenVM SDK modules
+2. Declare Contract: Extend `gl.Contract` to define a contract class
+3. State Variables: Declare with type annotations for strong typing
+4. Methods:
+    - `@gl.public.view`: Read-only methods that don't modify state
+    - `@gl.public.write`: Methods that can modify contract state
+    - `@gl.public.write.payable`: Methods that can modify contract state *and* receive `value`
+
+Here's an example:
+
+```py
+   # { "Depends": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6" }
+   from genlayer import *
+
+   class MyContract(gl.Contract):
+       # State variables with type annotations
+       variable: str
+
+       def __init__(self):
+           self.variable = "initial value"
+
+       @gl.public.view
+       def read_method(self) -> str:
+           return self.variable
+
+       @gl.public.write
+       def write_method(self, new_value: str):
+           self.variable = new_value
+```
+### Validation Process
+- When transactions are submitted to Intelligent Contracts, they are automatically queued in a contract-specific order and marked with a "pending" status
+- A randomly selected group of validators is assigned to process the transaction, with one designated as the leader to propose the outcome
+- Once all validators evaluate the proposal and reach consensus using the equivalence principle, the transaction is accepted and enters the Finality Window
+
+[Learn more about the validation process](/about-genlayer/core-concepts/optimistic-democracy)
+
+## Advantages over Traditional Smart Contracts
+
+### Enhanced Decision Making
+Intelligent Contracts can process complex and qualitative criteria that traditional smart contracts cannot handle. Through their natural language understanding capabilities, they can interpret and act on human-readable inputs without requiring strict formatting or coding syntax.
+
+This flexibility allows the contracts to dynamically adapt to changing conditions, making them more responsive and intelligent in their decision-making processes.
+
+### External Data Integration
+Intelligent Contracts can seamlessly integrate with external data sources, providing direct access to real-world information without intermediate layers. Their real-time data processing capabilities ensure that contract decisions are based on current and accurate information.
+
+This direct connectivity significantly reduces the traditional reliance on oracle services, making the contracts more efficient and cost-effective.
+
+### Flexible Programming
+Development of Intelligent Contracts leverages Python's robust ecosystem, providing developers with a familiar and powerful programming environment.
+
+The platform supports the data structures needed to handle complex business logic and requirements.
+
+## Trade-offs
+
+Intelligent Contracts introduce non-determinism and external dependencies that traditional smart contracts avoid. Key considerations:
+
+- **Non-deterministic outputs** — LLM responses and web data vary across validators. The [Equivalence Principle](/developers/intelligent-contracts/features/non-determinism) lets you define how validators compare results to reach consensus.
+- **External data reliability** — Web sources can be inconsistent or unavailable. Multiple validators independently fetch and cross-validate data as part of [Optimistic Democracy](/understand-genlayer-protocol/optimistic-democracy-how-genlayer-works).
+- **Compute cost** — LLM calls and web requests add latency and cost compared to purely deterministic contracts. Design contracts to minimize non-deterministic calls where possible.

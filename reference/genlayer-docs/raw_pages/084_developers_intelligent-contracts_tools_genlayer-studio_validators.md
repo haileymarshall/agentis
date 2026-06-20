@@ -1,0 +1,45 @@
+# Accessing and Configuring Validators
+
+Source: https://docs.genlayer.com/developers/intelligent-contracts/tools/genlayer-studio/validators
+
+In the GenLayer Studio, validators are essential for achieving consensus and validating transactions through a process known as [Optimistic Democracy](/core-concepts/optimistic-democracy). When you initialize the Studio based on your selected LLM provider(s), you are provided with 5 default validators.
+
+1. **Leaders:** Within this consensus model, one validator is selected as the leader for each transaction. The leader's role is to propose how a transaction should be executed based on the transaction data and the Intelligent Contract's logic.
+
+2. **Validators:** After the leader proposes a transaction execution, other validators are responsible for reviewing and validating the proposal. They use the [Equivalence Principle](/core-concepts/optimistic-democracy/equivalence-principle) to determine if the leader’s proposal meets the required standards.
+
+These validators can be modified to suit your Intelligent Contract's requirements.
+
+## Accessing Validators
+
+To access and manage validators, follow these steps:
+
+1. On the left sidebar, click on the **Validators** icon. This will open the validators page.
+
+2. In the validators page, you will see a list with all the validators currently configured in the Studio along with their models and providers.
+
+## Configuring Validators
+
+To configure validators, you can add new validators or modify existing ones.
+
+1. Click the **New Validator** button to open the validator creation dialog.
+
+2. **Create New Validator:**
+   In the validator creation dialog, fill in the required fields:
+
+   - **Provider:** Select the provider for the validator.
+   - **Model:** Choose the model that the validator will use.
+   - **Stake:** Specify the stake for the validator.
+   - **Config:** Enter any additional configuration parameters in JSON format.
+
+3. Click **Create** to add the new validator to your configuration.
+
+## Modify Validator Details
+
+To modify your validator settings, click on any existing validator and modify the fields based on your needs.
+
+## Delete Validator
+
+To delete a validator, click on the delete button beside the validator in the list.
+
+By properly managing and configuring validators, you ensure that your Intelligent Contracts operate smoothly and securely within the GenLayer Studio.

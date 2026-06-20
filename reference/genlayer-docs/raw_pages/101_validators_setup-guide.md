@@ -1,0 +1,827 @@
+# Setting Up Your GenLayer Validator
+
+Source: https://docs.genlayer.com/validators/setup-guide
+
+Running a GenLayer Validator node ensures the security and reliability of the GenLayer network. Below are the requirements for running a GenLayer validator.
+
+Validators require both a staking deposit and a validator priming transaction to enter the set.
+
+For a deeper understanding of how staking works in GenLayer, see the [Staking documentation](/understand-genlayer-protocol/core-concepts/optimistic-democracy/staking).
+
+## System Requirements
+
+| Resource | Requirement |
+|----------|-------------|
+| **Memory** | 16 GB RAM |
+| **CPU** | 8-core (AMD64 only) |
+| **Disk** | 128 GB SSD/NVMe |
+| **Network** | 100 Mbps |
+| **OS** | 64-bit Linux |
+| **Software** | Docker, Python 3 (with pip and venv) |
+
+GPU not required unless running LLMs locally. See [detailed requirements](/validators/system-requirements) for more info.
+
+## Choose Your Setup Method
+
+GenLayer offers two ways to set up your validator node. Both methods result in the same configuration—choose the one that fits your workflow.
+
+| Method | Best For |
+|--------|----------|
+| **AI-Assisted Setup** | New validators, quick setup, guided troubleshooting |
+| **Manual Setup** | Experienced operators, custom configurations, automation pipelines |
+
+### Option 1: AI-Assisted Setup (Recommended)
+
+We've released an interactive AI wizard that guides you through the entire validator setup process step-by-step. Instead of reading through documentation and running commands manually, the wizard handles everything interactively.
+
+#### What it does
+
+- Walks you through all setup steps interactively
+- Checks prerequisites automatically (architecture, RAM, Docker, Node.js, Python)
+- Detects common issues before they cause problems (port conflicts, disk space, wrong architecture)
+- Generates configurations based on your answers
+- Supports multiple deployment options: local machine, remote SSH, GCP, AWS, Azure
+- Handles both new validators (staking wizard) and existing validators
+- Includes minimal-downtime update procedure for upgrades
+
+#### How to use it
+
+1. Install [Claude Code](https://claude.ai/code) (Anthropic's CLI tool)
+
+2. Add the GenLayer plugin marketplace and install the plugin:
+   ```bash
+   claude /plugin marketplace add genlayerlabs/skills
+   claude /plugin install genlayernode@genlayerlabs
+   ```
+
+3. Run the wizard:
+   ```bash
+   claude /genlayernode install
+   ```
+
+That's it. The wizard will ask questions and guide you through everything.
+
+#### Available commands
+
+| Command | Description |
+|---------|-------------|
+| `/genlayernode install` | Fresh validator setup |
+| `/genlayernode update` | Upgrade existing node |
+| `/genlayernode configure grafana` | Set up monitoring |
+
+> **Note:**
+  The AI wizard uses the same underlying steps as the manual setup below. You can switch between methods at any point or use the manual guide as a reference.
+
+Browse all available skills at [skills.genlayer.com](https://skills.genlayer.com/) — the marketplace also includes the `genlayer-dev` skill for contract development.
+
+---
+
+### Option 2: Manual Setup
+
+If you prefer to run commands manually, need fine-grained control over each step, or are integrating with existing automation pipelines, follow the detailed instructions in the sections below.
+
+The manual setup covers:
+1. **Create the Validator Wallet** — Set up your wallet and stake GEN tokens
+2. **Set Up the Validator Node** — Download, configure, and run the node software
+
+---
+
+## Create the Validator Wallet
+
+Before setting up your validator node, you need to create your validator wallet and stake GEN tokens.
+
+### Understanding Validator Addresses
+
+> **Note:**
+GenLayer validators use three distinct addresses:
+
+| Address | Description | Where Used |
+|---------|-------------|------------|
+| **Owner** | The only address that can withdraw staked funds. Keep this secure (cold wallet). | CLI wizard - signs staking transaction |
+| **Operator** | Hot wallet on your server that signs blocks. Can be same as owner, but separate is recommended. | Node config: `operatorAddress` |
+| **Validator Wallet** | Smart contract created when you join. This is your validator's on-chain identity. | Node config: `validatorWalletAddress` |
+
+The wizard outputs all three addresses at the end. Save them - you'll need the Validator Wallet and Operator addresses for your node configuration.
+
+### Prerequisites
+
+- **Node.js** (v18 or higher)
+- **GenLayer CLI** - Install the latest version:
+  ```bash
+  npm install -g genlayer
+  ```
+- **GEN tokens** - You need at least **42,000 GEN** for the minimum self-stake requirement
+
+### Using the Validator Wizard
+
+The easiest way to create your validator wallet is using the interactive wizard:
+
+```bash
+genlayer staking wizard
+```
+
+The wizard guides you through:
+
+1. **Account setup** - Create or select your owner account
+2. **Network selection** - Choose testnet-asimov
+3. **Balance verification** - Confirms you have at least 42,000 GEN
+4. **Operator setup** - Create and export an operator keystore for your validator server
+5. **Stake amount** - Enter how much GEN to stake (minimum 42,000)
+6. **Validator creation** - Submits the staking transaction
+7. **Identity setup** - Set your validator's public profile (moniker, website, etc.)
+
+> **Note:**
+  **Save Your Validator Wallet Address!** After the wizard completes, note down your **Validator Wallet** address. You'll need this for your node configuration.
+
+#### Operator Keystore Export
+
+The wizard creates and exports an operator keystore file for you to transfer to your validator server. If your server is compromised, your staked funds (controlled by owner) remain safe.
+
+### Verify Your Validator
+
+After completing the wizard, verify your status:
+
+```bash
+genlayer staking validator-info --validator 0xYourValidatorWallet...
+```
+
+### Managing Your Validator
+
+```bash
+# Add more stake
+genlayer staking validator-deposit --amount 1000gen
+
+# Check active validators
+genlayer staking active-validators
+
+# Exit (initiates 7-epoch unbonding)
+genlayer staking validator-exit --shares 100
+
+# Claim after unbonding period
+genlayer staking validator-claim
+
+# Update identity
+genlayer staking set-identity --validator 0x... --moniker "New Name"
+```
+
+---
+
+## Set Up the Validator Node
+
+Once your validator wallet is created and staked, set up your node software.
+
+### Dependencies
+
+#### LLM Access
+
+Each validator needs access to a Large Language Model (LLM) for executing and evaluating Intelligent Contracts.
+
+It is up to each validator to select the model they want to use.
+
+Possible options:
+
+- Run an open-source model locally on the same machine with a GPU
+- Run an open-source model on a different machine
+- Connect to a hosted inference provider (OpenAI, Anthropic, Heurist, Atoma network etc.)
+
+See the [GenVM Configuration](/validators/genvm-configuration) page for partner credits, provider setup, and the greybox fallback strategy.
+
+#### ZKSync Full Node for the GenLayer Chain
+
+Each validator needs access to a [ZKSync Full Node](https://docs.zksync.io/zksync-era/tooling/external-node) connected to the GenLayer chain. Validators use this node to read the chain state and submit transactions.
+
+One full node can be shared between multiple validators. The optimal validator-to-node ratio is currently under evaluation.
+
+### Setup
+
+#### Download the node software
+
+1. Select the version of the node you want to run by checking the available builds
+
+   You can use this command to list available versions:
+
+   ```sh
+   curl -s "https://storage.googleapis.com/storage/v1/b/gh-af/o?prefix=genlayer-node/bin/amd64" | grep -o '"name": *"[^"]*"' | sed -n 's/.*\/\(v[^/]*\)\/.*/\1/p' | sort -ru | grep -v "rc" | head -n 5
+   ```
+
+   You should see a list like this
+
+   ```sh
+   v0.5.12
+   v0.5.11
+   v0.5.10
+   v0.5.9
+   v0.5.8
+   ```
+
+   Typically, you will want to run the latest version
+
+2. Download the packaged application
+   ```sh
+   export version=v0.5.12 # set your desired version here
+   wget https://storage.googleapis.com/gh-af/genlayer-node/bin/amd64/${version}/genlayer-node-linux-amd64-${version}.tar.gz
+   ```
+3. Extract the node software
+   ```sh
+   mkdir -p ${version}
+   tar -xzvf `genlayer-node-linux-amd64-${version}.tar.gz` -C `./${version}`
+   ```
+4. Change the directory
+
+   ```sh
+   cd `./${version}`
+   ```
+
+5. Run Genvm setup
+
+   ```sh
+   python3 ./third_party/genvm/bin/setup.py
+   ```
+It does following:
+
+- Downloads missing runners if any
+- Verifies runners hashes
+- Sets `elf`/`mach-o` interpreter for all binaries (modules, genvm)
+- Rust precompilation for built-in runners
+
+### Configuration
+
+Before you can start up the node, you need to configure it.
+
+#### `config.yaml`
+
+This is the main configuration file of your node. Without it, your node won't start
+
+The file needs to be located at `configs/node/config.yaml`
+
+You can use the following example configuration. **Note:** For most users, you will only need to modify the `genlayerchainrpcurl`, `genlayerchainwebsocketurl`, and the `consensus` section for your target network (see [Network-Specific Consensus Configuration](#network-specific-consensus-configuration) below).
+
+```yaml
+# rollup configuration
+rollup:
+  genlayerchainrpcurl: "TODO: Set your GenLayer Chain ZKSync HTTP RPC URL here" # GenLayer Chain RPC URL
+  genlayerchainwebsocketurl: "TODO: Set your GenLayer Chain ZKSync WebSocket RPC URL here" # GenLayer Chain WebSocket URL
+  provider: "TODO: Set your GenLayer Chain ZKSync provider" # Rollup operator name; surfaces as the "provider" label on RPC-driven metrics. Set explicitly per deployment.
+# consensus contracts configuration
+consensus:
+  # Testnet - Phase 5
+  consensusaddress: "0xe66B434bc83805f380509642429eC8e43AE9874a" # AddressManager Smart Contract Address
+  genesis: 17326 # (Optional) Genesis block number for this consensus deployment. If not provided, it will be auto-detected by searching for the first log from the ConsensusMain contract.
+  # chain_submit_buffer: "30s" # (Optional) Slack reserved at the end of each consensus step to submit the resulting on-chain tx (commit vote, reveal vote, proposed receipt) before the slot closes. Tune to underlying settlement chain latency. Default 30s.
+# data directory
+datadir: "./data/node"
+# logging configuration
+logging:
+  level: "INFO"
+  # json: `true` for json output to console, false for human readable log formatting
+  json: false
+  # Configuration for https://github.com/natefinch/lumberjack
+  file:
+    # enabled: set to `true` to save logs to a folder
+    enabled: true
+    level: "DEBUG"
+    # folder: path to the folder where to store logs. Relative paths go under `datadir`.
+    folder: logs
+    # maxsize: maximum size in megabytes of the log file before it gets rotated.
+    maxsize: 10
+    # maxage: maximum number of days to retain old log files based on the timestamp encoded in their filename.
+    maxage: 7
+    # maxbackups: maximum number of old log files to retain. Set to 0 for no limit
+    maxbackups: 100
+    # localtime: determines if the time used for formatting the timestamps in backup files is the computer's local time. Set to `false` to use UTC time.
+    localtime: false
+    # compress: determines if the rotated log files should be compressed using gzip
+    compress: true
+# node configuration
+node:
+  # Uncomment if the ID of the node is different from the validator wallet address.
+  # It is used to identify the node in the network.
+  # id: "node"
+  # Mode can be "validator" or "full".
+  # Default value is "validator".
+  mode: "validator"
+  # Address of the ValidatorWallet contract (required for validator mode)
+  validatorWalletAddress: ""
+  # Address of the operator that owns the ValidatorWallet
+  operatorAddress: ""
+  admin:
+    port: 9155
+  rpc:
+    # host: 0.0.0.0 # bind address for the HTTP listener (default: all interfaces)
+    port: 9151 # RPC server port
+    # allowed_origins: unified browser-origin allowlist applied to BOTH
+    # the HTTP transport (CORS) and the WS upgrade (gorilla CheckOrigin).
+    # Exact-match URLs only — no wildcard syntax beyond "*". Omit or
+    # leave empty to keep the permissive default ["*"]. Operators can
+    # override per-transport for WS via rpc.websocket.origins (rare).
+    # allowed_origins:
+    #   - "https://wallet.example.com"
+    #   - "https://app.example.com"
+    # websocket: inbound JSON-RPC WS endpoint for eth_subscribe /
+    # zks_subscribe plus all non-subscribe passthrough. Omit this whole
+    # block (the default) to keep WS disabled.
+    #
+    # When enabled, the default is single-listener mode: WS upgrades are
+    # served on the existing RPC listener (port above) — one port, one
+    # firewall entry, one reverse-proxy upstream. To run a dedicated WS
+    # listener instead (Geth-conventional dual-port pattern), set `port`
+    # to a value other than 0 and other than rpc.port (e.g. 9152) and
+    # set `host` for that listener.
+    # websocket:
+    #   enabled: true
+    #   # port: 0            # 0 or unset → single-listener on rpc.port (default)
+    #   # host: 0.0.0.0      # only used in dual-listener mode
+    #   path: "/ws"          # ws upgrade path — disambiguates HTTP RPC (POST /)
+    #                        # from WS upgrade (GET /ws) at the URL level.
+    #                        # Set to "/" for legacy behaviour (root path).
+    #   origins:             # WS-only override of rpc.allowed_origins (rare;
+    #                        # leave unset to inherit the unified allowlist)
+    #     - "*"              # permissive default — tighten via rpc.allowed_origins
+    #   max_conns: 1024
+    #   max_conns_per_ip: 16
+    #   max_subs_per_conn: 32
+    #   outbox_size: 256     # per-connection bounded queue; full → connection dropped
+    #   write_timeout: 10s
+    #   ping_interval: 30s
+    #   max_message_bytes: 10485760   # 10 MB cap on a single inbound frame (parity with rpc.max_request_body_bytes)
+    # ratelimit_whitelist: IPs or CIDRs that bypass rate limiting entirely
+    # ratelimit_whitelist:
+    #   - "127.0.0.1"
+    #   - "::1"              # IPv6 loopback (localhost on macOS)
+    #   - "10.0.0.0/8"
+    endpoints:
+      # Group-level configuration (enables/disables all methods in a group).
+      # When a group is enabled, ALL methods in that group are available.
+      # Rate limits (req/s per IP) apply by default even without config:
+      #   genlayer: 20, genlayer_debug: 2, ethereum: 50, zksync: 50
+      #   gen_call: 2, gen_getContractSchema: 2 (method-level overrides)
+      groups:
+        genlayer: true # gen_* methods (default ratelimit: 20 req/s per IP)
+        genlayer_debug: true # gen_dbg_* methods (default ratelimit: 2 req/s per IP)
+        ethereum: true # eth_* proxy methods (default ratelimit: 50 req/s per IP)
+        # includes: eth_blockNumber, eth_getBlockByNumber, eth_getBlockByHash,
+        #   eth_sendRawTransaction, eth_getTransactionReceipt, etc.
+        zksync: true # zks_* proxy methods (default ratelimit: 50 req/s per IP)
+        # includes: zks_getTransaction, zks_getBlockDetails, etc.
+      # Object format with custom rate limit (overrides defaults):
+      # groups:
+      #   genlayer:
+      #     enabled: true
+      #     ratelimit: 100       # custom: 100 req/s per IP instead of default 20
+      #
+      # Method-level configuration (optional, overrides group settings).
+      # Methods inherit their group's enabled state by default.
+      # Use this section to:
+      #   - Disable specific methods in an enabled group
+      #   - Enable specific methods in a disabled group
+      #   - Set per-method rate limits
+      #
+      # Example: enable all eth_* except eth_sendRawTransaction:
+      #   groups:
+      #     ethereum: true
+      #   methods:
+      #     eth_sendRawTransaction: false
+      #
+      # Example: disable all eth_* except eth_sendRawTransaction:
+      #   groups:
+      #     ethereum: false
+      #   methods:
+      #     eth_sendRawTransaction: true
+      # methods:
+      #   gen_call: true                   # default ratelimit: 2 req/s per IP (GenVM-bound)
+      #   gen_getContractSchema: true      # default ratelimit: 2 req/s per IP (GenVM-bound)
+      #   eth_blockNumber: true
+      #   eth_sendRawTransaction: true
+      #   zks_getTransaction: true
+      # Object format with custom rate limit:
+      # methods:
+      #   gen_call:
+      #     enabled: true
+      #     ratelimit: 5         # custom: 5 req/s per IP instead of default 2
+      #   gen_getContractSchema:
+      #     enabled: true
+      #     ratelimit: 0         # explicitly disable rate limiting for this method
+  ops:
+    port: 9153 # Metrics port
+    endpoints:
+      metrics: true # Enable metrics endpoint
+      health: true # Enable health endpoint
+      balance: true # Enable balance endpoint
+# genvm configuration
+genvm:
+  root_dir: ./third_party/genvm
+  start_manager: true # if true node will start genvm manager itself
+  manager_url: http://127.0.0.1:3999
+  permits: 8 # Leave empty for autodiscovery, put a number for updating genvm permits on startup
+  sync_permits: 64 # Optional: permits used while !isSynced (bulk replay). Leave empty to reuse the steady-state `permits` value.
+  sync_wait_timeout: "20s" # Max time to wait for GenVM to sync to a requested block before returning an error
+# Advanced configuration
+merkleforest:
+  maxdepth: 16
+  dbpath: "./data/node/merkle/forest/data.db"
+  indexdbpath: "./data/node/merkle/index.db"
+merkletree:
+  maxdepth: 16
+  dbpath: "./data/node/merkle/tree/"
+# metrics configuration
+metrics:
+  interval: "15s" # Default interval for all collectors (can be overridden per collector)
+  collectors:
+    node:
+      enabled: true
+      # interval: "30s"  # Optional: Override default interval for this collector
+    genvm:
+      enabled: true
+      # interval: "20s"  # Optional: Override default interval for this collector
+      # enable_simulated_traffic: false  # Optional: Enable simulated network traffic metrics for GenVM processes (default: false)
+      # simulated_rx_bytes_per_process: 1024  # Optional: Simulated received bytes per process per interval (default: 1024)
+      # simulated_tx_bytes_per_process: 512   # Optional: Simulated transmitted bytes per process per interval (default: 512)
+    webdriver:
+      enabled: true
+      # interval: "60s"  # Optional: Override default interval for this collector
+
+```
+
+#### Network-Specific Consensus Configuration
+
+Set the `consensus` section in your `config.yaml` according to the network you want to join:
+
+##### Testnet Asimov
+
+```yaml
+# Asimov Phase 5 network consensus configuration
+consensus:
+  consensusaddress: "0xe66B434bc83805f380509642429eC8e43AE9874a"
+  genesis: 17326
+
+```
+
+##### Testnet Bradbury
+
+```yaml
+# Bradbury Phase 1 network consensus configuration
+consensus:
+  consensusaddress: "0x8aCE036C8C3C5D603dB546b031302FCf149648E8"
+  genesis: 501711
+
+```
+
+#### Overriding Configuration with Environment Variables
+
+Any configuration value in `config.yaml` can be overridden using environment variables with the prefix `GENLAYERNODE_`.
+
+**Pattern:**
+
+- Replace dots (`.`) with underscores (`_`)
+- Convert to uppercase
+- Add the `GENLAYERNODE_` prefix
+
+**Examples:**
+
+| Config Key | Environment Variable |
+|------------|---------------------|
+| `rollup.genlayerchainrpcurl` | `GENLAYERNODE_ROLLUP_GENLAYERCHAINRPCURL` |
+| `rollup.genlayerchainwebsocketurl` | `GENLAYERNODE_ROLLUP_GENLAYERCHAINWEBSOCKETURL` |
+| `consensus.contractmainaddress` | `GENLAYERNODE_CONSENSUS_CONTRACTMAINADDRESS` |
+| `consensus.contractdataaddress` | `GENLAYERNODE_CONSENSUS_CONTRACTDATAADDRESS` |
+| `consensus.genesis` | `GENLAYERNODE_CONSENSUS_GENESIS` |
+| `node.mode` | `GENLAYERNODE_NODE_MODE` |
+| `node.validatorWalletAddress` | `GENLAYERNODE_NODE_VALIDATORWALLETADDRESS` |
+| `node.operatorAddress` | `GENLAYERNODE_NODE_OPERATORADDRESS` |
+| `node.rpc.port` | `GENLAYERNODE_NODE_RPC_PORT` |
+| `logging.level` | `GENLAYERNODE_LOGGING_LEVEL` |
+
+**Usage example:**
+
+```sh
+# Override the RPC port
+export GENLAYERNODE_CONSENSUS_CONTRACTMAINADDRESS="0x..."
+
+# Set validator wallet address
+export GENLAYERNODE_NODE_VALIDATORWALLETADDRESS="0x..."
+
+# Set logging level
+export GENLAYERNODE_LOGGING_LEVEL="DEBUG"
+```
+
+Environment variables take precedence over values in `config.yaml`, making them ideal for Docker deployments or sensitive values you don't want in configuration files.
+
+#### GenVM Configuration
+
+See the [GenVM Configuration](/validators/genvm-configuration) page for detailed LLM provider setup, configuration files, and advanced features like greyboxing.
+
+#### Import the Operator Key
+
+The operator key is used by your node to sign blocks and perform validator duties.
+
+#### Option 1: Import from CLI Wizard (Recommended)
+
+If you used `genlayer staking wizard`, it exported an operator keystore file. Transfer this file to your validator server and import it:
+
+```sh
+./bin/genlayernode account import \
+  --password "your node password" \
+  --passphrase "password you set when exporting from wizard" \
+  --path "/path/to/operator-keystore.json" \
+  -c $(pwd)/configs/node/config.yaml \
+  --setup
+```
+
+You should see:
+
+```sh
+Account imported:
+  Address: 0xA0b12Fd2f3F7e86fEC458D114A5E7a6f571160a8
+  Account setup as a validator
+```
+
+#### Option 2: Generate New Operator Key
+
+You can also generate a new operator key directly on the server:
+
+```sh
+./bin/genlayernode account new -c $(pwd)/configs/node/config.yaml --setup --password "your secret password"
+```
+
+Then use this address when running the wizard on your local machine.
+
+#### Restoring Your Operator Key
+
+To restore from a backup (e.g., after migrating to a new server):
+
+```sh
+./bin/genlayernode account import \
+  --password "your node password" \
+  --passphrase "your backup encryption passphrase" \
+  --path "/path/to/your/secure/backup.key" \
+  -c $(pwd)/configs/node/config.yaml \
+  --setup
+```
+
+> **Note:**
+  Always verify that your imported key works by checking the operator address matches what's configured for your validator.
+
+#### Backing Up Your Operator Key
+
+After setting up your operator key, back it up securely:
+
+```sh
+./bin/genlayernode account export \
+  --password "your node password" \
+  --address "your operator address" \
+  --passphrase "your backup encryption passphrase" \
+  --path "/path/to/your/secure/backup.key" \
+  -c $(pwd)/configs/node/config.yaml
+```
+
+> **Note:**
+  **Important: Back up your operator key!** Losing access means you'll need to set up a new operator and update your validator configuration. Store the backup securely.
+
+To print the private key from your backup file, use the `--print` flag. **Keep this private key secure and never share it.**
+
+### Running the node
+
+Once you have configured everything, you are ready to start the node.
+
+> **Note:**
+    **Important:** Before starting the node, ensure you have:
+    1. **Operator key** imported into the node (see "Import the Operator Key" above)
+    2. **Validator wallet address** - obtained after joining as validator via `genlayer staking wizard` or `validator-join`
+
+    Without both configured, your node will run as a full node instead of a validator.
+
+#### Running the Node using the binary
+
+1.  Set the LLM Provider API Key
+
+    Set the appropriate environment variable for your chosen LLM provider. See the [GenVM Configuration](/validators/genvm-configuration) page for details on LLM providers and obtaining API credits.
+
+    ```sh
+    # For Heurist
+    export HEURISTKEY='your_heurist_api_key'
+
+    # For Comput3
+    export COMPUT3KEY='your_comput3_api_key'
+
+    # For io.net
+    export IOINTELLIGENCE_API_KEY='your_ionet_api_key'
+
+    # For Chutes
+    export CHUTES_API_KEY='your_chutes_api_key'
+
+    # For Morpheus
+    export MORPHEUS_API_KEY='your_morpheus_api_key'
+
+    # For other providers, use the appropriate environment variable name
+    ```
+
+2.  Run the WebDriver container
+
+    ```sh
+    docker compose up -d # Starts the WebDriver needed by the GenVM web module
+    ```
+
+3.  (Optional) Run two services (modules) in background (this is a crucial step for running _Intelligent_ contracts). This can be done automatically or manually.
+    - To start them automatically in node configuration set `genvm.manage_modules` to `true`
+    - To start them manually run
+      ```bash
+       ./third_party/genvm/bin/genvm-modules web & ./third_party/genvm/bin/genvm-modules llm &
+      ```
+
+> **Note:**
+  Note: If you are using the default configuration, `genvm.manage_modules` is
+  set to `true` by default, meaning the node will manage these modules
+  automatically.
+
+4. Checking Your Configuration
+
+    To ensure your node is correctly configured, you can run the following command:
+
+    ```sh
+    ./bin/genlayernode doctor
+    ```
+
+    The `doctor` command now includes comprehensive GenVM diagnostics integration to validate:
+    - Consensus contract configuration and accessibility
+    - GenVM module connectivity and health status
+    - LLM provider configuration and API connectivity
+    - Network configuration and ZKSync node accessibility
+
+5.  Run the node
+
+    ```sh
+    ./bin/genlayernode run -c $(pwd)/configs/node/config.yaml --password "your secret password" # The same password you used when creating the account
+    ```
+
+> **Note:**
+  If you are running the node via SSH, the process might terminate if your
+  connection drops. To prevent this, consider using a terminal multiplexer like
+  `screen` or `tmux` to keep the node running in the background even if your SSH
+  session ends. You can find a guide on using `screen`
+  [here](https://www.networkworld.com/article/967925/how-the-linux-screen-tool-can-save-your-tasks-and-your-sanity-if-ssh-is-interrupted.html).
+
+#### Running the Node using docker-compose
+
+You can also run the GenLayer node using Docker and Docker Compose.
+
+1. Create a `docker-compose.yaml` file with the following content:
+
+```yaml
+services:
+  webdriver-container:
+    container_name: genlayer-node-webdriver
+    image: yeagerai/genlayer-genvm-webdriver:0.0.11
+    shm_size: 2gb
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      PORT: 4444
+    ports:
+      - "${WEBDRIVER_PORT:-4444}:4444"
+    restart: unless-stopped
+  genlayer-node:
+    image: yeagerai/genlayer-node:${NODE_VERSION:-latest}
+    entrypoint: ["sh", "-c", "/app/bin/genlayernode run --password ${NODE_PASSWORD:-12345678}"]
+    container_name: genlayer-node
+    restart: unless-stopped
+    env_file:
+      - path: ./.env
+        required: false
+    ports:
+      - "${NODE_RPC_PORT:-9151}:9151"
+      - "${NODE_OPS_PORT:-9153}:9153"
+    volumes:
+      - ${NODE_CONFIG_PATH:-./configs/node/config.yaml}:/app/configs/node/config.yaml:ro
+      - ${NODE_DATA_PATH:-./data}:/app/data
+      - ./genvm-module-web-docker.yaml:/app/third_party/genvm/config/genvm-module-web.yaml
+      - /var/run/docker.sock:/var/run/docker.sock:ro # required for webdriver metrics collection
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "3"
+        compress: "true"
+    depends_on:
+      - webdriver-container
+    profiles:
+      - node
+
+```
+
+2. Create `genvm-module-web-docker.yaml` for Docker networking:
+
+The extracted tarball includes `third_party/genvm/config/genvm-module-web.yaml` configured for `localhost`, which works when running
+the binary directly. For docker-compose, you need a version that points to the webdriver service name.
+
+Create `genvm-module-web-docker.yaml` in the same directory as your `docker-compose.yaml`:
+
+- Copy the contents of `third_party/genvm/config/genvm-module-web.yaml` into `genvm-module-web-docker.yaml`.
+- Modify the `webdriver_host` configuration to use the service name `webdriver-container` instead of `localhost`:
+
+```yaml
+webdriver_host: http://webdriver-container:4444
+```
+
+This allows the node container to reach the webdriver container using Docker's internal networking.
+
+The key difference:
+- **Binary execution**: uses `localhost:4444` (webdriver runs on same machine)
+- **Docker-compose**: uses `webdriver-container:4444` (container service name)
+
+3. Set the required environment variables in a `.env` file:
+
+> **Note:**
+  This `.env` file serves two purposes: it configures Docker Compose variables (like `NODE_VERSION`, `NODE_PASSWORD`, ports) and can also include `GENLAYERNODE_*` variables to override node configuration values as described in [Overriding Configuration with Environment Variables](#overriding-configuration-with-environment-variables).
+
+```env
+# GenLayer Node Release Configuration
+
+# =============================================================================
+# WebDriver Configuration (required for GenVM)
+# =============================================================================
+WEBDRIVER_PORT=4444
+
+# =============================================================================
+# Node Service Configuration (optional - use node profile)
+# =============================================================================
+# Docker image version
+NODE_VERSION=v0.4.0
+
+# Keystore password (used to unlock the pre-imported wallet)
+NODE_PASSWORD=12345678
+
+# Path to node configuration file
+NODE_CONFIG_PATH=./configs/node/config.yaml
+
+# Path to node data directory (for persistence)
+NODE_DATA_PATH=./data
+
+# Port mappings
+NODE_RPC_PORT=9151
+NODE_OPS_PORT=9153
+
+# LLM API Key (required for GenVM LLM module)
+HEURISTKEY=
+COMPUT3KEY=
+IOINTELLIGENCE_API_KEY=
+ANTHROPICKEY=
+XAIKEY=
+GEMINIKEY=
+ATOMAKEY=
+CHUTES_API_KEY=
+MORPHEUS_API_KEY=
+```
+
+or simply use the provided `docker-compose.yaml`, `.env.example` and the `genvm-module-web-docker.yaml` from the extracted tarball.
+
+4. Checking Your Configuration
+
+To ensure your node is correctly configured, you can run the following command:
+
+```sh
+source .env && docker run --rm --env-file ./.env \
+  -v ${NODE_CONFIG_PATH:-./configs/node/config.yaml}:/app/configs/node/config.yaml \
+  yeagerai/genlayer-node:${NODE_VERSION:-v0.4.0} \
+  ./bin/genlayernode doctor
+```
+
+5. Start the services using Docker Compose:
+
+```sh
+source .env && docker compose --profile node up -d
+```
+
+### Telemetry
+
+For a quick setup using Docker Compose:
+
+1. **Configure your `.env` file** with the required variables for monitoring:
+
+   ```env
+   # Central monitoring server endpoints for GenLayer Foundation
+   CENTRAL_MONITORING_URL=https://prometheus-prod-66-prod-us-east-3.grafana.net/api/prom/push
+   CENTRAL_LOKI_URL=https://logs-prod-042.grafana.net/loki/api/v1/push
+
+   # Authentication for central monitoring
+   # Metrics (Prometheus) credentials
+   CENTRAL_MONITORING_USERNAME=your-metrics-username
+   CENTRAL_MONITORING_PASSWORD=your-metrics-password
+   # Logs (Loki) credentials
+   CENTRAL_LOKI_USERNAME=your-logs-username
+   CENTRAL_LOKI_PASSWORD=your-logs-password
+
+   # Node identification
+   NODE_ID=validator-001
+   VALIDATOR_NAME=MyValidator
+   ```
+
+2. **Run docker compose**:
+   ```bash
+   docker compose --profile monitoring up -d
+   ```
+
+3. **Verify your node is pushing metrics** by checking the [GenLayer Foundation public dashboard](https://genlayerfoundation.grafana.net/public-dashboards/66a372d856ea44e78cf9ac21a344f792)
+
+For detailed monitoring setup including Prometheus metrics, Grafana dashboards, and centralized logging with Alloy, see the [Monitoring Guide](/validators/monitoring).

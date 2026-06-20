@@ -1,0 +1,360 @@
+# Development Setup
+
+Source: https://docs.genlayer.com/developers/intelligent-contracts/tooling-setup
+
+This guide covers everything you need to develop, test, and deploy Intelligent Contracts — from zero-setup exploration to a full local development environment with linting, testing, and agent-assisted workflows.
+
+## Recommended: GenLayer Skills
+
+The [GenLayer Skills](https://skills.genlayer.com/) plugin for Claude Code is the fastest path to a working development environment. The `genlayer-dev` skill scaffolds a project, installs prerequisites, runs the linter and direct-mode tests, and walks you through deployment — interactively.
+
+```bash
+claude /plugin marketplace add genlayerlabs/skills
+claude /plugin install genlayer-dev@genlayerlabs
+```
+
+Then run `claude /genlayer-dev` and follow the prompts. The skill bundles the same workflows documented in the rest of this page — it just runs them for you.
+
+The rest of this guide describes the manual setup, the reference path for anyone who wants fine-grained control or is integrating with existing tooling.
+
+## Quick Start: GenLayer Studio
+
+The fastest way to start is [studio.genlayer.com](https://studio.genlayer.com) — a web-based IDE where you can write, deploy, and interact with Intelligent Contracts with zero setup.
+
+You can also import any deployed contract by address to interact with it directly in the Studio — useful for debugging or testing contracts you've deployed from your local environment.
+
+For anything beyond exploration — local testing, CI, agent-assisted development — set up a local environment below.
+
+## Local Environment Setup
+
+### Prerequisites
+
+- [Python 3.12+](https://www.python.org/downloads/) - For contracts, linting, and testing
+- [Node.js 18+](https://nodejs.org/en/download/) - For GenLayer CLI and frontend
+- [Docker 26+](https://docs.docker.com/get-docker/) - For GenLayer Studio (local)
+
+> **Note:**
+  Docker is only required if you want to run GenLayer Studio locally. Direct mode tests and GLSim work without Docker.
+
+### Clone the Boilerplate
+
+The [GenLayer Project Boilerplate](https://github.com/genlayerlabs/genlayer-project-boilerplate) is the recommended starting point. It includes contract templates, testing infrastructure, and a frontend scaffold.
+
+```bash
+git clone https://github.com/genlayerlabs/genlayer-project-boilerplate.git
+cd genlayer-project-boilerplate
+```
+
+### Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+This installs:
+- **`genlayer-test`** — testing framework with direct mode, GLSim, and integration test support
+- **`genvm-linter`** — static analysis for contract safety and correctness
+
+### Project Structure
+
+```
+contracts/              # Your Intelligent Contracts
+tests/
+  direct/               # Fast in-memory tests (no server needed)
+  integration/          # Full tests against GenLayer Studio
+frontend/               # Next.js frontend with GenLayerJS
+deploy/                 # Deployment scripts
+gltest.config.yaml      # Test network configuration
+```
+
+## Development Workflow
+
+The recommended development loop:
+
+### 1. Write Your Contract
+
+Create or edit a contract in `contracts/`:
+
+```python
+from genlayer import *
+
+class MyContract(gl.Contract):
+    data: TreeMap[Address, str]
+
+    def __init__(self):
+        self.data = TreeMap()
+
+    @gl.public.view
+    def get_data(self, addr: Address) -> str:
+        return self.data.get(addr, "")
+
+    @gl.public.write
+    def set_data(self, value: str):
+        self.data[gl.message.sender_address] = value
+```
+
+### 2. Lint
+
+Run the linter to catch issues before testing:
+
+```bash
+genvm-lint check contracts/my_contract.py
+```
+
+`check` runs both fast AST-based safety checks and SDK-based semantic validation. It catches:
+- **Forbidden imports** — `os`, `sys`, `subprocess`, etc.
+- **Non-deterministic calls** outside equivalence principle blocks
+- **Invalid storage types** — must use `TreeMap`/`DynArray`, not `dict`/`list`
+- **Missing decorators** and return type annotations
+
+Use `--json` for machine-readable output (useful for CI and agent workflows).
+
+### 3. Direct Mode Tests
+
+The fastest feedback loop — runs contracts in-memory without any server:
+
+```bash
+pytest tests/direct/ -v
+```
+
+Direct mode provides Foundry-style test fixtures:
+
+```python
+import json
+
+def test_create_and_read(direct_vm, direct_deploy, direct_alice):
+    contract = direct_deploy("contracts/my_contract.py")
+
+    # Set the transaction sender
+    direct_vm.sender = direct_alice
+
+    # Call write methods directly
+    contract.set_data("hello")
+
+    # Call view methods
+    result = contract.get_data(direct_alice)
+    assert result == "hello"
+```
+
+#### Mocking Web and LLM Calls
+
+For contracts that use `gl.nondet.web` or `gl.nondet.exec_prompt`, mock the responses:
+
+```python
+def test_with_mocks(direct_vm, direct_deploy, direct_alice):
+    contract = direct_deploy("contracts/my_contract.py")
+    direct_vm.sender = direct_alice
+
+    # Mock web requests (regex matches on URL)
+    direct_vm.mock_web(
+        r".*api\.example\.com/prices.*",
+        {"status": 200, "body": '{"price": 42.5}'},
+    )
+
+    # Mock LLM responses (regex matches on prompt)
+    direct_vm.mock_llm(
+        r".*Extract the match result.*",
+        json.dumps({"score": "2:1", "winner": 1}),
+    )
+
+    contract.update_price("ETH/USD")
+    assert contract.get_price("ETH/USD") == 42.5
+
+    # Reset mocks between scenarios
+    direct_vm.clear_mocks()
+```
+
+#### Testing Failures
+
+```python
+def test_expected_failure(direct_vm, direct_deploy, direct_alice):
+    contract = direct_deploy("contracts/my_contract.py")
+    direct_vm.sender = direct_alice
+
+    with direct_vm.expect_revert("Insufficient balance"):
+        contract.withdraw(1000)
+```
+
+Available fixtures: `direct_vm`, `direct_deploy`, `direct_alice`, `direct_bob`, `direct_charlie`, `direct_owner`, `direct_accounts`
+
+### 4. Integration Tests
+
+Once direct tests pass, run against a GenLayer environment (see [Environments](#environments) below) for full end-to-end validation:
+
+```bash
+gltest tests/integration/ -v -s
+```
+
+Integration tests use the `genlayer-test` SDK to deploy and interact with contracts through the JSON-RPC API:
+
+```python
+from gltest import get_contract_factory
+from gltest.assertions import tx_execution_succeeded
+
+def test_full_flow():
+    factory = get_contract_factory("MyContract")
+    contract = factory.deploy(args=[])
+
+    # Write methods return transaction receipts
+    tx_receipt = contract.set_data(args=["hello"]).transact()
+    assert tx_execution_succeeded(tx_receipt)
+
+    # Read methods return values directly
+    result = contract.get_data(args=[contract.address]).call()
+    assert result == "hello"
+```
+
+See the [GenLayer Test SDK reference](/api-references/genlayer-test) for the full API.
+
+## Environments
+
+These are the backends you can develop against. Your frontend, integration tests, and deployment scripts all connect to one of these via JSON-RPC.
+
+### GLSim
+
+**Setup:** `pip install genlayer-test[sim]`
+
+A lightweight simulator that implements the GenLayer JSON-RPC protocol. Starts in ~1 second, no Docker required. You can point your frontend and integration tests at it for fast iteration.
+
+GLSim runs the Python runner natively — **not inside GenVM** — so there can be minor incompatibilities with the full runtime. Use it for fast development cycles, then validate against Studio before deploying.
+
+```bash
+# Start the simulator
+glsim --port 4000 --validators 5
+
+# Your frontend connects to http://localhost:4000/api
+# Integration tests run against it
+gltest tests/integration/ -v -s
+```
+
+### GenLayer Studio (Local)
+
+**Setup:** Docker 26+ and GenLayer CLI
+
+Full GenVM execution with real consensus. You get complete validator logs, transaction inspection, and the Studio UI for interactive debugging. This is where you validate that everything works in the real runtime.
+
+```bash
+npm install -g genlayer
+genlayer init
+genlayer up
+```
+
+Once running, access Studio at http://localhost:8080/. Your frontend and tests connect to `http://localhost:4000/api`.
+
+```bash
+gltest tests/integration/ -v -s --network localnet
+```
+
+CLI options for `genlayer init` and `genlayer up`
+
+**`genlayer init`** options:
+- `--numValidators ` — number of validators (default: 5)
+- `--headless` — run without Studio UI
+- `--reset-db` — start with a clean database
+- `--localnet-version ` — pin a specific localnet version
+
+**`genlayer up`** options:
+- `--reset-validators` — recreate all validators
+- `--numValidators ` — number of validators
+- `--headless` — run without Studio UI
+- `--reset-db` — clean database
+
+### studio.genlayer.com
+
+**Setup:** none
+
+Hosted Studio — convenient when you don't want to run Docker locally. Rate limited compared to a local instance. You can also import any deployed contract by address to interact with it directly in the browser.
+
+```bash
+gltest tests/integration/ -v -s --network studionet
+```
+
+### Testnet Bradbury
+
+**Setup:** account with private keys
+
+The most realistic environment — the actual GenLayer testnet with real validators. You don't get full validator logs like you do with local Studio, so this is best for final pre-production validation rather than active debugging.
+
+```bash
+gltest tests/integration/ -v -s --network testnet_bradbury
+```
+
+Configure accounts in `gltest.config.yaml`:
+
+```yaml
+networks:
+  testnet_bradbury:
+    accounts:
+      - "${ACCOUNT_PRIVATE_KEY_1}"
+      - "${ACCOUNT_PRIVATE_KEY_2}"
+```
+
+## IDE Support
+
+The [GenLayer VS Code Extension](https://marketplace.visualstudio.com/items?itemName=genlayer-labs.genlayer) provides syntax highlighting, snippets, and language support for Intelligent Contracts. Works with VS Code, Cursor, and other VS Code-compatible editors.
+
+## Agent-Assisted Development
+
+The boilerplate is designed to work well with AI coding agents. The linter and direct mode tests provide a fast feedback loop that agents can use without spinning up infrastructure.
+
+For Claude Code, install the [GenLayer Skills](https://skills.genlayer.com/) marketplace (covered at the top of this page) — it bundles the workflows below behind interactive commands.
+
+For other IDEs and clients, the GenLayer MCP servers provide the same capabilities via the Model Context Protocol:
+
+The [GenLayer MCP Server](https://www.npmjs.com/package/genlayer-mcp) provides contract generation and GenLayer-specific guidance directly in your IDE:
+
+```bash
+# Add to Claude Code
+claude mcp add genlayer npx -- -y genlayer-mcp
+```
+
+The **GenLayer Docs MCP Server** gives your AI agent searchable access to the full GenLayer documentation and SDK reference — so it can look up APIs, patterns, and examples while writing code:
+
+```bash
+# Add to Claude Code
+claude mcp add genlayer-docs --transport sse https://docs-mcp.genlayer.com/sse
+```
+
+This is a hosted service — no local setup required. It provides a `search_docs` tool that searches across both the [GenLayer documentation](https://docs.genlayer.com) and the [GenLayer SDK reference](https://sdk.genlayer.com). Compatible with any MCP client (Claude Code, Cursor, Windsurf, etc.).
+
+The boilerplate also includes a `CLAUDE.md` file pre-configured with commands, architecture context, and testing patterns — so agents understand the project structure immediately.
+
+## Frontend Development
+
+The boilerplate includes a Next.js frontend with GenLayerJS integration. See the [GenLayerJS SDK documentation](/api-references/genlayer-js) for the full API reference.
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+For building a frontend from scratch:
+
+```bash
+npm install genlayer-js
+```
+
+```javascript
+import { createClient } from 'genlayer-js';
+
+const client = createClient({ endpoint: 'http://localhost:4000/api' });
+
+// Read from a contract
+const value = await client.readContract({
+    address: contractAddress,
+    functionName: "get_data",
+    args: [],
+});
+
+// Write to a contract
+const txHash = await client.writeContract({
+    address: contractAddress,
+    functionName: "set_data",
+    args: [newValue],
+});
+const receipt = await client.waitForTransactionReceipt({
+    hash: txHash,
+    status: "FINALIZED",
+});
+```

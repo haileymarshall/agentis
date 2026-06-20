@@ -1,0 +1,237 @@
+# gen_call
+
+Source: https://docs.genlayer.com/api-references/genlayer-node/gen/gen_call
+
+Executes a new message call immediately without creating a transaction on the blockchain. This method supports read operations, write operations, and contract deployments.
+
+**Method:** `gen_call`
+
+**Parameters:**
+
+- `request` (object, required): The contract call request parameters
+  - `from` (string, required): The address making the call
+  - `to` (string, required): The contract address to call
+  - `data` (string, required): The encoded function call data
+  - `type` (string, required): The type of call (`"read"`, `"write"`, or `"deploy"`)
+  - `blockNumber` (string, optional): The block number to query at (hex-encoded). If not provided, uses latest block
+  - `status` (string, optional): The transaction status filter (`"finalized"` or `"accepted"`). If not provided, uses accepted state
+  - `value` (string, optional): The value to send with the call (hex-encoded)
+  - `leader_results` (array of strings or null, optional): When provided, GenVM runs in validator mode (executing `validator_fn` instead of `leader_fn` in `run_nondet` calls). Each element is a hex-encoded equivalence output from a previous leader execution. When omitted or null, GenVM runs in leader mode
+
+**Returns:** A structured JSON object containing execution results and debug information
+
+**Response Fields:**
+
+- `data` (string): Hex-encoded return value from contract execution
+- `eqOutputs` (array of strings): Equivalence outputs from GenVM execution, each as a hex-encoded string. These are deterministic outputs used for consensus validation. Populated in leader mode; empty in validator mode
+- `status` (object): Execution status
+  - `code` (number): Status code (0=success, 1=user error, 2=vm error, 3=internal error)
+  - `message` (string): Human-readable status message
+- `stdout` (string): Standard output captured during execution
+- `stderr` (string): Standard error captured during execution
+- `logs` (array): GenVM log entries, each as a JSON object with fields like `level`, `message`, `target`, `file`, `ts`
+- `events` (array): Contract events emitted during execution
+  - `topics` (array of strings): Event topics as hex-encoded strings
+  - `data` (string): Event data as hex-encoded string
+- `messages` (array): Messages emitted by the contract
+  - `messageType` (number): Type identifier for the message
+  - `recipient` (string): Recipient address
+  - `value` (string): Value in hex format
+  - `data` (string): Message data as hex-encoded string
+  - `onAcceptance` (boolean): Whether message is sent on acceptance
+  - `saltNonce` (string): Salt nonce in hex format
+- `nondetDisagreementCallNo` (number or null): When running in validator mode (with `leader_results`), indicates which `run_nondet` call the validator disagreed on. Null when there is no disagreement or when running in leader mode
+
+**Example - Deploy Call:**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "gen_call",
+  "params": [
+    {
+      "type": "deploy",
+      "data": "0xf9023db90223232076302e312e300a23207b2022446570656e6473223a202270792d67656e6c617965723a3135716669766a7679383038303072683939387063786d64326d38766131777132717a71687a3835306e3867676372346939713022207d0a0a66726f6d2067656e6c6179657220696d706f7274202a0a0a0a2320636f6e747261637420636c6173730a636c6173732053746f7261676528676c2e436f6e7472616374293a0a2020202073746f726167653a207374720a0a202020202320636f6e7374727563746f720a20202020646566205f5f696e69745f5f2873656c662c20696e697469616c5f73746f726167653a20737472293a0a202020202020202073656c662e73746f72616765203d20696e697469616c5f73746f726167650a0a20202020232072656164206d6574686f6473206d75737420626520616e6e6f7461746564207769746820766965770a2020202040676c2e7075626c69632e766965770a20202020646566206765745f73746f726167652873656c6629202d3e207374723a0a202020202020202072657475726e2073656c662e73746f726167650a0a2020202023207772697465206d6574686f640a2020202040676c2e7075626c69632e77726974650a20202020646566207570646174655f73746f726167652873656c662c206e65775f73746f726167653a2073747229202d3e204e6f6e653a0a202020202020202073656c662e73746f72616765203d206e65775f73746f726167650a950e04617267730d6c696e697469616c2076616c756500",
+      "from": "0xf6A60752C24Cd3BFcAf8d387a5EB62d3746F44EE",
+      "to": "0x0000000000000000000000000000000000000000",
+      "status": "finalized"
+    }
+  ],
+  "id": 1
+}
+```
+
+**Example Response (Deploy Success):**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "data": "00",
+    "eqOutputs": [],
+    "status": {
+      "code": 0,
+      "message": "success"
+    },
+    "stdout": "",
+    "stderr": "",
+    "logs": [
+      {
+        "file": "common/src/lib.rs:111",
+        "level": "info",
+        "message": "logging initialized",
+        "target": "genvm_common",
+        "ts": "1770221913210",
+        "version": "v0.2.11-aarch64-macos-release"
+      },
+      {
+        "file": "src/exe/run.rs:150",
+        "genvm_id": "1",
+        "level": "info",
+        "message": "genvm id",
+        "target": "genvm::exe::run",
+        "ts": "1770221913212"
+      },
+      {
+        "file": "src/lib.rs:299",
+        "level": "info",
+        "message": "metrics",
+        "metrics": {
+          "gvm": {
+            "host": { "time": 654 },
+            "llm_module": { "calls": 0, "time": 0 },
+            "supervisor": { "compilation_time": 0, "compiled_modules": 0, "precompile_hits": 2 },
+            "web_module": { "calls": 0, "time": 0 }
+          },
+          "llm": null,
+          "web": null
+        },
+        "target": "genvm",
+        "ts": "1770221913590"
+      }
+    ],
+    "events": [],
+    "messages": [],
+    "nondetDisagreementCallNo": null
+  },
+  "id": 1
+}
+```
+
+**Example - Read Call (Latest Accepted State):**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "gen_call",
+  "params": [
+    {
+      "type": "read",
+      "data": "0xd8960e066d6574686f646c6765745f686176655f636f696e00",
+      "from": "0xf6A60752C24Cd3BFcAf8d387a5EB62d3746F44EE",
+      "to": "0xCe5712E63fd5475288aB1B7c0a368B9417357b81",
+      "gas": "0x5208",
+      "value": "0x0"
+    }
+  ],
+  "id": 1
+}
+```
+
+**Example - Read Call with Specific Block and Status:**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "gen_call",
+  "params": [
+    {
+      "type": "read",
+      "data": "0xd8960e066d6574686f646c6765745f686176655f636f696e00",
+      "from": "0xf6A60752C24Cd3BFcAf8d387a5EB62d3746F44EE",
+      "to": "0xCe5712E63fd5475288aB1B7c0a368B9417357b81",
+      "blockNumber": "0x151ec5",
+      "status": "accepted"
+    }
+  ],
+  "id": 1
+}
+```
+
+**Example - Write Call:**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "gen_call",
+  "params": [
+    {
+      "from": "0x742d35Cc6634C0532925a3b8D4C9db96c4b4d8b6",
+      "to":   "0x742d35Cc6634C0532925a3b8D4C9db96c4b4d8b6",
+      "data": "0xa9059cbb000000000000000000000000742d35cc6634c0532925a3b8d4c9db96c4b4d8b6",
+      "type": "write",
+      "gas":  "0x5208",
+      "value":"0x0"
+    }
+  ],
+  "id": 1
+}
+```
+
+**Example Response with Messages (Router Forward Call):**
+
+When a contract emits internal messages (e.g., a router contract forwarding calls), the response includes the messages array:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "data": "00",
+    "eqOutputs": [],
+    "status": {
+      "code": 0,
+      "message": "success"
+    },
+    "stdout": "",
+    "stderr": "",
+    "logs": [
+      {
+        "file": "src/lib.rs:299",
+        "level": "info",
+        "message": "metrics",
+        "target": "genvm",
+        "ts": "1770225770000"
+      }
+    ],
+    "events": [],
+    "messages": [
+      {
+        "messageType": 1,
+        "recipient": "0xc346f80c86adf1d71accfc4ef6efe7482b25be40",
+        "value": "0x0",
+        "data": "0xf86eb86a16046172677331d4023078393164463338654243623930384335643635...",
+        "onAcceptance": false,
+        "saltNonce": "0x0"
+      },
+      {
+        "messageType": 1,
+        "recipient": "0xad26513a4315b0ea8a5c800322b35092a83dfd3d",
+        "value": "0x0",
+        "data": "0xf86eb86a16046172677331d4023078333738653339374533316346383538333630...",
+        "onAcceptance": false,
+        "saltNonce": "0x0"
+      }
+    ],
+    "nondetDisagreementCallNo": null
+  },
+  "id": 1
+}
+```
+
+**Notes:**
+
+- The `blockNumber` parameter can be either hex-encoded with a `0x` prefix (e.g., `"0x151ec5"`) or decimal (e.g., `"1384133"`)
+- Valid `status` values are `"accepted"` (default) and `"finalized"`
+- When both parameters are omitted, the call executes against the latest accepted state
+- For `read` and `write` type calls, if the contract doesn't exist at the specified block/status combination, an error is returned with code `-32001` (Resource not found) and message `"contract not found at address 0x..."`
+- For `deploy` type calls, the `status` and `blockNumber` parameters are not used for contract state validation since no contract exists yet

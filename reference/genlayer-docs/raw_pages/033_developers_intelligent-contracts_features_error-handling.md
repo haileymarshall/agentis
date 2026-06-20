@@ -1,0 +1,119 @@
+# Error Handling
+
+Source: https://docs.genlayer.com/developers/intelligent-contracts/features/error-handling
+
+## Unrecoverable Errors
+
+Exit codes terminate execution immediately:
+
+```python
+if invalid_condition:
+    exit(1)
+```
+
+Unhandled exceptions also become unrecoverable:
+
+```python
+raise Exception("Critical error")  # Becomes exit(1)
+```
+
+## UserError
+
+User-generated errors with UTF-8 encoded messages:
+
+```python
+# Can be caught in current sub-vm
+raise gl.vm.UserError("Invalid input")
+
+# Immediate user error, more efficient but can't be caught
+gl.advanced.user_error_immediate("Insufficient funds")
+```
+
+## VMError
+
+VM-generated errors with predefined string codes:
+
+```python
+# Non-zero exit codes become VMError
+exit(1)  # Results in VMError with specific code
+
+# Resource limit violations also trigger VMError
+# (handled automatically by the VM)
+```
+
+## Catching UserError
+
+Handle user errors from sub-VMs:
+
+```python
+def risky_operation():
+    raise gl.vm.UserError("Operation failed")
+
+try:
+    result = gl.eq_principle.strict_eq(risky_operation)
+except gl.vm.UserError as e:
+    print(f"Caught user error: {e.message}")
+```
+
+## Error Propagation
+
+Errors flow from non-deterministic to deterministic code:
+
+```python
+def nondet_block():
+    if some_condition:
+        raise gl.vm.UserError("INVALID_STATE")
+    return "success"
+
+try:
+    gl.eq_principle.strict_eq(nondet_block)
+except gl.vm.UserError as e:
+    if e.message == "INVALID_STATE":
+        # Handle specific error condition
+        pass
+```
+
+## VM Result Types
+
+GenVM produces four result types:
+
+- **Return** - Successful execution with encoded result
+- **VMError** - VM errors (exit codes, resource limits)
+- **UserError** - User-generated errors with UTF-8 messages
+- **InternalError** - Critical VM failures (not visible to contracts)
+
+## Error Patterns for Consensus
+
+When using `run_nondet_unsafe`, errors affect how validators compare results. If the leader errors, the validator needs to decide: do I agree or disagree?
+
+One approach is to classify errors by their nature, so validators can handle each type appropriately:
+
+- **Deterministic errors** (business logic, client errors): should match exactly between leader and validator
+- **Transient errors** (network issues, server errors): both hitting a transient failure is expected
+- **LLM errors** (malformed output): disagreeing forces a rotation to a new leader, which is usually what you want
+
+### Example: Error Classification
+
+```python
+def validator_fn(leaders_res: gl.vm.Result) -> bool:
+    if not isinstance(leaders_res, gl.vm.Return):
+        # Leader errored — run the same logic to see if we error too
+        leader_msg = leaders_res.message if hasattr(leaders_res, 'message') else ''
+        try:
+            leader_fn()
+            return False  # Leader errored but we succeeded — disagree
+        except gl.UserError as e:
+            validator_msg = str(e)
+            # Both hit the same business logic error — agree
+            if validator_msg == leader_msg:
+                return True
+            return False
+        except Exception:
+            return False
+
+    # Leader succeeded — validate the result
+    validator_result = leader_fn()
+    return compare_results(leaders_res.calldata, validator_result)
+```
+
+This pattern ensures that consensus failures on broken LLM output or transient network issues lead to retries rather than locking in bad state.

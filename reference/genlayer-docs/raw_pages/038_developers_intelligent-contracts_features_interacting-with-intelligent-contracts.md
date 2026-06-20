@@ -1,0 +1,102 @@
+# Interacting with Intelligent Contracts
+
+Source: https://docs.genlayer.com/developers/intelligent-contracts/features/interacting-with-intelligent-contracts
+
+> This page covers syntax for internal messages (IC → IC). See [Messages](/developers/intelligent-contracts/features/messages) for the conceptual model and [Value Transfers](/developers/intelligent-contracts/features/value-transfers) for sending GEN.
+
+## Getting Contract References
+
+Access other contracts by their address:
+
+```python
+contract_address = Address("0x03FB09251eC05ee9Ca36c98644070B89111D4b3F")
+
+dynamically_typed_contract = gl.get_contract_at(contract_address)
+
+@gl.contract_interface
+class GenLayerContractIface:
+    class View:
+        def method_name(self, a: int, b: str): ...
+
+    class Write:
+        pass
+
+statically_typed_contract = GenLayerContractIface(contract_address)
+```
+
+Both approaches result in the same runtime value,
+however the statically typed approach provides type checking and autocompletion in IDEs.
+
+## Calling View Methods
+
+Call read-only methods on other contracts:
+
+```python
+addr: Address = ...
+other = gl.get_contract_at(addr)
+result = other.view().get_token_balance()
+```
+
+## Emitting Messages
+
+Send asynchronous messages to other contracts:
+
+```python
+other = gl.get_contract_at(addr)
+other.emit(on='accepted').update_status("active")
+other.emit(on='finalized').update_status("active")
+
+# With value (recipient method must be @gl.public.write.payable)
+other.emit(value=u256(100), on='finalized').deposit()
+```
+
+## Deploying New Contracts
+
+```python
+gl.deploy_contract(code=contract_code)
+salt: u256 = u256(1) # not zero
+child_address = gl.deploy_contract(code=contract_code, salt=salt)
+```
+
+## View vs Emit
+
+- **`view()`** is synchronous — it reads state from another contract and returns the result immediately. The target contract's state is read as of the current block.
+- **`emit()`** is asynchronous — it queues a write call that executes *after* the current transaction completes. The call is not blocking.
+
+### Accepted vs Finalized
+
+```python
+# Fast — executes after the transaction is accepted by initial consensus
+other.emit(on='accepted').do_something()
+
+# Safe — waits until the transaction is fully finalized (after appeal window)
+other.emit(on='finalized').do_something()
+```
+
+**`on='accepted'` has important implications.** If the emitting transaction is appealed, two things can happen:
+
+1. The appeal changes the contract state such that the message should not have been emitted — but it was already sent and cannot be recalled.
+2. The transaction is re-executed during the appeal, and the message (or a similar one) is emitted again. This can repeat across multiple appeal rounds — up to ~6 times depending on the validator set size.
+
+The receiving contract must be **idempotent** — it must handle duplicate or unexpected messages gracefully. If the receiving logic cannot tolerate duplicates or messages that "shouldn't have been sent" based on the final state, use `on='finalized'` instead.
+
+## Factory Pattern
+
+Deploy child contracts from a parent:
+
+```python
+def __init__(self, num_workers: int):
+    with open("/contract/Worker.py", "rt") as f:
+        worker_code = f.read()
+
+    for i in range(num_workers):
+        addr = gl.deploy_contract(
+            code=worker_code.encode("utf-8"),
+            args=[i, gl.message.contract_address],
+            salt_nonce=i + 1,
+            on="accepted",
+        )
+        self.worker_addresses.append(addr)
+```
+
+Child contracts are immutable after deployment. To update worker logic, redeploy through the factory.

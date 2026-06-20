@@ -1,0 +1,169 @@
+# FetchWebContent Contract
+
+Source: https://docs.genlayer.com/developers/intelligent-contracts/examples/fetch-web-content
+
+The FetchWebContent contract demonstrates how to fetch and store web content within an intelligent contract. This contract shows how to use the [comparative equivalence principle](/developers/intelligent-contracts/equivalence-principle#comparative-equivalence-principle) to ensure all nodes agree on the same web content.
+
+```python
+# { "Depends": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6" }
+
+from genlayer import *
+import typing
+
+class FetchWebContent(gl.Contract):
+    content: str
+
+    def __init__(self):
+        self.content = ""
+
+    @gl.public.write
+    def fetch_web_content(self) -> typing.Any:
+
+        def fetch_web_url_content() -> str:
+            response = gl.nondet.web.get("https://example.com/")
+            return response.body.decode("utf-8")
+
+        self.content = gl.eq_principle.strict_eq(fetch_web_url_content)
+
+    @gl.public.view
+    def show_content(self) -> str:
+        return self.content
+```
+
+## Code Explanation
+
+- **Initialization**: The `FetchWebContent` class initializes with an empty string in the `content` variable.
+- **Write Method**:
+  - `fetch_web_content()` retrieves content from a web page and stores it.
+  - It contains an inner function `fetch_web_url_content()` that uses `gl.nondet.web.get()` to fetch content.
+  - Uses `gl.eq_principle.strict_eq()` to ensure all nodes agree on the same content.
+- **Read Method**:
+  - `show_content()` returns the stored web content.
+
+## Key Components
+
+1. **Web Integration**: The contract uses `gl.nondet.web.get()` to fetch content from web URLs.
+2. **Deterministic Execution**: `gl.eq_principle.strict_eq()` ensures that all nodes in the network arrive at the same exact content.
+3. **State Management**: The contract maintains a single string state variable that stores the web content.
+
+## Deploying the Contract
+
+To deploy the FetchWebContent contract:
+
+1. **Deploy the Contract**: No initial parameters are needed for deployment.
+2. The contract will initialize with an empty content string.
+
+## Checking the Contract State
+
+After deployment, you can:
+
+- Use `show_content()` to view the currently stored web content.
+- Initially, this will return an empty string.
+
+## Executing Transactions
+
+To interact with the deployed contract:
+
+1. Call `fetch_web_content()` to trigger the web content fetch.
+2. The function will:
+   - Fetch the content from example.com
+   - Store the result using the equivalence principle
+   - Make the content available through `show_content()`
+
+## Understanding Web Content Integration
+
+This contract demonstrates several important concepts:
+
+- **Web Fetching**: Shows how to safely retrieve content from web sources.
+- **Deterministic Results**: Uses the equivalence principle to ensure all nodes reach consensus on web content.
+- **State Updates**: Demonstrates how web content can be stored in blockchain state.
+
+## Handling Different Scenarios
+
+- **Initial State**: The content starts empty.
+- **After fetch_web_content()**: The content will contain the text from example.com.
+- **Multiple Calls**: Each call to `fetch_web_content()` will update the stored content.
+- **Network Consensus**: All nodes will agree on the same content due to the equivalence principle.
+
+## Important Notes
+
+1. This example uses example.com as a stable demonstration URL.
+2. Web content should be relatively stable to ensure consensus.
+3. The equivalence principle ensures that all nodes store identical content.
+4. The `mode="text"` parameter ensures only text content is retrieved.
+
+## Security Considerations
+
+1. Only fetch content from trusted and stable sources.
+2. Be aware that web content can change over time.
+3. Consider implementing content validation before storage.
+4. Use appropriate error handling for network issues.
+
+You can monitor the contract's behavior through transaction logs, which will show the fetched content and state updates as they occur.
+
+## HTML Mode for Web Content
+
+The `gl.nondet.web.get()` function supports different modes for retrieving web content. While the default mode returns the plain text content, `gl.nondet.web.render()` with `mode="html"` allows you to retrieve the complete HTML `` of the webpage.
+
+Use `render` instead of `get` when the page needs a browser to execute JavaScript, load dynamic content, or render the DOM before your contract extracts data.
+
+Here's an example of using HTML mode:
+
+```python
+class FetchHTMLContent(gl.Contract):
+    html_content: str
+
+    def __init__(self):
+        self.html_content = ""
+
+    @gl.public.write
+    def fetch_html_content(self) -> typing.Any:
+        def fetch_web_url_html() -> str:
+            return gl.nondet.web.render("https://example.com/", mode='html')
+
+        self.html_content = gl.eq_principle.strict_eq(fetch_web_url_html)
+
+    @gl.public.view
+    def show_html_content(self) -> str:
+        return self.html_content
+```
+
+### Key Differences with HTML Mode:
+
+- **Complete Structure**: Returns the full HTML document including tags, attributes, and DOM structure
+- **Use Cases**:
+  - Parsing specific HTML elements or attributes
+  - Extracting links, images, or other structured content
+  - Analyzing webpage structure and metadata
+- **Data Size**: HTML content is typically larger than text mode as it includes markup
+- **Processing**: May require additional HTML parsing to extract specific elements
+
+### When to Use HTML Mode:
+
+1. When you need to extract information from specific HTML elements
+3. When analyzing page structure or links
+4. If you need to process structured data like tables or forms
+
+### Waiting for Dynamic Pages
+
+Some pages finish the initial load before the data you need appears. For JavaScript-heavy sites, pass `wait_after_loaded` so the browser waits briefly after the page load event before returning content:
+
+```python
+def fetch_rendered_text() -> str:
+    return gl.nondet.web.render(
+        "https://example.com/dynamic-page",
+        mode="text",
+        wait_after_loaded="5s",
+    )
+```
+
+Use this sparingly:
+
+- Prefer `gl.nondet.web.get()` for stable APIs and static pages.
+- Use `render(..., mode="text")` when you only need readable page text.
+- Use `render(..., mode="html")` when you need DOM structure, attributes, links, or tables.
+- Keep waits short and extract stable structured fields before returning data from the non-deterministic block.
+
+Dynamic pages can still vary between validators. If the raw page content is unstable, extract the specific facts you need and validate only those fields in your equivalence logic.
+
+This addition provides users with a clear understanding of the HTML mode option and its specific use cases, complementing the existing text mode example.

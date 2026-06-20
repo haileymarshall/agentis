@@ -1,0 +1,47 @@
+# How GenLayer Works
+
+Source: https://docs.genlayer.com/understand-genlayer-protocol/optimistic-democracy-how-genlayer-works
+
+## Optimistic Democracy
+
+GenLayer uses **Optimistic Democracy** for consensus — a mechanism where validators running diverse AI models independently evaluate transactions and vote on outcomes. It applies [Condorcet's Jury Theorem](https://en.wikipedia.org/wiki/Condorcet%27s_jury_theorem): a group of independent reasoners is more likely to reach the correct answer than any individual. This is what lets GenLayer act as an **adjudication layer** for the agentic economy — judgments emerge from a diverse validator set rather than from any one model, operator, or jurisdiction.
+
+Transactions are accepted if a majority of validators agree. Anyone can appeal an accepted result, triggering re-evaluation by a new, larger validator set. This process can escalate through multiple rounds until a final decision is reached.
+
+## Transaction Lifecycle
+
+Every transaction moves through these stages:
+
+1. **Pending** — queued, waiting to be picked up
+2. **Proposing** — a leader validator executes the contract and proposes a result
+3. **Committing** — other validators execute independently and submit encrypted votes
+4. **Leader Revealing** — the leader reveals execution data and decryption keys
+5. **Revealing** — validators reveal their votes
+6. **Accepted** — majority consensus reached; transaction enters the appeal window
+7. **Finalized** — appeal window closed, result is permanent and irreversible
+
+If consensus is not reached, the transaction may be marked **Undetermined** or rotate to a new leader.
+
+See [Transaction Execution](/understand-genlayer-protocol/core-concepts/transactions/transaction-execution) for the full state machine.
+
+## Non-Determinism and Consensus
+
+Because Intelligent Contracts use LLMs and web data, validators may produce different outputs for the same input. GenLayer provides several strategies for reaching consensus on non-deterministic results:
+
+- **Strict equality** — all validators must produce the exact same output (for deterministic operations)
+- **LLM-based comparison** — an LLM compares validator outputs against developer-defined criteria
+- **Custom validation** — developers write explicit leader/validator function pairs with full control over consensus logic
+
+See [Non-determinism](/developers/intelligent-contracts/features/non-determinism) for implementation details.
+
+## Appeals and Finality
+
+After a transaction is accepted, it enters a **finality window** during which anyone can appeal the result.
+
+- An appeal triggers a new round with a fresh, larger validator set
+- Appeals can escalate through multiple rounds
+- The final round's decision is binding
+
+Once the finality window closes without appeal (or after the final appeal round), the transaction is **finalized** — permanent and irreversible.
+
+See [Appeal Process](/understand-genlayer-protocol/core-concepts/optimistic-democracy/appeal-process) and [Finality](/understand-genlayer-protocol/core-concepts/optimistic-democracy/finality) for details.

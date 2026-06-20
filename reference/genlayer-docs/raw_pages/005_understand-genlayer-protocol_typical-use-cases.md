@@ -1,0 +1,68 @@
+# Use Cases
+
+Source: https://docs.genlayer.com/understand-genlayer-protocol/typical-use-cases
+
+GenLayer is built for commitments where outcomes depend on judgment — evaluating evidence, interpreting language, or assessing quality — and where a deterministic smart contract alone cannot resolve them.
+
+If you are deciding whether a feature belongs on GenLayer or in a normal backend, start with the [builder fit checklist](/developers/intelligent-contracts/when-to-use-genlayer).
+
+The use cases below are grouped by where the need for adjudication is most acute today.
+
+## 1. Performance & Milestone Adjudication
+
+Payments, rewards, or recognition that depend on whether some obligation was actually fulfilled under criteria that are partly measurable and partly interpretive. The money is already on-chain. The commitment is already written down. The dispute already happens — and today it is resolved by human bottlenecks that do not scale.
+
+- **Bounties** where payout depends on whether the work met the spec
+- **Grant milestones** where tranche release turns on contested deliverables
+- **Retroactive funding rounds** where allocation depends on impact assessment
+- **Creator economies** where AI-scored rewards generate disputes with no resolution layer
+- **Prediction markets** with subjective outcomes ([example contract](/developers/intelligent-contracts/examples/prediction))
+- **Contributor performance** tied to vesting or continued compensation
+- **Freelance and gig work** — was the deliverable satisfactory? AI consensus replaces subjective back-and-forth
+- **Chargebacks** — buyer/seller disputes resolved by analyzing shipping records, communication logs, and transaction history
+
+GenLayer can support agreed dispute-resolution workflows, but it is not a court and does not automatically make a result legally binding. For legal or contractual use cases, parties still need the appropriate agreements, jurisdiction, and escalation process around the Intelligent Contract.
+
+## 2. Adjudication Inside the Agentic-Commerce Stack
+
+GenLayer plugs into the infrastructure the industry is building right now: payment rails ([x402](https://www.x402.org/)), agent identity and reputation ([ERC-8004](https://eips.ethereum.org/EIPS/eip-8004)), agent-to-agent task exchange ([A2A](https://a2a-protocol.org)), plus Stripe/OpenAI's ACP, Visa's Trusted Agent Protocol, Google's AP2, and Mastercard's Agent Pay. Each standard ships the happy path and carves the moment of disagreement out as someone else's problem. GenLayer is that someone else.
+
+- **Agent-executed job disputes** — was the task delivered to spec?
+- **Escrow release on ambiguous completion** — agent counterparties needing neutral resolution
+- **SLA enforcement on agent work** — quality, latency, or scope claims
+- **Reputation claims contested between counterparties** in ERC-8004-style identity systems
+- **Coverage claims on agent-to-agent commitments** — parametric and evidence-based
+- **Multi-agent workflows** where responsibility for failure has to be assigned across participants
+
+## 3. Rule & Constitution Verification
+
+Check whether something meets a set of criteria defined in natural language — a foundational primitive that many applications reduce to.
+
+- Does a new prediction market meet listing guidelines?
+- Does a DAO proposal comply with the organization's charter?
+- Does a content submission follow community standards?
+- Does a transaction comply with regulatory requirements?
+
+## 4. Adjacent Surfaces
+
+The same primitive shows up across digital commerce:
+
+- **Insurance** — parametric and evidence-based claims evaluated by AI validators. Contracts fetch weather data, flight statuses, or photographic evidence to assess claims and trigger payouts automatically — no adjusters, no weeks of waiting.
+- **Social content verification** — AI validators assess quality, detect plagiarism, and distribute rewards based on originality and engagement. Replaces centralized moderation with consensus-driven evaluation.
+- **Code & work quality assurance** — staked submissions where reviewers are economically incentivized to find issues; AI validators assess deliverable completeness or compliance with specifications.
+- **AI-governed organizations** — DAOs where proposals are written in natural language, evaluated against real-time data, and executed automatically when conditions align.
+- **Compliance automation** — real-time screening against sanctions lists, KYC/AML requirements, and changing regulations. Contracts read authoritative sources directly — no manual updates needed.
+- **Argumentation and debate markets** — structured debates where participants stake positions and AI consensus determines outcomes, a new primitive for information markets.
+
+## What Makes These Possible
+
+All of these share a common pattern: they require **judgment** that traditional smart contracts can't perform. GenLayer's Intelligent Contracts can:
+
+- Fetch and interpret live web data
+- Process natural language and unstructured inputs
+- Make subjective decisions through multi-validator AI consensus
+- Execute outcomes on-chain with full finality — justice in minutes, not months
+
+See [projects building on GenLayer](https://portal.genlayer.foundation/#/) for live examples.
+
+[Start building →](/developers/intelligent-contracts/first-contract)

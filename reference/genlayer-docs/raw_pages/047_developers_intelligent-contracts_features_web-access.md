@@ -1,0 +1,100 @@
+# Web Access
+
+Source: https://docs.genlayer.com/developers/intelligent-contracts/features/web-access
+
+## HTTP Requests
+
+Send data to external services:
+
+```python
+def post_request():
+    url = "https://test-server.genlayer.com/body/echo"
+    response = gl.nondet.web.request(
+        url,
+        method='POST',
+        body={}
+    )
+    return response.status_code
+
+status_code = gl.eq_principle.strict_eq(post_request)
+```
+
+## Web Rendering
+
+Render web page and extract content:
+
+```python
+def render_page():
+    url = "https://test-server.genlayer.com/static/genvm/hello.html"
+    # Render HTML content
+    html_content = gl.nondet.web.render(url, mode='html')
+    return html_content
+
+page_html = gl.eq_principle.strict_eq(render_page)
+```
+
+## Screenshot Capture
+
+Take screenshots of web pages:
+
+```python
+def take_screenshot():
+    url = "https://test-server.genlayer.com/static/genvm/hello.html"
+    # Capture page as image
+    screenshot = gl.nondet.web.render(url, mode='screenshot')
+    return screenshot
+
+image_data = gl.eq_principle.strict_eq(take_screenshot)
+```
+
+## Handling HTTP Errors
+
+External APIs can return error responses. Consider checking the status code:
+
+```python
+def fetch_data():
+    response = gl.nondet.web.request(api_url, method='GET')
+    if response.status_code >= 400 and response.status_code < 500:
+        raise gl.UserError(f"API returned client error: {response.status_code}")
+    elif response.status_code >= 500:
+        raise gl.UserError(f"API temporarily unavailable: {response.status_code}")
+    return json.loads(response.body.decode("utf-8"))
+```
+
+## Consensus-Friendly Web Requests
+
+When using web data in non-deterministic blocks, remember that the leader and validators make **independent requests**. External APIs may return different data between calls — timestamps change, counts update, caches vary.
+
+### Extract Stable Fields
+
+One approach is to return only the fields that won't change between calls:
+
+```python
+def leader_fn():
+    res = gl.nondet.web.get(api_url)
+    data = json.loads(res.body.decode("utf-8"))
+    # Only return fields that are stable across requests
+    return {"id": data["id"], "login": data["login"], "status": data["status"]}
+    # NOT: follower_count, updated_at, online_status
+```
+
+### Derive Status from Variable Data
+
+When raw data may differ between leader and validator (e.g., CI check counts change), consider comparing a derived summary instead of the raw values:
+
+```python
+def validator_fn(leaders_res: gl.vm.Result) -> bool:
+    validator_data = leader_fn()
+
+    def derive_status(checks):
+        if not checks:
+            return "pending"
+        for c in checks:
+            if c.get("conclusion") != "success":
+                return "failing"
+        return "success"
+
+    return derive_status(leaders_res.calldata) == derive_status(validator_data)
+```
+
+See the [Equivalence Principle](/developers/intelligent-contracts/equivalence-principle) page for more validation patterns.

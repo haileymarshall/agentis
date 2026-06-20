@@ -1,0 +1,119 @@
+# What is GenLayer
+
+Source: https://docs.genlayer.com/understand-genlayer-protocol/what-is-genlayer
+
+## The Adjudication Layer for the Agentic Economy
+
+GenLayer uses decentralized AI-validator consensus to resolve contracts that require judgment, not just code.
+
+Intelligent Contracts interpret language, process unstructured data, and pull live web inputs. No oracles, no intermediaries.
+
+- **Bitcoin** — Trustless Money
+- **Ethereum** — Trustless Computation
+- **GenLayer** — Trustless Adjudication
+
+Where Bitcoin reached consensus on the *order* of transactions and Ethereum on the *execution* of code, GenLayer reaches consensus on the **meaning** of transactions. The technical primitive that makes this possible is the [Equivalence Principle](/developers/intelligent-contracts/features/non-determinism): two answers can be different in form yet equivalent in meaning, and a network of independent AI validators can agree on that.
+
+## The Missing Layer
+
+The agentic-commerce stack is being built in the open — and every layer of it stops at the happy path.
+
+| Layer | Standard | What it handles | Dispute resolution |
+|---|---|---|---|
+| Payments | [x402](https://www.x402.org/) (Coinbase) | Internet-native, agent-friendly payments | Not specified |
+| Identity & reputation | [ERC-8004](https://eips.ethereum.org/EIPS/eip-8004) (Ethereum) | Trustless agent identity | Delegated to external validation protocols |
+| Agent interoperability | [A2A](https://a2a-protocol.org) (Linux Foundation / Google) | How agents discover each other and exchange tasks | Not defined within the protocol |
+
+Other players are stacking in alongside them — Stripe + OpenAI's ACP (already powering ChatGPT checkout), Visa's Trusted Agent Protocol, Google's AP2, Mastercard's Agent Pay + BVNK, and Tempo (Stripe / Paradigm L1). The shape is the same in every case: the payment goes through, the job is accepted, the reputation is updated — and the moment a single material dispute appears, the stack reaches for a function it does not have.
+
+That function is **adjudication**. Not a sovereign court. A credible, machine-speed mechanism for evaluating contested commitments, weighing evidence, interpreting language, reaching a verdict, and attaching consequences to it.
+
+GenLayer is that layer.
+
+## What Intelligent Contracts Can Do
+
+### Subjective Decisions
+Evaluate context and nuance. Turn judgment calls into enforceable on-chain outcomes — content moderation, claim assessment, quality evaluation.
+
+### Internet Access
+Fetch live web data directly on-chain. Contracts can read websites, call APIs, and verify real-world information without oracles or intermediaries.
+
+### Natural Language Processing
+Interpret human-readable inputs via LLMs. Contracts can analyze text, extract meaning, and make decisions based on qualitative criteria.
+
+### Image & Visual Processing
+Pass images to LLMs for analysis — screenshot a webpage and verify its content, check visual evidence for claims, analyze receipts or documents. Contracts can capture screenshots via `gl.nondet.web.render()` and send them to LLMs via `gl.nondet.exec_prompt(images=[...])`.
+
+### Unstructured Data
+Process text, images, audio transcripts, and qualitative evidence. Handle real-world complexity that traditional smart contracts cannot.
+
+## How It Compares
+
+| Feature | Traditional Smart Contracts | Intelligent Contracts |
+|---|---|---|
+| **Language** | Solidity, Rust | Python |
+| **Data sources** | On-chain only (or oracles) | On-chain + live web data |
+| **Decision logic** | Deterministic only | Deterministic + subjective |
+| **AI integration** | Not possible | Native LLM access (text + images) |
+| **Consensus** | All nodes must agree on exact output | Validators assess equivalence of results |
+
+## Architecture: Two Layers
+
+GenLayer operates as two integrated layers:
+
+**GenLayer Chain** — an EVM-compatible L2 (zkSync Elastic Chain). Holds account balances via ghost contracts, handles standard Ethereum operations (`eth_*` methods), and anchors to Ethereum's security model.
+
+**GenVM** — the execution environment for Intelligent Contracts. A WebAssembly-based VM (built on [Wasmtime](https://wasmtime.dev)) that runs a Python interpreter with native access to LLMs, web data, and non-deterministic operations. Can also execute compiled native code.
+
+Every Intelligent Contract has a corresponding **ghost contract** on the chain layer at the same address. Ghost contracts hold the contract's GEN balance, relay transactions to consensus, and execute external messages. See [Messages](/developers/intelligent-contracts/features/messages#ghost-contracts) for details.
+
+Transactions enter via `addTransaction` on the chain layer. GenVM executes the contract logic. Results settle back on-chain.
+
+## Develop in Python
+
+Intelligent Contracts are Python classes extending `gl.Contract`:
+
+```python
+# { "Depends": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6" }
+from genlayer import *
+import json
+
+class WizardOfCoin(gl.Contract):
+    has_coin: bool
+
+    def __init__(self):
+        self.has_coin = True
+
+    @gl.public.write
+    def ask_for_coin(self, request: str) -> None:
+        if not self.has_coin:
+            raise gl.vm.UserError("I don't have a coin!")
+
+        prompt = f"""
+        You are a wizard guarding a gold coin.
+        An adventurer says: {request}
+        Should you give them the coin?
+        Respond as JSON: {{"give_coin": true/false}}
+        """
+
+        def leader_fn():
+            return gl.nondet.exec_prompt(prompt, response_format="json")
+
+        def validator_fn(leaders_res) -> bool:
+            if not isinstance(leaders_res, gl.vm.Return):
+                return False
+            my_result = leader_fn()
+            return my_result["give_coin"] == leaders_res.calldata["give_coin"]
+
+        result = gl.vm.run_nondet_unsafe(leader_fn, validator_fn)
+        if result["give_coin"]:
+            self.has_coin = False
+
+    @gl.public.view
+    def get_has_coin(self) -> bool:
+        return self.has_coin
+```
+
+Full SDK available: [genlayer-js](/api-references/genlayer-js) (TypeScript), [genlayer-py](/api-references/genlayer-py) (Python), [CLI](/api-references/genlayer-cli).
+
+[Get started →](/developers/intelligent-contracts/first-contract)
