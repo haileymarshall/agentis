@@ -8,7 +8,7 @@ services:
   - type: web
     name: agentis-relayer
     runtime: node
-    plan: starter # free tier sleeps after inactivity, which stalls event watching
+    plan: free # note: free instances sleep after ~15m idle, which stalls event watching; upgrade to starter once billing is set up
     region: oregon
     rootDir: .
     buildCommand: npm ci && npm run build -w @agentis/shared && npm run build -w @agentis/backend
