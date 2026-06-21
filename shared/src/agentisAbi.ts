@@ -123,6 +123,13 @@ export const agentisAbi = [
   },
   {
     type: "function",
+    name: "timeoutRefund",
+    stateMutability: "nonpayable",
+    inputs: [{ name: "jobId", type: "uint256" }],
+    outputs: []
+  },
+  {
+    type: "function",
     name: "getJob",
     stateMutability: "view",
     inputs: [{ name: "jobId", type: "uint256" }],

@@ -1,0 +1,54 @@
+# Render blueprint for the Agentis verdict relayer (backend).
+# The relayer watches Base for VerdictRequested events, evaluates the dispute on
+# GenLayer, and records the verdict back on Base. It also serves /health.
+#
+# Build runs from the monorepo root: install workspaces, build @agentis/shared,
+# then @agentis/backend. Hardhat/contract builds are intentionally skipped.
+services:
+  - type: web
+    name: agentis-relayer
+    runtime: node
+    plan: starter # free tier sleeps after inactivity, which stalls event watching
+    region: oregon
+    rootDir: .
+    buildCommand: npm ci && npm run build -w @agentis/shared && npm run build -w @agentis/backend
+    startCommand: node backend/dist/relay.js
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: HOST
+        value: 0.0.0.0
+      # Non-secret defaults
+      - key: SUPPORTED_CHAIN_IDS
+        value: "84532,8453"
+      - key: DEFAULT_CHAIN_ID
+        value: "84532"
+      - key: GENLAYER_NETWORK
+        value: studionet
+      - key: GENLAYER_RPC_URL
+        value: https://studio.genlayer.com/api
+      - key: RELAY_DB_PATH
+        value: ./relay-state.json
+      # Secrets — set these in the Render dashboard (sync: false keeps them out of git)
+      - key: BASE_SEPOLIA_RPC_URL
+        sync: false
+      - key: BASE_MAINNET_RPC_URL
+        sync: false
+      - key: BASE_SEPOLIA_AGENTIS_ADDRESS
+        sync: false
+      - key: BASE_MAINNET_AGENTIS_ADDRESS
+        sync: false
+      - key: BASE_SEPOLIA_START_BLOCK
+        sync: false
+      - key: BASE_MAINNET_START_BLOCK
+        sync: false
+      - key: BASE_SEPOLIA_RELAYER_PRIVATE_KEY
+        sync: false
+      - key: BASE_MAINNET_RELAYER_PRIVATE_KEY
+        sync: false
+      - key: GENLAYER_ACCOUNT_PRIVATE_KEY
+        sync: false
+      - key: GENLAYER_CONTRACT_ADDRESS
+        sync: false

@@ -50,11 +50,21 @@ export function HomePage() {
 
       <section className="workflow">
         <h2>How it works</h2>
+        <p className="muted">Each step is taken by a specific party — Agentis only ever shows you the action that is yours.</p>
         <div className="steps">
-          {["Create", "Accept", "Deliver", "Approve or dispute", "Judge", "Finalize", "Claim"].map((step, index) => (
+          {[
+            { step: "Create & fund", who: "client" },
+            { step: "Accept", who: "agent" },
+            { step: "Deliver", who: "agent" },
+            { step: "Approve or dispute", who: "client" },
+            { step: "Judge", who: "GenLayer" },
+            { step: "Finalize", who: "either" },
+            { step: "Claim", who: "both" }
+          ].map(({ step, who }, index) => (
             <span key={step}>
               <BriefcaseBusiness size={16} />
               {index + 1}. {step}
+              <em className="step-who">{who}</em>
             </span>
           ))}
         </div>

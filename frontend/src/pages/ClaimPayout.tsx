@@ -1,49 +1,37 @@
-import { useParams } from "react-router-dom";
-import { HandCoins } from "lucide-react";
-import { useReadContract, useWriteContract } from "wagmi";
-import { agentisAbi } from "@agentis/shared";
+import { Link, useParams } from "react-router-dom";
+import { ArrowLeft, HandCoins } from "lucide-react";
 import { PayoutPanel } from "../components/PayoutPanel";
-import { useSelectedNetwork } from "../lib/network";
+import { StatusBadge } from "../components/StatusBadge";
+import { useAgentisJob } from "../lib/useAgentisJob";
+import { useAgentisWrite } from "../lib/useAgentisWrite";
 
 export function ClaimPayoutPage() {
   const jobId = BigInt(useParams().jobId || "0");
-  const { selectedChain } = useSelectedNetwork();
-  const { writeContract, data, error, isPending } = useWriteContract();
-  const { data: payouts } = useReadContract({
-    address: selectedChain.contractAddress,
-    abi: agentisAbi,
-    functionName: "getPendingPayouts",
-    args: [jobId],
-    chainId: selectedChain.id,
-    query: { enabled: Boolean(selectedChain.contractAddress && jobId > 0n) }
-  });
-
-  function claim() {
-    if (!selectedChain.contractAddress) return;
-    writeContract({
-      address: selectedChain.contractAddress,
-      abi: agentisAbi,
-      functionName: "claimPayout",
-      args: [jobId],
-      chainId: selectedChain.id
-    });
-  }
+  const { job, payouts, refetch } = useAgentisJob(jobId);
+  const { submit, isPending, error, txHash } = useAgentisWrite(refetch);
 
   return (
     <section className="page narrow">
       <div className="page-head">
         <div>
-          <span className="eyebrow">Claim</span>
+          <span className="eyebrow">Claim · client or agent</span>
           <h1>Claim payout or refund</h1>
         </div>
+        <StatusBadge status={job?.status} />
       </div>
+      <p className="muted">Withdraw your settled balance from the Base escrow. Only your own balance is paid out.</p>
       <PayoutPanel payouts={payouts as any} />
-      <button className="button primary" type="button" onClick={claim} disabled={isPending}>
+      <button className="button primary" type="button" onClick={() => submit("claimPayout", [jobId])} disabled={isPending}>
         <HandCoins size={16} />
         Claim from Base
       </button>
-      {error && <p className="error-text">{error.message}</p>}
-      {data && <p className="success-text">Transaction submitted: {data}</p>}
+      <p>
+        <Link to={`/jobs/${jobId.toString()}`}>
+          <ArrowLeft size={14} /> Back to job
+        </Link>
+      </p>
+      {error && <p className="error-text">{error}</p>}
+      {txHash && <p className="success-text">Transaction submitted: {txHash}</p>}
     </section>
   );
 }

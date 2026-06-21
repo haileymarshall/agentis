@@ -652,6 +652,209 @@ textarea {
   gap: 10px;
 }
 
+.step-who {
+  margin-left: 6px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: #eef4f0;
+  color: var(--green-strong);
+  font-size: 11px;
+  font-weight: 800;
+  font-style: normal;
+  text-transform: uppercase;
+}
+
+/* Role banner ----------------------------------------------------------- */
+.role-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-left-width: 4px;
+  border-radius: 8px;
+  background: var(--panel);
+}
+
+.role-banner strong {
+  display: block;
+  font-size: 15px;
+}
+
+.role-banner p {
+  margin: 4px 0 0;
+  color: var(--muted);
+}
+
+.role-banner.role-client {
+  border-left-color: var(--blue);
+}
+
+.role-banner.role-agent {
+  border-left-color: var(--green);
+}
+
+.role-banner.role-observer {
+  border-left-color: var(--muted);
+}
+
+/* Stepper --------------------------------------------------------------- */
+.stepper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 4px;
+  margin: 0 0 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.stepper-node {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 130px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--panel);
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.stepper-dot {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: #e9ede8;
+  color: #2d3a34;
+  font-size: 12px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.stepper-node.is-done {
+  border-color: #a8d4bf;
+  background: #edf8f2;
+  color: var(--green-strong);
+}
+
+.stepper-node.is-done .stepper-dot {
+  background: var(--green-strong);
+  color: #fff;
+}
+
+.stepper-node.is-current {
+  border-color: var(--green-strong);
+  box-shadow: 0 0 0 2px rgba(15, 107, 79, 0.16);
+  color: var(--ink);
+}
+
+.stepper-node.is-current .stepper-dot {
+  background: var(--green-strong);
+  color: #fff;
+}
+
+.stepper-node.is-skipped {
+  border-style: dashed;
+  opacity: 0.6;
+}
+
+/* Next action card ------------------------------------------------------ */
+.next-action-wrap {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.next-action {
+  border: 1px solid var(--green-strong);
+  border-radius: 10px;
+  background: #f3faf6;
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+
+.next-action-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  color: var(--green-strong);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.next-action h2 {
+  margin-bottom: 6px;
+}
+
+.next-action > p {
+  margin-bottom: 16px;
+  color: #2f4239;
+  line-height: 1.55;
+}
+
+.inline-form {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+}
+
+.waiting-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 18px 20px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--panel);
+}
+
+.waiting-card strong {
+  display: block;
+}
+
+.waiting-card p {
+  margin: 4px 0 0;
+  color: var(--muted);
+}
+
+.secondary-actions {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel);
+}
+
+.secondary-actions > summary {
+  padding: 12px 16px;
+  cursor: pointer;
+  font-weight: 700;
+  color: #33443c;
+}
+
+.secondary-actions-body {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+  padding: 0 16px 16px;
+}
+
+.secondary-actions-body .action-panel {
+  box-shadow: none;
+}
+
+.button.danger {
+  border-color: #cf9a96;
+  color: var(--red);
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
