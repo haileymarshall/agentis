@@ -32,7 +32,6 @@ export function createRelayProcessor(deps: RelayProcessorDeps) {
       return existing;
     }
 
-    deps.store.markProcessing(chainId, jobId);
     try {
       const job = await deps.fetchJob(deps.config, chainId, jobId);
       if (job.chainId !== chainId) {
@@ -40,11 +39,13 @@ export function createRelayProcessor(deps: RelayProcessorDeps) {
       }
       if (job.status !== 5) {
         // Expected during historical replay: the job already moved past
-        // AwaitingVerdict (resolved, finalized, or expired). Skip, don't fail.
+        // AwaitingVerdict (resolved, finalized, or expired). Skip, don't fail,
+        // and don't mark it processing in the store.
         logger.log(`Skipping ${chainId}:${jobId.toString()} — status ${job.status} is not AwaitingVerdict`);
         return existing;
       }
 
+      deps.store.markProcessing(chainId, jobId);
       const genlayer = await deps.evaluateOnGenLayer(deps.config, job);
       const verdict = genLayerVerdictSchema.parse(genlayer.verdict);
       const baseTxHash = await deps.submitToBase(deps.config, chainId, jobId, verdict);

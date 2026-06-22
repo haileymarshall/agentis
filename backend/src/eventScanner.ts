@@ -26,13 +26,22 @@ export async function scanMissedVerdictRequests(
 
   while (from <= latest) {
     const to = from + range - 1n > latest ? latest : from + range - 1n;
-    const logs = await publicClient.getContractEvents({
-      address: network.agentisAddress,
-      abi: agentisAbi,
-      eventName: "VerdictRequested",
-      fromBlock: from,
-      toBlock: to
-    });
+    let logs;
+    try {
+      logs = await publicClient.getContractEvents({
+        address: network.agentisAddress,
+        abi: agentisAbi,
+        eventName: "VerdictRequested",
+        fromBlock: from,
+        toBlock: to
+      });
+    } catch (error) {
+      // e.g. a rate-limited public RPC. Log one concise line and stop the
+      // historical scan for this chain; the live watcher keeps running.
+      const message = error instanceof Error ? error.message.split("\n")[0] : String(error);
+      console.error(`Historical scan stopped for chain ${chainId} at blocks ${from}-${to}: ${message}`);
+      return;
+    }
 
     for (const log of logs) {
       const emittedChainId = Number(log.args.chainId);
