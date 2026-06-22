@@ -8,6 +8,10 @@ export interface VerdictRequestEvent {
   txHash?: `0x${string}`;
 }
 
+// Public RPCs (e.g. sepolia.base.org) cap eth_getLogs at a 2000-block range, so
+// the historical scan is paginated into windows of this size.
+const DEFAULT_SCAN_BLOCK_RANGE = 2000n;
+
 export async function scanMissedVerdictRequests(
   config: RelayerConfig,
   chainId: BaseChainId,
@@ -16,23 +20,32 @@ export async function scanMissedVerdictRequests(
   const { publicClient, network } = createBaseClients(config, chainId);
   if (!network.agentisAddress) return;
 
-  const logs = await publicClient.getContractEvents({
-    address: network.agentisAddress,
-    abi: agentisAbi,
-    eventName: "VerdictRequested",
-    fromBlock: network.startBlock,
-    toBlock: "latest"
-  });
+  const range = BigInt(process.env.LOG_SCAN_BLOCK_RANGE || DEFAULT_SCAN_BLOCK_RANGE.toString());
+  const latest = await publicClient.getBlockNumber();
+  let from = network.startBlock > 0n ? network.startBlock : 0n;
 
-  for (const log of logs) {
-    const emittedChainId = Number(log.args.chainId);
-    if (emittedChainId !== chainId) {
-      throw new Error(`Refusing mixed-chain event: listener ${chainId}, emitted ${emittedChainId}`);
+  while (from <= latest) {
+    const to = from + range - 1n > latest ? latest : from + range - 1n;
+    const logs = await publicClient.getContractEvents({
+      address: network.agentisAddress,
+      abi: agentisAbi,
+      eventName: "VerdictRequested",
+      fromBlock: from,
+      toBlock: to
+    });
+
+    for (const log of logs) {
+      const emittedChainId = Number(log.args.chainId);
+      if (emittedChainId !== chainId) {
+        throw new Error(`Refusing mixed-chain event: listener ${chainId}, emitted ${emittedChainId}`);
+      }
+      if (log.args.jobId == null) {
+        throw new Error("VerdictRequested event missing jobId");
+      }
+      await handler({ chainId, jobId: log.args.jobId, txHash: log.transactionHash });
     }
-    if (log.args.jobId == null) {
-      throw new Error("VerdictRequested event missing jobId");
-    }
-    await handler({ chainId, jobId: log.args.jobId, txHash: log.transactionHash });
+
+    from = to + 1n;
   }
 }
 

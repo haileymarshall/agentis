@@ -99,18 +99,28 @@ async function main() {
     submitToBase: submitVerdictToBase
   });
 
-  for (const chainId of config.supportedChainIds) {
-    await scanMissedVerdictRequests(config, chainId, async (event) => {
-      await processor.processVerdictRequest(event.chainId, event.jobId);
-    });
-    watchVerdictRequests(config, chainId, async (event) => {
-      await processor.processVerdictRequest(event.chainId, event.jobId);
-    });
-  }
-
+  // Bind the HTTP server first so /health is available immediately; a slow or
+  // failing historical scan must never stop the service from coming up.
   const hostname = process.env.HOST || "0.0.0.0";
   serve({ fetch: createRelayApp(store, config).fetch, port: config.port, hostname });
   console.log(`Agentis relayer listening on http://${hostname}:${config.port}`);
+
+  for (const chainId of config.supportedChainIds) {
+    try {
+      await scanMissedVerdictRequests(config, chainId, async (event) => {
+        await processor.processVerdictRequest(event.chainId, event.jobId);
+      });
+    } catch (error) {
+      console.error(`Failed to scan missed verdict requests for chain ${chainId}:`, error);
+    }
+    try {
+      watchVerdictRequests(config, chainId, async (event) => {
+        await processor.processVerdictRequest(event.chainId, event.jobId);
+      });
+    } catch (error) {
+      console.error(`Failed to start verdict watcher for chain ${chainId}:`, error);
+    }
+  }
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
