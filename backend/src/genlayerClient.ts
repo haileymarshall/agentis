@@ -46,11 +46,14 @@ export async function evaluateDisputeOnGenLayer(
     value: 0n
   })) as `0x${string}`;
 
+  // Wait for ACCEPTED, not FINALIZED: the verdict result is available as soon as
+  // the GenLayer leader executes. FINALIZED only happens after the appeal/finality
+  // window, which can take many minutes and needlessly blocks the relayer.
   const receipt = await client.waitForTransactionReceipt({
     hash: txHash as any,
-    status: TransactionStatus.FINALIZED,
+    status: TransactionStatus.ACCEPTED,
     interval: 5_000,
-    retries: 240
+    retries: 120
   });
 
   if (getReceiptExecutionResultName(receipt) === ExecutionResult.FINISHED_WITH_ERROR) {
