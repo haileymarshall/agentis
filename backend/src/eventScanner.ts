@@ -37,12 +37,22 @@ export async function scanMissedVerdictRequests(
     for (const log of logs) {
       const emittedChainId = Number(log.args.chainId);
       if (emittedChainId !== chainId) {
-        throw new Error(`Refusing mixed-chain event: listener ${chainId}, emitted ${emittedChainId}`);
+        console.error(`Refusing mixed-chain event: listener ${chainId}, emitted ${emittedChainId}`);
+        continue;
       }
       if (log.args.jobId == null) {
-        throw new Error("VerdictRequested event missing jobId");
+        console.error("VerdictRequested event missing jobId");
+        continue;
       }
-      await handler({ chainId, jobId: log.args.jobId, txHash: log.transactionHash });
+      // A failure on one (possibly stale) event must not abort the whole scan.
+      try {
+        await handler({ chainId, jobId: log.args.jobId, txHash: log.transactionHash });
+      } catch (error) {
+        console.error(
+          `Failed to process VerdictRequested ${chainId}:${log.args.jobId.toString()}:`,
+          error instanceof Error ? error.message : error
+        );
+      }
     }
 
     from = to + 1n;

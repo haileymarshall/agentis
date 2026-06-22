@@ -117,8 +117,8 @@ describe("relayer processor", () => {
 
     const record = await relay.processVerdictRequest(84532, 12n);
 
-    expect(record.status).toBe("submitted");
-    expect(record.chainId).toBe(84532);
+    expect(record?.status).toBe("submitted");
+    expect(record?.chainId).toBe(84532);
     expect(captures).toEqual([84532]);
   });
 
@@ -128,8 +128,8 @@ describe("relayer processor", () => {
 
     const record = await relay.processVerdictRequest(8453, 7n);
 
-    expect(record.status).toBe("submitted");
-    expect(record.chainId).toBe(8453);
+    expect(record?.status).toBe("submitted");
+    expect(record?.chainId).toBe(8453);
     expect(captures).toEqual([8453]);
   });
 
@@ -149,7 +149,7 @@ describe("relayer processor", () => {
     expect(captures).toEqual([84532]);
   });
 
-  it("rejects jobs that are not awaiting a verdict", async () => {
+  it("skips jobs that are not awaiting a verdict without failing", async () => {
     const relayDeps = deps();
     relayDeps.fetchJob = vi.fn(async (_config, chainId, jobId) => ({
       chainId,
@@ -166,7 +166,11 @@ describe("relayer processor", () => {
     }));
     const relay = createRelayProcessor(relayDeps);
 
-    await expect(relay.processVerdictRequest(84532, 1n)).rejects.toThrow(/not AwaitingVerdict/);
+    // A stale event for an already-resolved job must resolve (skip), not throw,
+    // so it cannot abort the historical scan of later jobs.
+    await expect(relay.processVerdictRequest(84532, 1n)).resolves.toBeUndefined();
+    expect(relayDeps.evaluateOnGenLayer).not.toHaveBeenCalled();
+    expect(relayDeps.submitToBase).not.toHaveBeenCalled();
   });
 
   it("rejects invalid GenLayer verdict schema", async () => {

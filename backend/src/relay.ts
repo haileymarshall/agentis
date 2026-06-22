@@ -39,7 +39,10 @@ export function createRelayProcessor(deps: RelayProcessorDeps) {
         throw new Error(`Fetched job chain mismatch: expected ${chainId}, got ${job.chainId}`);
       }
       if (job.status !== 5) {
-        throw new Error(`Job ${chainId}:${jobId.toString()} is not AwaitingVerdict`);
+        // Expected during historical replay: the job already moved past
+        // AwaitingVerdict (resolved, finalized, or expired). Skip, don't fail.
+        logger.log(`Skipping ${chainId}:${jobId.toString()} — status ${job.status} is not AwaitingVerdict`);
+        return existing;
       }
 
       const genlayer = await deps.evaluateOnGenLayer(deps.config, job);
