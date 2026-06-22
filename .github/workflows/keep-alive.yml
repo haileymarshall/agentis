@@ -1,0 +1,29 @@
+name: Keep relayer awake
+
+# Render free web services sleep after ~15 min idle. This pings the relayer's
+# /health every 10 minutes so it stays awake and responds instantly during
+# testing. Public repos get unlimited GitHub Actions minutes, so this is free.
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping relayer /health
+        run: |
+          URL="https://agentis-relay.onrender.com/health"
+          # A cold start from sleep can take ~30-60s, so retry a few times.
+          for i in 1 2 3 4 5; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 70 "$URL" || echo "000")
+            echo "Attempt $i: HTTP $code"
+            if [ "$code" = "200" ]; then
+              echo "Relayer is awake."
+              exit 0
+            fi
+            sleep 20
+          done
+          echo "Relayer did not return 200 after retries."
+          exit 1
